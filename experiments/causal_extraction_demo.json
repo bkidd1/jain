@@ -1,0 +1,56 @@
+[
+  {
+    "prompt": "The capital of Texas is",
+    "final_output": "a",
+    "concepts": [
+      {
+        "token": "Austin",
+        "layer": 24,
+        "prob": 0.4169921875,
+        "causal_effect": 0.10614013671875
+      },
+      {
+        "token": "known",
+        "layer": 24,
+        "prob": 0.2197265625,
+        "causal_effect": 0.10614013671875
+      },
+      {
+        "token": "home",
+        "layer": 24,
+        "prob": 0.2081298828125,
+        "causal_effect": 0.10614013671875
+      },
+      {
+        "token": "a",
+        "layer": 31,
+        "prob": 0.15673828125,
+        "causal_effect": 0.15673047304153442
+      }
+    ]
+  },
+  {
+    "prompt": "Dallas is a city in the state of",
+    "final_output": "Texas",
+    "concepts": [
+      {
+        "token": "Texas",
+        "layer": 20,
+        "prob": 0.6416015625,
+        "causal_effect": 0.9585180282592773
+      }
+    ]
+  },
+  {
+    "prompt": "Apple was founded by Steve",
+    "final_output": "Jobs",
+    "concepts": [
+      {
+        "token": "Jobs",
+        "layer": 20,
+        "prob": 0.33935546875,
+        "causal_effect": 0.9112663269042969
+      }
+    ]
+  }
+]
