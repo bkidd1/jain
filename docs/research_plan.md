@@ -2,7 +2,7 @@
 
 ## A Post-Hoc Reasoning Trace Predictor Trained on White-Box Ground Truth
 
-**Researcher:** Brinlee Owens
+**Researcher:** Brinlee Kidd
 **Duration:** 12–16 weeks (MVP experiment in 6–8)
 **Compute requirement:** Single A100 or equivalent (cloud OK)
 
