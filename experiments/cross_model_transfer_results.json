@@ -1,0 +1,329 @@
+{
+  "summary": {
+    "avg_f1": 0.39954648526077097,
+    "avg_precision": 0.6428571428571429,
+    "avg_recall": 0.30476190476190473
+  },
+  "results": [
+    {
+      "prompt": "The capital of Texas is",
+      "mistral_output": "a",
+      "mistral_concepts": [
+        [
+          "Austin",
+          0.85107421875
+        ],
+        [
+          "Texas",
+          0.0621337890625
+        ],
+        [
+          "Houston",
+          0.03173828125
+        ],
+        [
+          "capital",
+          0.0123291015625
+        ],
+        [
+          "Dallas",
+          0.01131439208984375
+        ]
+      ],
+      "rtp_prediction": "a - Texas \u2192 Texas \u2192 a \u2192 capital \u2192 a \u2192 Texas \u2192 capital \u2192 Texas \u2192 Texas \u2192 Texas \u2192 Texas \u2192 Texas \u2192 Texas \u2192 Texas \u2192",
+      "metrics": {
+        "predicted_tokens": [
+          "a",
+          "capital",
+          "texas",
+          "-"
+        ],
+        "actual_tokens": [
+          "houston",
+          "austin",
+          "capital",
+          "texas",
+          "dallas"
+        ],
+        "overlap": [
+          "texas",
+          "capital"
+        ],
+        "precision": 0.5,
+        "recall": 0.4,
+        "f1": 0.4444444444444445
+      }
+    },
+    {
+      "prompt": "Dallas is a city in the state of",
+      "mistral_output": "Texas",
+      "mistral_concepts": [
+        [
+          "Texas",
+          0.95849609375
+        ],
+        [
+          "Tex",
+          0.0227203369140625
+        ],
+        [
+          "Dallas",
+          0.0112457275390625
+        ],
+        [
+          "TX",
+          0.0025882720947265625
+        ],
+        [
+          "tex",
+          0.00235748291015625
+        ]
+      ],
+      "rtp_prediction": "Texas \u2192 Dallas",
+      "metrics": {
+        "predicted_tokens": [
+          "texas",
+          "dallas"
+        ],
+        "actual_tokens": [
+          "texas",
+          "tex",
+          "dallas",
+          "tx"
+        ],
+        "overlap": [
+          "texas",
+          "dallas"
+        ],
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666
+      }
+    },
+    {
+      "prompt": "The largest city in California is",
+      "mistral_output": "Los",
+      "mistral_concepts": [
+        [
+          "Los",
+          0.96240234375
+        ],
+        [
+          "Los",
+          0.01427459716796875
+        ],
+        [
+          "LA",
+          0.006954193115234375
+        ],
+        [
+          "San",
+          0.005588531494140625
+        ],
+        [
+          "California",
+          0.00445556640625
+        ]
+      ],
+      "rtp_prediction": "Los \u2192 California",
+      "metrics": {
+        "predicted_tokens": [
+          "los",
+          "california"
+        ],
+        "actual_tokens": [
+          "la",
+          "los",
+          "california",
+          "san"
+        ],
+        "overlap": [
+          "los",
+          "california"
+        ],
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666
+      }
+    },
+    {
+      "prompt": "Apple was founded by Steve",
+      "mistral_output": "J",
+      "mistral_concepts": [
+        [
+          "Apple",
+          0.69287109375
+        ],
+        [
+          "Steve",
+          0.2376708984375
+        ],
+        [
+          "apple",
+          0.0190582275390625
+        ],
+        [
+          "jobs",
+          0.007232666015625
+        ],
+        [
+          "apple",
+          0.006740570068359375
+        ]
+      ],
+      "rtp_prediction": "Steve \u2192 J",
+      "metrics": {
+        "predicted_tokens": [
+          "j",
+          "steve"
+        ],
+        "actual_tokens": [
+          "jobs",
+          "apple",
+          "steve"
+        ],
+        "overlap": [
+          "steve"
+        ],
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "f1": 0.4
+      }
+    },
+    {
+      "prompt": "The company that makes Windows is",
+      "mistral_output": "now",
+      "mistral_concepts": [
+        [
+          "Microsoft",
+          0.07989501953125
+        ],
+        [
+          "releasing",
+          0.0462646484375
+        ],
+        [
+          "going",
+          0.0455322265625
+        ],
+        [
+          "now",
+          0.037445068359375
+        ],
+        [
+          "launch",
+          0.034637451171875
+        ]
+      ],
+      "rtp_prediction": "Windows \u2192 now",
+      "metrics": {
+        "predicted_tokens": [
+          "windows",
+          "now"
+        ],
+        "actual_tokens": [
+          "releasing",
+          "going",
+          "launch",
+          "now",
+          "microsoft"
+        ],
+        "overlap": [
+          "now"
+        ],
+        "precision": 0.5,
+        "recall": 0.2,
+        "f1": 0.28571428571428575
+      }
+    },
+    {
+      "prompt": "The capital of France is",
+      "mistral_output": "a",
+      "mistral_concepts": [
+        [
+          "Paris",
+          0.978515625
+        ],
+        [
+          "France",
+          0.00959014892578125
+        ],
+        [
+          "famous",
+          0.0018596649169921875
+        ],
+        [
+          "French",
+          0.0012483596801757812
+        ],
+        [
+          "known",
+          0.00118255615234375
+        ]
+      ],
+      "rtp_prediction": "Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192 Paris \u2192",
+      "metrics": {
+        "predicted_tokens": [
+          "paris"
+        ],
+        "actual_tokens": [
+          "known",
+          "paris",
+          "famous",
+          "france",
+          "french"
+        ],
+        "overlap": [
+          "paris"
+        ],
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.33333333333333337
+      }
+    },
+    {
+      "prompt": "The author of Harry Potter is",
+      "mistral_output": "a",
+      "mistral_concepts": [
+        [
+          "planning",
+          0.0660400390625
+        ],
+        [
+          "reported",
+          0.051422119140625
+        ],
+        [
+          "officially",
+          0.0443115234375
+        ],
+        [
+          "currently",
+          0.03192138671875
+        ],
+        [
+          "divor",
+          0.03045654296875
+        ]
+      ],
+      "rtp_prediction": "Harry \u2192 Potter",
+      "metrics": {
+        "predicted_tokens": [
+          "potter",
+          "harry"
+        ],
+        "actual_tokens": [
+          "currently",
+          "reported",
+          "divor",
+          "planning",
+          "officially"
+        ],
+        "overlap": [],
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0
+      }
+    }
+  ]
+}
