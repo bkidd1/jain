@@ -1,0 +1,269 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading Llama 3.1 8B (cached, should be fast)...
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:11,  3.82s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:09<00:09,  4.68s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:18<00:06,  6.87s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:20<00:00,  5.09s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:20<00:00,  5.23s/it]
+WARNING:root:With reduced precision, it is advised to use `from_pretrained_no_processing` instead of `from_pretrained`.
+WARNING:root:You are not using LayerNorm, so the writing weights can't be centered! Skipping
+Loaded pretrained model meta-llama/Llama-3.1-8B into HookedTransformer
+✓ Loaded on mps
+
+
+============================================================
+EXPERIMENT 1: Multi-hop Reasoning
+============================================================
+============================================================
+Prompt: 'The capital of Texas is'
+============================================================
+
+📍 Final output:
+   ' a': 0.157
+   ' home': 0.101
+   ' also': 0.071
+   ' the': 0.063
+   ' known': 0.056
+
+🔍 Logit lens by layer:
+   Layer  0: '/is'(0.06), '/w'(0.04), 'otope'(0.02)
+   Layer  8: "'gc"(0.04), '_vlog'(0.02), 'zte'(0.01)
+   Layer 16: 'iveau'(0.02), 'šak'(0.01), 'LAY'(0.01)
+   Layer 20: 'also'(0.08), 'host'(0.06), 'capital'(0.04)
+   Layer 24: 'Austin'(0.42), 'known'(0.22), 'home'(0.21)
+   Layer 28: 'home'(0.59), 'known'(0.15), 'Austin'(0.05)
+   Layer 31: 'a'(0.16), 'home'(0.10), 'also'(0.07)
+
+============================================================
+Prompt: 'Dallas is a city in the state of'
+============================================================
+
+📍 Final output:
+   ' Texas': 0.959
+   ' Georgia': 0.004
+   ' North': 0.003
+   '\xa0': 0.002
+   ' New': 0.001
+
+🔍 Logit lens by layer:
+   Layer  0: 'vbCrLf'(0.01), 'Looper'(0.01), '_MAGIC'(0.01)
+   Layer  8: 'rawer'(0.04), '366'(0.02), '/***/'(0.01)
+   Layer 16: 'ktop'(0.05), 'ystate'(0.03), 'racat'(0.01)
+   Layer 20: 'Texas'(0.64), 'Texas'(0.05), 'amet'(0.01)
+   Layer 24: 'Texas'(1.00), 'Texas'(0.00), 'TX'(0.00)
+   Layer 28: 'Texas'(0.98), 'Texas'(0.01), 'TX'(0.01)
+   Layer 31: 'Texas'(0.96), 'Georgia'(0.00), 'North'(0.00)
+
+============================================================
+Prompt: 'The largest city in Texas is'
+============================================================
+
+📍 Final output:
+   ' also': 0.130
+   ' home': 0.099
+   ' Houston': 0.099
+   ' the': 0.064
+   ' a': 0.061
+
+🔍 Logit lens by layer:
+   Layer  0: '/is'(0.04), '/w'(0.03), 'MC'(0.02)
+   Layer  8: "'gc"(0.01), 'Enlarge'(0.01), '�'(0.01)
+   Layer 16: 'erece'(0.09), '-city'(0.02), 'ετ'(0.01)
+   Layer 20: 'also'(0.25), 'city'(0.18), '-city'(0.07)
+   Layer 24: 'Dallas'(0.57), 'Texas'(0.20), 'Houston'(0.15)
+   Layer 28: 'Houston'(0.40), 'Dallas'(0.37), 'home'(0.10)
+   Layer 31: 'also'(0.13), 'home'(0.10), 'Houston'(0.10)
+
+============================================================
+Prompt: 'Austin is the capital of'
+============================================================
+
+📍 Final output:
+   ' the': 0.547
+   ' Texas': 0.433
+   ' and': 0.003
+   ' Tex': 0.001
+   ' The': 0.001
+
+🔍 Logit lens by layer:
+   Layer  0: '\u200b\u200b'(0.04), 'hr'(0.01), 'Dud'(0.01)
+   Layer  8: '_formats'(0.01), 'ovna'(0.01), 'ایز'(0.01)
+   Layer 16: 'aterno'(0.01), 'ereum'(0.01), 'ovna'(0.00)
+   Layer 20: 'Texas'(0.70), 'state'(0.07), 'Texas'(0.04)
+   Layer 24: 'Texas'(0.99), 'Texas'(0.01), 'Austin'(0.00)
+   Layer 28: 'Texas'(0.96), 'TX'(0.02), 'Texas'(0.01)
+   Layer 31: 'the'(0.55), 'Texas'(0.43), 'and'(0.00)
+
+
+============================================================
+EXPERIMENT 2: Arithmetic Reasoning
+============================================================
+============================================================
+Prompt: '23 + 17 ='
+============================================================
+
+📍 Final output:
+   ' ': 0.294
+   '?': 0.251
+   '?\n': 0.119
+   ' Solution': 0.020
+   '?': 0.015
+
+🔍 Logit lens by layer:
+   Layer  0: '/='(0.02), 'erin'(0.01), 'tü'(0.01)
+   Layer  8: 'amas'(0.01), 'Sachs'(0.01), 'uber'(0.01)
+   Layer 16: '(水'(0.03), 'illac'(0.02), 'Woo'(0.01)
+   Layer 20: '/='(0.19), 'omor'(0.03), 'BITTE'(0.01)
+   Layer 24: '/='(0.02), 'Required'(0.02), 'Dragging'(0.01)
+   Layer 28: 'Required'(0.04), 'enan'(0.01), '?'(0.01)
+   Layer 31: ''(0.29), '?'(0.25), '?'(0.12)
+
+============================================================
+Prompt: 'What is 15 × 4? The answer is'
+============================================================
+
+📍 Final output:
+   ' ': 0.874
+   ':': 0.034
+   '\xa0': 0.013
+   ' shown': 0.006
+   ' the': 0.005
+
+🔍 Logit lens by layer:
+   Layer  0: 'otope'(0.02), 'gın'(0.01), 'gì'(0.01)
+   Layer  8: 'Sesso'(0.04), '$LANG'(0.02), '\ufeff#'(0.01)
+   Layer 16: ''(0.02), 'ассив'(0.01), 'imler'(0.01)
+   Layer 20: 'otope'(0.14), '�u'(0.02), 'FO'(0.01)
+   Layer 24: '�u'(0.04), 'otope'(0.02), ''(0.01)
+   Layer 28: ''(0.09), 'called'(0.03), 'iliz'(0.01)
+   Layer 31: ''(0.87), ':'(0.03), ''(0.01)
+
+============================================================
+Prompt: 'If I have 100 and subtract 37, I get'
+============================================================
+
+📍 Final output:
+   ' ': 0.867
+   ' the': 0.032
+   ' a': 0.016
+   ' -': 0.009
+   ' what': 0.007
+
+🔍 Logit lens by layer:
+   Layer  0: 'tin'(0.02), 'HCI'(0.01), 'agli'(0.01)
+   Layer  8: 'rier'(0.02), 'tiv'(0.02), 'Boeh'(0.01)
+   Layer 16: 'domic'(0.04), 'zell'(0.01), 'arine'(0.01)
+   Layer 20: '63'(0.55), '62'(0.04), '73'(0.02)
+   Layer 24: '63'(0.95), '73'(0.01), '62'(0.01)
+   Layer 28: '63'(0.98), '83'(0.00), '73'(0.00)
+   Layer 31: ''(0.87), 'the'(0.03), 'a'(0.02)
+
+
+============================================================
+EXPERIMENT 3: Adversarial Multi-hop
+============================================================
+(Tests if model uses real reasoning vs surface heuristics)
+============================================================
+Prompt: 'The largest city in the state whose capital is Austin is'
+============================================================
+
+📍 Final output:
+   ' San': 0.309
+   ' Houston': 0.226
+   ' the': 0.071
+   ' Dallas': 0.026
+   ' also': 0.020
+
+🔍 Logit lens by layer:
+   Layer  0: '/w'(0.06), 'otope'(0.03), 'gın'(0.01)
+   Layer  8: 'EPROM'(0.03), '�'(0.02), 'ㅡ'(0.01)
+   Layer 16: 'erece'(0.39), 'クト'(0.01), 'eree'(0.01)
+   Layer 20: 'city'(0.11), 'Texas'(0.09), 'cities'(0.07)
+   Layer 24: 'Texas'(0.35), 'Dallas'(0.29), 'Houston'(0.19)
+   Layer 28: 'Houston'(0.52), 'Dallas'(0.31), 'Texas'(0.04)
+   Layer 31: 'San'(0.31), 'Houston'(0.23), 'the'(0.07)
+
+============================================================
+Prompt: 'The largest city in the state whose capital is Sacramento is'
+============================================================
+
+📍 Final output:
+   ' San': 0.263
+   ' Los': 0.132
+   ' the': 0.103
+   ' Fresno': 0.069
+   ' Stock': 0.065
+
+🔍 Logit lens by layer:
+   Layer  0: '/w'(0.04), 'otope'(0.01), 'gın'(0.01)
+   Layer  8: 'EPROM'(0.03), '�'(0.02), 'nte'(0.01)
+   Layer 16: 'erece'(0.43), 'city'(0.01), 'クト'(0.01)
+   Layer 20: 'city'(0.19), 'cities'(0.07), 'DSA'(0.07)
+   Layer 24: 'Sacramento'(0.49), 'Los'(0.20), 'Sac'(0.15)
+   Layer 28: 'Stock'(0.64), 'Los'(0.10), 'San'(0.08)
+   Layer 31: 'San'(0.26), 'Los'(0.13), 'the'(0.10)
+
+
+============================================================
+EXPERIMENT 4: Knowledge Retrieval Chains
+============================================================
+============================================================
+Prompt: 'The CEO of Apple is'
+============================================================
+
+📍 Final output:
+   ' the': 0.058
+   ' a': 0.053
+   ' one': 0.046
+   ' Tim': 0.046
+   ' not': 0.042
+
+🔍 Logit lens by layer:
+   Layer  0: '/w'(0.03), 'MC'(0.01), 'Tanner'(0.01)
+   Layer  8: 'ęk'(0.01), '▲'(0.00), 'uncia'(0.00)
+   Layer 16: 'oval'(0.02), 'azes'(0.02), 'now'(0.02)
+   Layer 20: 'Apple'(0.05), 'finally'(0.03), 'now'(0.02)
+   Layer 24: 'Apple'(0.62), 'Apple'(0.04), 'worth'(0.03)
+   Layer 28: 'back'(0.07), 'worth'(0.05), 'scheduled'(0.02)
+   Layer 31: 'the'(0.06), 'a'(0.05), 'one'(0.05)
+
+============================================================
+Prompt: 'Apple was founded by Steve'
+============================================================
+
+📍 Final output:
+   ' Jobs': 0.912
+   ' W': 0.065
+   ' jobs': 0.013
+   ' Job': 0.003
+   ' and': 0.001
+
+🔍 Logit lens by layer:
+   Layer  0: 'μέ'(0.02), 'κυ'(0.01), 'rollback'(0.01)
+   Layer  8: 'autop'(0.03), '(SK'(0.00), '.erb'(0.00)
+   Layer 16: 'andler'(0.01), 'discounts'(0.01), 'chor'(0.01)
+   Layer 20: 'Jobs'(0.34), 'Apple'(0.02), 'Jobs'(0.02)
+   Layer 24: 'Jobs'(0.96), 'Jobs'(0.03), 'jobs'(0.01)
+   Layer 28: 'Jobs'(0.93), 'jobs'(0.04), 'Jobs'(0.02)
+   Layer 31: 'Jobs'(0.91), 'W'(0.07), 'jobs'(0.01)
+
+============================================================
+Prompt: 'The company that makes the iPhone is'
+============================================================
+
+📍 Final output:
+   ' also': 0.056
+   ' now': 0.043
+   ' the': 0.027
+   ' going': 0.027
+   ' working': 0.024
+
+🔍 Logit lens by layer:
+   Layer  0: 'otope'(0.02), '/w'(0.02), 'gın'(0.01)
+   Layer  8: 'Exited'(0.01), '월부터'(0.01), 'ВА'(0.01)
+   Layer 16: 'now'(0.07), 'today'(0.01), 'corporation'(0.01)
+   Layer 20: 'now'(0.11), 'also'(0.06), 'Apple'(0.03)
+   Layer 24: 'Apple'(0.32), 'now'(0.09), 'also'(0.06)
+   Layer 28: 'Apple'(0.07), 'also'(0.07), 'now'(0.04)
+   Layer 31: 'also'(0.06), 'now'(0.04), 'the'(0.03)
+
+
+============================================================
+✓ All experiments complete!
+============================================================
