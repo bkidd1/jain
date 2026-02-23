@@ -17,18 +17,6 @@ All figures are in `../docs/figures/`:
 | Fig 4 | `fig4_transfer_f1.png` | Cross-model transfer results |
 | Fig 5 | `fig5_concept_comparison.png` | Llama vs Mistral concepts |
 
-## Building the PDF
-
-```bash
-cd paper
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-pdflatex main.tex
-```
-
-Or use Overleaf — upload `main.tex` and the figures folder.
-
 ## Target Venues
 
 - **ICML 2026** Mechanistic Interpretability Workshop
@@ -41,7 +29,6 @@ Or use Overleaf — upload `main.tex` and the figures folder.
 
 ## TODO Before Submission
 
-- [ ] Update author email
 - [ ] Check venue-specific formatting requirements
 - [ ] Verify all figure references
 - [ ] Proofread
