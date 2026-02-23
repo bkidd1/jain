@@ -1,0 +1,10 @@
+{"task_type": "factual", "input_text": "The capital of France is", "expected_output": "Paris", "expected_trace": ["France", "Paris"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "The capital of Japan is", "expected_output": "Tokyo", "expected_trace": ["Japan", "Tokyo"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "The capital of Germany is", "expected_output": "Berlin", "expected_trace": ["Germany", "Berlin"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "The CEO of Apple is", "expected_output": "Tim", "expected_trace": ["Apple", "Tim"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "The company that makes Windows is", "expected_output": "Microsoft", "expected_trace": ["Windows", "Microsoft"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "Apple was founded by Steve", "expected_output": "Jobs", "expected_trace": ["Apple", "Steve", "Jobs"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "The author of Harry Potter is", "expected_output": "J", "expected_trace": ["Harry Potter", "Rowling"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "The largest planet in our solar system is", "expected_output": "Jupiter", "expected_trace": ["solar system", "Jupiter"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "Water freezes at", "expected_output": "0", "expected_trace": ["freezes", "0"], "metadata": {"type": "factual_completion"}}
+{"task_type": "factual", "input_text": "The speed of light is approximately 300,000", "expected_output": "km", "expected_trace": ["light", "300"], "metadata": {"type": "factual_completion"}}

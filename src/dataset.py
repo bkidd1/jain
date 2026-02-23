@@ -6,6 +6,8 @@ Includes task generators for the three core domains:
 1. Factual multi-hop reasoning
 2. Arithmetic with intermediate steps  
 3. Sentiment-influenced generation
+
+NOTE: Prompts are formatted as COMPLETIONS for base models, not questions.
 """
 
 import json
@@ -28,7 +30,7 @@ class MultiHopGenerator:
     """
     Generates factual multi-hop reasoning examples.
     
-    Example: "What is the capital of the state where Dallas is located?"
+    Example: "The capital of the state where Dallas is located is"
     Expected trace: Dallas → Texas → Austin
     """
     
@@ -59,26 +61,35 @@ class MultiHopGenerator:
     def generate(self, n: int = 100) -> Generator[TaskExample, None, None]:
         """Generate multi-hop reasoning examples."""
         
-        # Type 1: City → State → Capital
+        # Type 1: City → State → Capital (completion format)
         for city, state in self.CITY_TO_STATE.items():
             if state in self.STATE_TO_CAPITAL:
                 capital = self.STATE_TO_CAPITAL[state]
                 yield TaskExample(
                     task_type="multi_hop_capital",
-                    input_text=f"What is the capital of the state where {city} is located?",
+                    input_text=f"The capital of the state where {city} is located is",
                     expected_output=capital,
                     expected_trace=[city, state, capital],
                     metadata={"hop_type": "city_state_capital"}
                 )
         
-        # Type 2: Capital → State → Largest City (adversarial - tests if model
-        # uses real reasoning vs. surface heuristics)
+        # Type 2: Simple city → state (for sanity checking)
+        for city, state in self.CITY_TO_STATE.items():
+            yield TaskExample(
+                task_type="city_to_state",
+                input_text=f"{city} is a city in the state of",
+                expected_output=state,
+                expected_trace=[city, state],
+                metadata={"hop_type": "city_state_direct"}
+            )
+        
+        # Type 3: Capital → State → Largest City (adversarial)
         for state, capital in self.STATE_TO_CAPITAL.items():
             if state in self.STATE_TO_LARGEST_CITY:
                 largest = self.STATE_TO_LARGEST_CITY[state]
                 yield TaskExample(
                     task_type="multi_hop_adversarial",
-                    input_text=f"What is the largest city in the state whose capital is {capital}?",
+                    input_text=f"The largest city in the state whose capital is {capital} is",
                     expected_output=largest,
                     expected_trace=[capital, state, largest],
                     metadata={"hop_type": "capital_state_largest", "adversarial": True}
@@ -88,37 +99,86 @@ class MultiHopGenerator:
 class ArithmeticGenerator:
     """
     Generates arithmetic examples with intermediate steps.
+    Uses completion format: "37 + 48 ="
     
-    Example: "What is 23 × 17?"
-    Expected trace: 23×10=230, 23×7=161, 230+161=391
+    Expected trace: 30+40=70, 7+8=15, 70+15=85
     """
     
     def generate(self, n: int = 100) -> Generator[TaskExample, None, None]:
         """Generate arithmetic examples."""
         import random
         
-        for _ in range(n):
-            # Two-digit multiplication
-            a = random.randint(11, 49)
-            b = random.randint(11, 49)
-            result = a * b
-            
-            # Expected decomposition (distributive property)
-            b_tens = (b // 10) * 10
-            b_ones = b % 10
-            step1 = a * b_tens
-            step2 = a * b_ones
+        # Addition (simpler, models are better at this)
+        for _ in range(n // 2):
+            a = random.randint(10, 99)
+            b = random.randint(10, 99)
+            result = a + b
             
             yield TaskExample(
-                task_type="arithmetic_multiply",
-                input_text=f"What is {a} × {b}?",
+                task_type="arithmetic_add",
+                input_text=f"{a} + {b} =",
                 expected_output=str(result),
-                expected_trace=[
-                    f"{a}×{b_tens}={step1}",
-                    f"{a}×{b_ones}={step2}",
-                    f"{step1}+{step2}={result}"
-                ],
+                expected_trace=[str(a), str(b), str(result)],
+                metadata={"operation": "add", "a": a, "b": b}
+            )
+        
+        # Subtraction
+        for _ in range(n // 4):
+            a = random.randint(50, 150)
+            b = random.randint(10, a - 1)
+            result = a - b
+            
+            yield TaskExample(
+                task_type="arithmetic_sub",
+                input_text=f"{a} - {b} =",
+                expected_output=str(result),
+                expected_trace=[str(a), str(b), str(result)],
+                metadata={"operation": "subtract", "a": a, "b": b}
+            )
+        
+        # Simple multiplication (single digit × double digit)
+        for _ in range(n // 4):
+            a = random.randint(2, 9)
+            b = random.randint(11, 25)
+            result = a * b
+            
+            yield TaskExample(
+                task_type="arithmetic_mult",
+                input_text=f"{a} × {b} =",
+                expected_output=str(result),
+                expected_trace=[str(a), str(b), str(result)],
                 metadata={"operation": "multiply", "a": a, "b": b}
+            )
+
+
+class FactualGenerator:
+    """
+    Generates simple factual completion examples.
+    Good for validating logit lens captures known facts.
+    """
+    
+    FACTS = [
+        ("The capital of France is", "Paris", ["France", "Paris"]),
+        ("The capital of Japan is", "Tokyo", ["Japan", "Tokyo"]),
+        ("The capital of Germany is", "Berlin", ["Germany", "Berlin"]),
+        ("The CEO of Apple is", "Tim", ["Apple", "Tim"]),
+        ("The company that makes Windows is", "Microsoft", ["Windows", "Microsoft"]),
+        ("Apple was founded by Steve", "Jobs", ["Apple", "Steve", "Jobs"]),
+        ("The author of Harry Potter is", "J", ["Harry Potter", "Rowling"]),
+        ("The largest planet in our solar system is", "Jupiter", ["solar system", "Jupiter"]),
+        ("Water freezes at", "0", ["freezes", "0"]),
+        ("The speed of light is approximately 300,000", "km", ["light", "300"]),
+    ]
+    
+    def generate(self, n: int = 100) -> Generator[TaskExample, None, None]:
+        """Generate factual examples."""
+        for prompt, expected, trace in self.FACTS:
+            yield TaskExample(
+                task_type="factual",
+                input_text=prompt,
+                expected_output=expected,
+                expected_trace=trace,
+                metadata={"type": "factual_completion"}
             )
 
 
@@ -130,35 +190,35 @@ class SentimentGenerator:
     Based on Anthropic's "hint" paradigm from the faithfulness study.
     """
     
-    NEUTRAL_QUESTIONS = [
-        "Is this movie worth watching?",
-        "Should I read this book?",
-        "Is this restaurant good?",
+    NEUTRAL_PROMPTS = [
+        ("This movie was", ["good", "bad"]),
+        ("The restaurant was", ["great", "terrible"]),
+        ("I thought the book was", ["excellent", "boring"]),
     ]
     
     POSITIVE_FRAMES = [
-        "My friend loved it and said",
-        "Critics are raving about it.",
-        "Everyone says it's amazing.",
+        "Everyone loved it.",
+        "Critics praised it highly.",
+        "It won many awards.",
     ]
     
     NEGATIVE_FRAMES = [
-        "My friend hated it and warned me.",
-        "Critics have panned it.",
-        "Everyone says it's terrible.",
+        "Everyone hated it.",
+        "Critics panned it completely.",
+        "It was a huge flop.",
     ]
     
     def generate(self, n: int = 100) -> Generator[TaskExample, None, None]:
         """Generate sentiment-influenced examples."""
         
-        for question in self.NEUTRAL_QUESTIONS:
+        for prompt, expected_pair in self.NEUTRAL_PROMPTS:
             # Positive framing
             for frame in self.POSITIVE_FRAMES:
                 yield TaskExample(
                     task_type="sentiment_positive",
-                    input_text=f"{frame} {question}",
-                    expected_output="positive_recommendation",  # Placeholder
-                    expected_trace=["positive_frame_detected", "sentiment_influence"],
+                    input_text=f"{frame} {prompt}",
+                    expected_output=expected_pair[0],  # positive word
+                    expected_trace=["positive_frame", expected_pair[0]],
                     metadata={"frame_type": "positive", "frame": frame}
                 )
             
@@ -166,9 +226,9 @@ class SentimentGenerator:
             for frame in self.NEGATIVE_FRAMES:
                 yield TaskExample(
                     task_type="sentiment_negative",
-                    input_text=f"{frame} {question}",
-                    expected_output="negative_recommendation",  # Placeholder
-                    expected_trace=["negative_frame_detected", "sentiment_influence"],
+                    input_text=f"{frame} {prompt}",
+                    expected_output=expected_pair[1],  # negative word
+                    expected_trace=["negative_frame", expected_pair[1]],
                     metadata={"frame_type": "negative", "frame": frame}
                 )
 
@@ -193,6 +253,13 @@ def generate_full_dataset(output_dir: str = "data/raw") -> Dict[str, int]:
         for example in arithmetic:
             f.write(json.dumps(asdict(example)) + "\n")
     counts["arithmetic"] = len(arithmetic)
+    
+    # Factual
+    factual = list(FactualGenerator().generate())
+    with open(output_path / "factual.jsonl", "w") as f:
+        for example in factual:
+            f.write(json.dumps(asdict(example)) + "\n")
+    counts["factual"] = len(factual)
     
     # Sentiment
     sentiment = list(SentimentGenerator().generate())
