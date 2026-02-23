@@ -1,8 +1,8 @@
 # Black-Box Reasoning Trace Prediction via White-Box Distillation
 
-**Brinlee Kidd**  
-Independent Researcher  
-brinlee0kidd@gmail.com
+**Brinlee Kidd**¹, **Demosthenes**²  
+¹Independent Researcher, ²AI Research Assistant  
+brinlee@gmail.com, demo.hegemon@gmail.com
 
 ---
 
