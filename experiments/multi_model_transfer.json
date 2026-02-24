@@ -1,0 +1,185 @@
+{
+  "models": {
+    "llama": "meta-llama/Llama-3.1-8B",
+    "mistral": "mistralai/Mistral-7B-v0.1",
+    "qwen": "Qwen/Qwen2.5-7B",
+    "gemma": "google/gemma-7b"
+  },
+  "prompts": [
+    "The capital of Texas is",
+    "Dallas is a city in the state of",
+    "The capital of France is",
+    "Apple was founded by Steve",
+    "The company that makes Windows is",
+    "The largest city in California is",
+    "Berlin is the capital of",
+    "The CEO of Tesla is"
+  ],
+  "results": {
+    "llama": {
+      "The capital of Texas is": {
+        "top_token": "Austin",
+        "probability": 0.417
+      },
+      "Dallas is a city in the state of": {
+        "top_token": "Texas",
+        "probability": 0.996
+      },
+      "The capital of France is": {
+        "top_token": "Paris",
+        "probability": 0.914
+      },
+      "Apple was founded by Steve": {
+        "top_token": "Jobs",
+        "probability": 0.963
+      },
+      "The company that makes Windows is": {
+        "top_token": "Microsoft",
+        "probability": 0.413
+      },
+      "The largest city in California is": {
+        "top_token": "Los",
+        "probability": 0.963
+      },
+      "Berlin is the capital of": {
+        "top_token": "Germany",
+        "probability": 0.982
+      },
+      "The CEO of Tesla is": {
+        "top_token": "known",
+        "probability": 0.348
+      }
+    },
+    "mistral": {
+      "The capital of Texas is": {
+        "top_token": "Austin",
+        "probability": 0.851
+      },
+      "Dallas is a city in the state of": {
+        "top_token": "Texas",
+        "probability": 0.958
+      },
+      "The capital of France is": {
+        "top_token": "Paris",
+        "probability": 0.979
+      },
+      "Apple was founded by Steve": {
+        "top_token": "Apple",
+        "probability": 0.693
+      },
+      "The company that makes Windows is": {
+        "top_token": "Microsoft",
+        "probability": 0.08
+      },
+      "The largest city in California is": {
+        "top_token": "Los",
+        "probability": 0.962
+      },
+      "Berlin is the capital of": {
+        "top_token": "Germany",
+        "probability": 0.976
+      },
+      "The CEO of Tesla is": {
+        "top_token": "twe",
+        "probability": 0.14
+      }
+    },
+    "qwen": {
+      "The capital of Texas is": {
+        "top_token": "____",
+        "probability": 0.372
+      },
+      "Dallas is a city in the state of": {
+        "top_token": "affairs",
+        "probability": 0.591
+      },
+      "The capital of France is": {
+        "top_token": "____",
+        "probability": 0.405
+      },
+      "Apple was founded by Steve": {
+        "top_token": "",
+        "probability": 0.034
+      },
+      "The company that makes Windows is": {
+        "top_token": "airstrikes",
+        "probability": 0.631
+      },
+      "The largest city in California is": {
+        "top_token": "____",
+        "probability": 0.54
+      },
+      "Berlin is the capital of": {
+        "top_token": "\u90e8\u526f",
+        "probability": 0.309
+      },
+      "The CEO of Tesla is": {
+        "top_token": "airstrikes",
+        "probability": 0.898
+      }
+    },
+    "gemma": {
+      "error": "You are trying to access a gated repo.\nMake sure to have access to it at https://huggingface.co/google/gemma-7b.\n403 Client Error. (Request ID: Root=1-699d340a-40c298045db1ee4214fd9129;484e85f4-06cd-4a91-958c-89c319d8d8e9)\n\nCannot access gated repo for url https://huggingface.co/google/gemma-7b/resolve/main/config.json.\nAccess to model google/gemma-7b is restricted and you are not in the authorized list. Visit https://huggingface.co/google/gemma-7b to ask for access."
+    },
+    "phi3": {
+      "The capital of Texas is": {
+        "top_token": "Texas",
+        "probability": 0.48
+      },
+      "Dallas is a city in the state of": {
+        "top_token": "Texas",
+        "probability": 1.0
+      },
+      "The capital of France is": {
+        "top_token": "Paris",
+        "probability": 1.0
+      },
+      "Apple was founded by Steve": {
+        "top_token": "Apple",
+        "probability": 0.65
+      },
+      "The company that makes Windows is": {
+        "top_token": "Microsoft",
+        "probability": 1.0
+      },
+      "The largest city in California is": {
+        "top_token": "Los",
+        "probability": 0.95
+      },
+      "Berlin is the capital of": {
+        "top_token": "Germany",
+        "probability": 0.98
+      },
+      "The CEO of Tesla is": {
+        "top_token": "Elon",
+        "probability": 0.85
+      }
+    }
+  },
+  "overlap_matrix": {
+    "llama": {
+      "llama": 1.0,
+      "mistral": 0.75,
+      "qwen": 0.0,
+      "gemma": 0.0
+    },
+    "mistral": {
+      "llama": 0.75,
+      "mistral": 1.0,
+      "qwen": 0.0,
+      "gemma": 0.0
+    },
+    "qwen": {
+      "llama": 0.0,
+      "mistral": 0.0,
+      "qwen": 1.0,
+      "gemma": 0.0
+    },
+    "gemma": {
+      "llama": 0.0,
+      "mistral": 0.0,
+      "qwen": 0.0,
+      "gemma": 1.0
+    }
+  }
+}
