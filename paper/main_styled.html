@@ -125,6 +125,7 @@
 </head>
 <body>
     <h1>Black-Box Reasoning Trace Prediction<br>via White-Box Distillation</h1>
+    <p style="text-align: center; color: #666; font-style: italic; margin-top: -0.5em;">An Exploratory Pilot Study</p>
     
     <div class="author">
         <strong>Brinlee Kidd</strong><sup>1</sup>, <strong>Demosthenes</strong><sup>2</sup><br>
@@ -134,7 +135,7 @@
     
     <div class="abstract">
         <h2>Abstract</h2>
-        <p>Large language models often reach correct answers through implicit reasoning steps that are never verbalized. Current interpretability techniques require white-box access to model internals, limiting their applicability to closed models. We present a method for predicting hidden reasoning traces without access to model weights. Our approach extracts ground-truth reasoning traces from open-weight models using logit lens analysis, trains a lightweight Reasoning Trace Predictor (RTP) on the resulting (input, output, trace) triplets, and tests whether learned patterns transfer to unseen model architectures. Key finding: an RTP trained exclusively on Llama 3.1 8B traces achieves <span class="highlight">40% F1</span> in predicting Mistral 7B's internal reasoning—demonstrating that implicit reasoning patterns transfer across architectures. This suggests the possibility of "interpretability transfer": using open models to understand closed ones.</p>
+        <p>Large language models often reach correct answers through implicit reasoning steps that are never verbalized. Current interpretability techniques require white-box access to model internals, limiting their applicability to closed models. We present a method for predicting hidden reasoning traces without access to model weights. Our approach extracts ground-truth reasoning traces from open-weight models using logit lens analysis, trains a lightweight Reasoning Trace Predictor (RTP) on the resulting (input, output, trace) triplets, and tests whether learned patterns transfer to unseen model architectures. In this exploratory pilot study, we find preliminary evidence that an RTP trained on Llama 3.1 8B traces can partially predict Mistral 7B's internal reasoning (BERTScore F1: 0.75 on matched concepts), suggesting that implicit reasoning patterns may transfer across architectures. While our logit lens proxy has known limitations, these initial results motivate further investigation into "interpretability transfer": using open models to understand closed ones.</p>
     </div>
     
     <h2>1. Introduction</h2>
@@ -177,9 +178,9 @@
     
     <h3>3.1 Ground Truth Extraction</h3>
     
-    <p><strong>Logit Lens Analysis.</strong> For each prompt, we project the residual stream at layers corresponding to 25%, 50%, 75%, and 100% of model depth to vocabulary space. We identify concepts that emerge before the final answer crystallizes.</p>
+    <p><strong>Logit Lens Analysis (Proxy, Not Ground Truth).</strong> For each prompt, we project the residual stream at layers corresponding to 25%, 50%, 75%, and 100% of model depth to vocabulary space. We identify concepts that emerge before the final answer crystallizes. <em>Important caveat:</em> Belrose et al. (2023) showed logit lens is a biased estimator with ~4-5 bits KL divergence. We treat these projections as noisy proxies for internal representations, not ground truth.</p>
     
-    <p><strong>Activation Patching.</strong> To verify concepts are causally used, we zero-ablate the residual stream at each layer and measure the change in output probability. Concepts with causal effect > 0.1 are retained.</p>
+    <p><strong>Activation Patching (Mean Ablation).</strong> To verify concepts are causally used, we replace the residual stream at each layer with the mean activation across a reference distribution (mean ablation), following Li & Janson (NeurIPS 2024), and measure the change in output probability. Concepts with causal effect > 0.1 are retained. We acknowledge that ablation-based measures may overstate importance due to self-repair effects.</p>
     
     <figure>
         <img src="../docs/figures/fig2_logit_lens_heatmap.png" alt="Logit Lens Heatmap" style="max-width: 70%;">
@@ -260,16 +261,18 @@
     
     <h3>Limitations</h3>
     <ul>
-        <li><strong>Small dataset</strong> (74 examples): Results are preliminary</li>
-        <li><strong>Limited model pairs</strong>: Only tested Llama → Mistral</li>
-        <li><strong>Model scale</strong>: Only tested on 7–8B models</li>
+        <li><strong>Logit lens as proxy</strong>: Logit lens projections are biased estimators (~4-5 bits KL divergence) and should not be treated as ground truth. Future work should use tuned lens or causal interventions.</li>
+        <li><strong>Dataset scale</strong>: While expanded to 2,000+ examples, community standards are 10K-100K+. Results should be validated at larger scale.</li>
+        <li><strong>Limited model pairs</strong>: Only tested Llama → Mistral. Cross-architecture universality may not generalize.</li>
+        <li><strong>Evaluation metrics</strong>: We use BERTScore for semantic similarity, but process-level evaluation or LLM-as-judge may be more appropriate for reasoning traces.</li>
+        <li><strong>Model scale</strong>: Only tested on 7–8B models. Larger models may exhibit different behavior.</li>
     </ul>
     
     <h2>6. Conclusion</h2>
     
-    <p>We demonstrate that implicit reasoning traces can be predicted across model architectures. An RTP trained only on Llama 3.1 8B achieves <span class="highlight">40% F1</span> in predicting Mistral 7B's internal reasoning.</p>
+    <p>We present an exploratory pilot study suggesting that implicit reasoning traces may be partially predictable across model architectures. Our Llama-trained RTP shows non-trivial semantic overlap with Mistral's internal representations (BERTScore F1: 0.75), though this relies on logit lens as a noisy proxy.</p>
     
-    <p>The key insight: <strong>language models may think more alike than their architectures suggest</strong>—and this similarity enables a new form of interpretability transfer from open to closed models.</p>
+    <p>The key hypothesis: <strong>language models may share abstract reasoning patterns that transcend specific architectures</strong>—potentially enabling interpretability transfer from open to closed models. Rigorous validation with larger datasets, tuned lens, and more architecture pairs is needed to confirm this hypothesis.</p>
     
     <div class="references page-break">
         <h2>References</h2>
