@@ -43,11 +43,44 @@ We trained classifiers to detect when a language model's internal computation di
 - Test: Phi-2 (never seen during training)
 - **AUROC: 0.838, F1: 78.4%** ✅
 
+## Model Robustness to Hint Manipulation
+
+An unexpected finding: models vary dramatically in their susceptibility to misleading hints embedded in prompts. We rank models by their "robustness" — the percentage of cases where they ignored the misleading hint and produced the correct answer.
+
+### Robustness Ranking
+
+| Rank | Model | Unfaithful Rate | Robustness | Notes |
+|------|-------|-----------------|------------|-------|
+| 🥇 1 | **Pythia-1.4B** | 0.0% | **100%** | Completely ignored all hints |
+| 🥈 2 | TinyLlama-1.1B | 31.8% | 68.2% | Moderate susceptibility |
+| 🥉 3 | Qwen2-1.5B | 33.3% | 66.7% | Moderate susceptibility |
+| 4 | Phi-2 | 33.3% | 66.7% | Moderate susceptibility |
+
+### Analysis
+
+**Pythia's robustness is striking.** Despite being similar in size to TinyLlama (1.4B vs 1.1B), Pythia showed zero susceptibility to misleading hints. Possible explanations:
+
+1. **Training data differences** — Pythia was trained on The Pile, which may include more diverse or adversarial examples
+2. **Architecture differences** — GPT-NeoX architecture may process in-context hints differently than Llama-style models
+3. **Instruction tuning** — TinyLlama, Qwen, and Phi-2 are instruction-tuned; Pythia is a base model that may weight prompt content differently
+
+**Implications for AI Safety:**
+- Model robustness to manipulation varies significantly and unpredictably
+- Instruction tuning may increase susceptibility to in-context manipulation
+- Base models may be more robust but less useful for downstream tasks
+- This metric could be valuable for evaluating model safety properties
+
+### Future Work
+- Test more models to establish robustness patterns across architecture families
+- Investigate whether instruction tuning systematically increases hint susceptibility
+- Develop adversarial robustness benchmarks based on this paradigm
+
 ## Key Insights
 
 1. **Single-model patterns don't transfer** — unfaithfulness signatures are architecture-specific
 2. **Multi-model training learns generalizable patterns** — 0.967 → 0.838 AUROC on unseen architecture
 3. **Some models are robust to hint manipulation** — Pythia ignored all misleading hints (0% unfaithful)
+4. **Instruction tuning may reduce robustness** — All susceptible models were instruction-tuned; the robust model was a base model
 
 ## Implications
 
