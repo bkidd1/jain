@@ -1,0 +1,17 @@
+{
+  "model_dir": "experiments/02_divergence_detection/data/models/detector_v1",
+  "test_data": "experiments/02_divergence_detection/data/extractions/extractions_qwen2_1.5b.jsonl",
+  "n_examples": 255,
+  "n_unfaithful": 85,
+  "metrics": {
+    "auroc": 0.538235294117647,
+    "accuracy": 0.5568627450980392,
+    "precision": 0.37272727272727274,
+    "recall": 0.4823529411764706,
+    "f1": 0.4205128205128205,
+    "true_positives": 41,
+    "false_positives": 69,
+    "true_negatives": 101,
+    "false_negatives": 44
+  }
+}

@@ -33,13 +33,14 @@ def load_examples(path: Path) -> list[dict]:
     return examples
 
 
-def predict(model, tokenizer, examples: list[dict], device: str, batch_size: int = 8):
+def predict(model, tokenizer, examples: list[dict], device: str, batch_size: int = 1):
     """Get predictions for examples."""
     model.eval()
     
     all_probs = []
     all_labels = []
     
+    # Use batch_size=1 to avoid padding issues
     for i in tqdm(range(0, len(examples), batch_size), desc="Predicting"):
         batch = examples[i:i+batch_size]
         
