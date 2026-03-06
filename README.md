@@ -1,59 +1,72 @@
-# Jain: Reasoning Trace Predictor
+# JAIN: Interpretability Transfer for Reasoning Detection
 
-A research project investigating whether a lightweight external model can predict the implicit reasoning steps a language model took but didn't verbalize, trained against mechanistic interpretability evidence as ground truth.
+A research project investigating whether interpretability insights from open-weight models can transfer to detect reasoning anomalies in unseen architectures.
 
-## Research Question
+## Research Arc
 
-**Can a lightweight "reasoning trace predictor" (RTP), trained on mechanistic interpretability evidence from open-weight models, accurately reconstruct the implicit reasoning steps that a language model performed but did not verbalize?**
+**Initial question:** Can we reconstruct the implicit reasoning steps an LLM took but didn't verbalize?
+
+**What we learned:** Full reconstruction may be structurally intractable (see Nanda's "pragmatic interpretability" pivot, Sept 2025). The more achievable and safety-relevant goal is *detecting* when reasoning goes wrong.
+
+**Refined question:** Can a classifier trained on divergence patterns in open-weight models detect unfaithful chain-of-thought in unseen architectures?
 
 ## Project Structure
 
 ```
 jain/
-├── src/                    # Core source code
-│   ├── __init__.py
-│   ├── ground_truth.py     # Ground truth extraction (logit lens, probes, patching)
-│   ├── dataset.py          # Dataset generation and management
-│   └── rtp.py              # Reasoning Trace Predictor model
-├── data/
-│   ├── raw/                # Raw task prompts
-│   └── processed/          # Processed (input, output, trace) triples
-├── notebooks/              # Jupyter notebooks for exploration
-├── scripts/                # Training and evaluation scripts
-└── experiments/            # Experiment configs and results
+├── experiments/
+│   ├── 01_reconstruction/     # Original RTP experiment (complete)
+│   │   ├── data/              # Prompts, traces, training data
+│   │   ├── models/            # TinyLlama + LoRA checkpoints
+│   │   ├── scripts/           # Extraction, training, evaluation
+│   │   └── results/           # Cross-model transfer results
+│   └── 02_divergence_detection/  # Current work (in progress)
+│       ├── data/              # Hint pairs, labeled examples
+│       ├── models/            # Detector checkpoints
+│       └── scripts/           # Generation, training, evaluation
+├── src/                       # Shared library code
+│   ├── ground_truth.py        # Logit lens extraction
+│   ├── dataset.py             # Dataset generators
+│   └── tuned_lens_extraction.py
+├── paper/                     # LaTeX source
+├── docs/                      # Research notes, figures
+└── notebooks/                 # Exploration
 ```
+
+## Key Results (Experiment 01)
+
+- Trained TinyLlama + LoRA to predict reasoning traces from logit lens outputs
+- Achieved **40% F1** on cross-model transfer (Llama → Mistral)
+- Identified limitations: small dataset (74 examples), token F1 metric issues, zero ablation outdated
+
+These findings motivated the pivot to divergence detection.
+
+## Current Work (Experiment 02)
+
+Detecting unfaithful chain-of-thought via binary classification:
+1. Generate hint/no-hint prompt pairs on Llama
+2. Extract internal traces + CoT outputs
+3. Train classifier: does stated reasoning match internal computation?
+4. Test transfer to Mistral, Qwen, DeepSeek
 
 ## Setup
 
 ```bash
-# Create and activate virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
-
-# Install dependencies
-pip install torch transformers accelerate transformer-lens einops jaxtyping
+pip install -r requirements.txt
 ```
 
-## Phase 1: Ground Truth Generation
+## Authors
 
-Using TransformerLens to extract implicit reasoning traces:
-1. Run input through model with hooks at every layer
-2. Apply logit lens at each layer → get top-k predicted tokens per layer
-3. Apply linear probes at key layers → extract concept activations
-4. Use activation patching to confirm causal relevance
-5. Record: ordered sequence of confirmed intermediate concepts = "reasoning trace"
-
-## Task Domains
-
-1. **Factual multi-hop reasoning** - e.g., "What is the capital of the state where Dallas is located?"
-2. **Arithmetic with intermediate steps** - e.g., "What is 23 × 17?"
-3. **Sentiment-influenced generation** - Biased prompts where the model's answer is influenced by framing
+- Brinlee Kidd (brinlee@gmail.com)
+- Demosthenes (demo.hegemon@gmail.com)
 
 ## References
 
-- [Anthropic CoT Faithfulness Study](https://arxiv.org/abs/2305.04388) - "Reasoning Models Don't Always Say What They Think"
-- [TransformerLens](https://github.com/TransformerLensOrg/TransformerLens) - Neel Nanda's interpretability library
-- [Logit Lens](https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens) - Interpreting intermediate predictions
+- [Anthropic CoT Faithfulness Study](https://arxiv.org/abs/2305.04388)
+- [TransformerLens](https://github.com/TransformerLensOrg/TransformerLens)
+- Nanda, N. "From Ambitious to Pragmatic Interpretability" (2025)
 
 ## License
 
