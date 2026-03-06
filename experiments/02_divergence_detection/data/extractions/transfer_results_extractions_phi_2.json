@@ -1,0 +1,17 @@
+{
+  "model_dir": "experiments/02_divergence_detection/data/models/detector_v2_multimodel",
+  "test_data": "experiments/02_divergence_detection/data/extractions/extractions_phi_2.jsonl",
+  "n_examples": 255,
+  "n_unfaithful": 85,
+  "metrics": {
+    "auroc": 0.838235294117647,
+    "accuracy": 0.8549019607843137,
+    "precision": 0.7790697674418605,
+    "recall": 0.788235294117647,
+    "f1": 0.783625730994152,
+    "true_positives": 67,
+    "false_positives": 19,
+    "true_negatives": 151,
+    "false_negatives": 18
+  }
+}
