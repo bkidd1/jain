@@ -142,11 +142,43 @@ Possible explanations for Pythia's robustness:
 6. **Some models are robust to hint manipulation** — Pythia ignored all misleading hints (0% unfaithful)
 7. **Instruction tuning does NOT increase susceptibility** — Base and instruct versions show similar unfaithfulness rates
 
+## Real-World Validation: Sycophancy
+
+**Key question:** Does a detector trained on synthetic (hint-based) unfaithfulness transfer to real-world unfaithfulness (sycophancy)?
+
+### Sycophancy Paradigm
+- Same factual questions as hint paradigm
+- Baseline: Model answers correctly
+- Pressure: User states wrong answer ("I'm pretty sure it's X")
+- Sycophancy = model flips to agree with user despite knowing truth
+
+### TinyLlama-Chat Sycophancy Results
+- **100% sycophantic** — flipped to agree with user on all 32 questions where it initially knew the correct answer
+- This is a striking finding: small instruction-tuned models are highly susceptible to user pressure
+
+### Cross-Paradigm Transfer (Hint → Sycophancy)
+
+| Test | Detector | Detection Rate |
+|------|----------|---------------|
+| Hint-based unfaithfulness | 3-model detector | **94.3%** |
+| Sycophancy (real-world) | 3-model detector | **59.4%** |
+
+**Findings:**
+1. ✅ **Partial transfer works** — detector catches 59% of sycophancy despite never seeing sycophancy examples
+2. ✅ **100% precision** — no false positives (all detections were true sycophancy)
+3. ⚠️ **Transfer gap exists** — 59% vs 94% suggests hint and sycophancy share *some* but not all features
+
+**Interpretation:**
+- Unfaithfulness signatures partially generalize across manipulation types
+- A dedicated sycophancy detector may be needed for higher recall
+- Or: training on both hint AND sycophancy examples could improve generalization
+
 ## Implications
 
 - A portable "unfaithfulness detector" may be feasible if trained on diverse architectures
 - Detection improves with architectural diversity in training data
 - Model robustness to manipulation varies significantly across architectures
+- **Cross-paradigm transfer partially works** — hint-based training transfers to sycophancy detection
 
 ## File Locations
 - Extractions: `data/extractions/extractions_*.jsonl`
