@@ -56,6 +56,28 @@ We trained classifiers to detect when a language model's internal computation di
 
 **Result:** Training on architectures that *exclude* the target outperforms training on the target itself by 18.2 percentage points.
 
+### Scaling: How Many Architectures? (v3-scaling)
+
+**Question:** Does adding more architectures to training improve cross-model generalization?
+
+| # Archs | Training Data | Test: TinyLlama-Chat | AUROC |
+|---------|--------------|---------------------|-------|
+| 1 | TinyLlama-Chat (same) | N/A (validation) | 0.746 |
+| 1 | Qwen only (foreign) | TinyLlama-Chat | 0.702 |
+| 1 | Phi-2 only (foreign) | TinyLlama-Chat | 0.564 |
+| **2** | **Qwen + Phi-2** | TinyLlama-Chat | **0.928** |
+| **3** | **Qwen + Phi-2 + TinyLlama-Base** | TinyLlama-Chat | **0.943** ✅ |
+
+**Key findings:**
+1. **Phase transition at 2 architectures** — Single foreign architecture fails (0.56-0.70), but combining two succeeds (0.93)
+2. **3 models beats 2 models** — Adding TinyLlama-Base improved AUROC by +1.5pp (0.928 → 0.943)
+3. **Related architectures help** — TinyLlama-Base (same family as target) provided useful diversity despite architectural similarity
+
+**Interpretation:**
+- One foreign architecture overfits to that architecture's quirks
+- Two+ architectures force the detector to find architecture-agnostic unfaithfulness signals
+- Even related architectures (base vs instruct within same family) add useful signal
+
 **Interpretation:** 
 - Same-model training may overfit to architecture-specific artifacts
 - Cross-architecture training forces the detector to learn *general* unfaithfulness signatures
@@ -115,8 +137,10 @@ Possible explanations for Pythia's robustness:
 1. **Single-model patterns don't transfer** — unfaithfulness signatures are architecture-specific
 2. **Multi-model training learns generalizable patterns** — 0.967 → 0.838 AUROC on unseen architecture
 3. **Cross-architecture training beats same-model training** — Detector trained on OTHER models (0.928) outperforms detector trained on TARGET model (0.746) by +18.2pp
-4. **Some models are robust to hint manipulation** — Pythia ignored all misleading hints (0% unfaithful)
-5. **Instruction tuning does NOT increase susceptibility** — Base and instruct versions show similar unfaithfulness rates
+4. **Phase transition at 2 architectures** — Single foreign arch (0.56-0.70) fails; combining two (0.93) succeeds
+5. **More architectures = better** — 3 models (0.943) beats 2 models (0.928) by +1.5pp
+6. **Some models are robust to hint manipulation** — Pythia ignored all misleading hints (0% unfaithful)
+7. **Instruction tuning does NOT increase susceptibility** — Base and instruct versions show similar unfaithfulness rates
 
 ## Implications
 
