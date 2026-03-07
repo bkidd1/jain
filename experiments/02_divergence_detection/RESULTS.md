@@ -6,6 +6,8 @@ We trained classifiers to detect when a language model's internal computation di
 
 **Key finding:** Multi-architecture training enables cross-model transfer of unfaithfulness detection.
 
+**Surprising finding:** Training on *other* architectures outperforms training on the target itself.
+
 ## Experimental Setup
 
 ### Hint Paradigm
@@ -42,6 +44,27 @@ We trained classifiers to detect when a language model's internal computation di
 - Training: TinyLlama + Qwen
 - Test: Phi-2 (never seen during training)
 - **AUROC: 0.838, F1: 78.4%** ✅
+
+### Cross-Architecture Generalization (v3)
+
+**Key experiment:** Does training on *other* architectures improve detection on a target model, compared to training on the target itself?
+
+| Detector | Training Data | Test: TinyLlama | Delta |
+|----------|--------------|-----------------|-------|
+| v1 (same-model) | TinyLlama only | **0.746 AUROC** | baseline |
+| v3 (exclude target) | Qwen + Phi-2 (NO TinyLlama) | **0.928 AUROC** | **+18.2 pp** ✅ |
+
+**Result:** Training on architectures that *exclude* the target outperforms training on the target itself by 18.2 percentage points.
+
+**Interpretation:** 
+- Same-model training may overfit to architecture-specific artifacts
+- Cross-architecture training forces the detector to learn *general* unfaithfulness signatures
+- These general patterns transfer back to detect unfaithfulness the same-model detector missed
+
+**Implications:**
+1. You don't need labeled examples from your target model to detect unfaithfulness in it
+2. Diverse training data produces more robust detectors than homogeneous data
+3. This could enable detecting unfaithfulness in closed models by training only on open ones
 
 ## Model Robustness to Hint Manipulation
 
@@ -91,8 +114,9 @@ Possible explanations for Pythia's robustness:
 
 1. **Single-model patterns don't transfer** — unfaithfulness signatures are architecture-specific
 2. **Multi-model training learns generalizable patterns** — 0.967 → 0.838 AUROC on unseen architecture
-3. **Some models are robust to hint manipulation** — Pythia ignored all misleading hints (0% unfaithful)
-4. **Instruction tuning may reduce robustness** — All susceptible models were instruction-tuned; the robust model was a base model
+3. **Cross-architecture training beats same-model training** — Detector trained on OTHER models (0.928) outperforms detector trained on TARGET model (0.746) by +18.2pp
+4. **Some models are robust to hint manipulation** — Pythia ignored all misleading hints (0% unfaithful)
+5. **Instruction tuning does NOT increase susceptibility** — Base and instruct versions show similar unfaithfulness rates
 
 ## Implications
 
