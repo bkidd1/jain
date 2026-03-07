@@ -56,23 +56,35 @@ An unexpected finding: models vary dramatically in their susceptibility to misle
 | 🥉 3 | Qwen2-1.5B | 33.3% | 66.7% | Moderate susceptibility |
 | 4 | Phi-2 | 33.3% | 66.7% | Moderate susceptibility |
 
+### Base vs Instruction-Tuned Comparison
+
+We tested whether instruction tuning affects susceptibility to hint manipulation:
+
+| Model Family | Base | Instruct | Effect |
+|--------------|------|----------|--------|
+| TinyLlama-1.1B | 33.3% unfaithful | 31.8% unfaithful | Instruct slightly **more robust** |
+| Qwen2-1.5B | 33.3% unfaithful | 33.3% unfaithful | **No difference** |
+
+**Conclusion: Instruction tuning does NOT increase susceptibility.** The hypothesis that instruction tuning makes models more vulnerable to in-context manipulation is **not supported** by our data.
+
 ### Analysis
 
-**Pythia's robustness is striking.** Despite being similar in size to TinyLlama (1.4B vs 1.1B), Pythia showed zero susceptibility to misleading hints. Possible explanations:
+**Pythia's robustness is architecture-specific.** Despite being similar in size to TinyLlama (1.4B vs 1.1B), Pythia showed zero susceptibility to misleading hints. This is NOT due to instruction tuning (Pythia is a base model, but so are Qwen2-base and Phi-2, which show 33.3% unfaithfulness).
 
-1. **Training data differences** — Pythia was trained on The Pile, which may include more diverse or adversarial examples
-2. **Architecture differences** — GPT-NeoX architecture may process in-context hints differently than Llama-style models
-3. **Instruction tuning** — TinyLlama, Qwen, and Phi-2 are instruction-tuned; Pythia is a base model that may weight prompt content differently
+Possible explanations for Pythia's robustness:
+1. **Training data** — Pythia was trained on The Pile, which may include more diverse examples
+2. **Architecture** — GPT-NeoX architecture may process in-context hints differently than Llama/Qwen/Phi architectures
+3. **Tokenization/embedding** — Different tokenizers may represent hints differently
 
 **Implications for AI Safety:**
-- Model robustness to manipulation varies significantly and unpredictably
-- Instruction tuning may increase susceptibility to in-context manipulation
-- Base models may be more robust but less useful for downstream tasks
+- Model robustness to manipulation varies significantly across architectures
+- Instruction tuning does NOT systematically increase susceptibility
+- Architecture choice may be more important than training paradigm for robustness
 - This metric could be valuable for evaluating model safety properties
 
 ### Future Work
-- Test more models to establish robustness patterns across architecture families
-- Investigate whether instruction tuning systematically increases hint susceptibility
+- Test more GPT-NeoX models (Pythia-2.8B, GPT-J) to confirm architecture hypothesis
+- Investigate what makes GPT-NeoX resistant to hint manipulation
 - Develop adversarial robustness benchmarks based on this paradigm
 
 ## Key Insights
