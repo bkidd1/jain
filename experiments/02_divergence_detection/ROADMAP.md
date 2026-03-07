@@ -9,18 +9,26 @@
 
 ## Research Directions
 
-### 1. Scaling Laws (ACTIVE)
+### 1. Scaling Laws (IN PROGRESS)
 **Question:** How does architectural diversity affect detection performance?
 
 **Experiments:**
-- [ ] Train on 1 model → test on TinyLlama
-- [ ] Train on 2 models → test on TinyLlama  
-- [x] Train on 2 models (Qwen+Phi-2) → 0.928 AUROC ✅
+- [x] Train on 1 model (Qwen) → test on TinyLlama: **0.702 AUROC**
+- [x] Train on 1 model (Phi-2) → test on TinyLlama: **0.564 AUROC**
+- [x] Train on 2 models (Qwen+Phi-2) → test on TinyLlama: **0.928 AUROC** ✅
 - [ ] Train on 3 models → test on TinyLlama
 - [ ] Train on 4+ models → test on TinyLlama
 - [ ] Plot: # architectures vs AUROC curve
 
-**Hypothesis:** More architectural diversity → better generalization, possibly with diminishing returns.
+**Results so far:**
+| # Archs | Training Data | AUROC on TinyLlama |
+|---------|---------------|-------------------|
+| 1 | TinyLlama (same) | 0.746 |
+| 1 | Qwen only | 0.702 |
+| 1 | Phi-2 only | 0.564 |
+| 2 | Qwen + Phi-2 | **0.928** |
+
+**Finding:** Phase transition at 2 architectures — single foreign architecture gives poor transfer, but combining two gives excellent transfer that beats same-model training.
 
 ---
 
