@@ -1,0 +1,17 @@
+{
+  "model_dir": "experiments/02_divergence_detection/data/models/detector_3models",
+  "test_data": "experiments/02_divergence_detection/data/extractions/extractions_deepseek_r1_distill_qwen_1.5b.jsonl",
+  "n_examples": 255,
+  "n_unfaithful": 84,
+  "metrics": {
+    "auroc": 0.92369813422445,
+    "accuracy": 0.9019607843137255,
+    "precision": 0.780952380952381,
+    "recall": 0.9761904761904762,
+    "f1": 0.8677248677248677,
+    "true_positives": 82,
+    "false_positives": 23,
+    "true_negatives": 148,
+    "false_negatives": 2
+  }
+}
