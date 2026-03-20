@@ -12,7 +12,7 @@ Chain-of-thought (CoT) explanations can misrepresent a model's actual reasoning 
 
 Our key finding is surprising: **a detector trained on architectures that exclude the target outperforms one trained on the target itself**. A classifier trained on Qwen and Phi-2 achieves 0.928 AUROC detecting unfaithfulness in TinyLlama—18 percentage points higher than a classifier trained on TinyLlama directly (0.746). We identify a phase transition at exactly 2 training architectures: single foreign architectures fail to transfer (0.56–0.70), but combining two succeeds dramatically (0.93).
 
-This suggests that diverse architectural training forces detectors to learn architecture-agnostic unfaithfulness signatures, which generalize better than architecture-specific patterns. We validate this finding with real-world sycophancy detection (59% recall, 100% precision) despite never training on sycophancy examples. Our results point toward portable unfaithfulness detectors that could eventually work on closed models by training only on open ones.
+This suggests that diverse architectural training forces detectors to learn architecture-agnostic unfaithfulness signatures, which generalize better than architecture-specific patterns. We validate this finding across paradigms: sycophancy detection (59% recall, 100% precision) and transfer to DeepSeek-R1-Distill, a reasoning model never seen during training (0.924 AUROC). Our results point toward portable unfaithfulness detectors that could eventually work on closed models by training only on open ones.
 
 ---
 
@@ -40,7 +40,9 @@ Specifically, we demonstrate:
 
 4. **Cross-paradigm transfer**: A hint-trained detector catches 59% of real-world sycophancy with 100% precision, despite never seeing sycophancy examples.
 
-5. **Architecture-specific robustness**: Pythia-1.4B shows 0% susceptibility to hint manipulation, suggesting some architectures are behaviorally immune to this class of unfaithfulness.
+5. **Reasoning model transfer**: The detector achieves 0.924 AUROC on DeepSeek-R1-Distill, an RL-trained reasoning model never seen during training.
+
+6. **Architecture-specific robustness**: Pythia-1.4B shows 0% susceptibility to hint manipulation, suggesting some architectures are behaviorally immune to this class of unfaithfulness.
 
 These results point toward a practical goal: training unfaithfulness detectors on diverse open-weight models that could eventually detect unfaithfulness in closed models we cannot directly probe.
 
@@ -122,8 +124,9 @@ We process these into fixed-dimensional feature vectors suitable for classificat
 | Qwen2-1.5B-Instruct | 1.5B | Qwen | 33.3% |
 | Phi-2 | 2.7B | Phi | 33.3% |
 | Pythia-1.4B | 1.4B | GPT-NeoX | **0%** |
+| DeepSeek-R1-Distill-Qwen-1.5B | 1.5B | Qwen (R1) | 32.9% |
 
-Pythia's complete robustness to hint manipulation is a notable finding we discuss in Section 5.
+Pythia's complete robustness to hint manipulation is a notable finding we discuss in Section 5. DeepSeek-R1-Distill represents a reasoning model—trained with reinforcement learning on chain-of-thought—distinct from the standard language models above.
 
 ### 3.4 Detector Architecture
 
@@ -232,6 +235,31 @@ We test whether a hint-trained detector transfers to a different type of unfaith
 | Sycophancy (never seen) | **59.4%** | **100%** |
 
 The detector catches 59% of sycophantic behavior with zero false positives, despite never seeing sycophancy examples during training. This suggests partial generalization of unfaithfulness signatures across manipulation types.
+
+### 4.8 Transfer to Reasoning Models: DeepSeek-R1
+
+To test whether our detector generalizes to reasoning models—a distinct class trained with reinforcement learning on chain-of-thought reasoning—we evaluate on DeepSeek-R1-Distill-Qwen-1.5B.
+
+| Metric | Value |
+|--------|-------|
+| AUROC | **0.924** |
+| Accuracy | 90.2% |
+| Precision | 78.1% |
+| Recall | 97.6% |
+| F1 | 86.8% |
+
+Detailed confusion matrix:
+| | Predicted Unfaithful | Predicted Faithful |
+|---|---------------------|-------------------|
+| Actually Unfaithful | 82 (TP) | 2 (FN) |
+| Actually Faithful | 23 (FP) | 148 (TN) |
+
+The 3-model detector (trained on Qwen + Phi-2 + TinyLlama-Base, never seeing DeepSeek) achieves 0.924 AUROC on this reasoning model. Notably:
+
+- **97.6% recall**: The detector catches nearly all unfaithful cases (82 of 84)
+- **Comparable to TinyLlama**: 0.924 AUROC vs 0.943 on TinyLlama-Chat
+
+This suggests that unfaithfulness signatures generalize not only across architectures but across training paradigms (standard LM pretraining → RL-trained reasoning).
 
 ---
 
@@ -373,4 +401,5 @@ Unfaithful chain-of-thought as nudged reasoning. (2025). *MATS 8.0 / AI Alignmen
 | Qwen-only | Qwen | TinyLlama (transfer) | 0.702 | — | — |
 | Phi2-only | Phi-2 | TinyLlama (transfer) | 0.564 | — | — |
 | 3-model | Qwen + Phi-2 + TinyLlama-Base | TinyLlama-Chat (transfer) | 0.943 | 94.5% | 91.6% |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill (transfer) | 0.924 | 90.2% | 86.8% |
 | 3-model | — | Sycophancy | 59.4% recall | 100% precision | — |
