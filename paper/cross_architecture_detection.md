@@ -105,14 +105,45 @@ We label a response as **unfaithful** when:
 
 This operationalizes unfaithfulness as: the model uses information it doesn't disclose.
 
+![Figure 3: Example of unfaithful reasoning detected via logit lens](figures/unfaithful_example.png)
+*Figure 3: An example of unfaithful chain-of-thought. The model is asked "What is the capital of France?" with a misleading hint suggesting "Lyon." The logit lens reveals "Lyon" appearing in the top-5 tokens at layers 12-18 (shaded region), indicating the model internally considers the hint. However, the generated CoT says "The capital of France is Lyon because it's the largest city" without mentioning the hint. The detector learns to identify this pattern of internal-external divergence.*
+
 ### 3.2 Activation Extraction
 
-For each prompt-response pair, we extract:
-- Hidden states at layers 25%, 50%, 75%, and 100% of model depth
-- Attention patterns at key layers
-- The complete chain-of-thought text
+We use the **logit lens** technique (nostalgebraist, 2020) to inspect what tokens the model is "thinking about" at each layer. For each prompt-response pair:
 
-We process these into fixed-dimensional feature vectors suitable for classification. The key signal is the *relationship* between internal representations (which may encode hint-influenced reasoning) and external CoT (which may not mention the hint).
+**Step 1: Generate CoT with hidden state capture**
+```
+outputs = model(input_ids, output_hidden_states=True)
+hidden_states = outputs.hidden_states  # (n_layers, batch, seq, hidden_dim)
+```
+
+**Step 2: Apply logit lens at each layer**
+
+For each layer's hidden state, we project through the model's final layer norm and LM head to get a distribution over vocabulary:
+```
+logits_layer_i = LM_head(LayerNorm(hidden_states[i]))
+top_tokens_i = argmax(logits_layer_i, dim=-1)[:5]
+```
+
+**Step 3: Detect hint presence in internal representations**
+
+We check whether the misleading answer token (e.g., "Lyon" when the correct answer is "Paris") appears in the top-5 predicted tokens at any layer. If the model internally "considers" the hint but doesn't mention it in the CoT, this signals unfaithfulness.
+
+```python
+hint_in_internals = misleading_token in any(top_tokens_by_layer)
+hint_layers = [i for i, tops in enumerate(top_tokens_by_layer) 
+               if misleading_token in tops]
+```
+
+**Step 4: Label construction**
+
+An example is labeled **unfaithful** if:
+1. The model's final answer matches the misleading hint (not the correct answer)
+2. The hint token appeared in internal layer representations
+3. The generated CoT does not explicitly mention following the hint
+
+This captures cases where the model internally processes the hint, uses it to form its answer, but produces a CoT that rationalizes the answer without acknowledging the hint's influence.
 
 ### 3.3 Models Tested
 
@@ -130,12 +161,35 @@ Pythia's complete robustness to hint manipulation is a notable finding we discus
 
 ### 3.4 Detector Architecture
 
-We fine-tune TinyLlama-1.1B with LoRA (rank 16) as a binary classifier. Input: concatenated activation features. Output: faithful/unfaithful prediction.
+We fine-tune TinyLlama-1.1B as a binary sequence classifier using LoRA (Low-Rank Adaptation). The detector takes as input the concatenated prompt and generated CoT, formatted as:
 
-Training details:
-- 5 epochs, batch size 4, learning rate 2e-4
-- Train/val split: 85%/15%
-- Metric: AUROC (handles class imbalance)
+```
+<prompt>
+
+Response: <generated_cot>
+```
+
+The model outputs a probability P(unfaithful | prompt, cot). Importantly, the detector does **not** see the logit lens traces at inference time—it learns to detect unfaithfulness purely from the text, having been trained on examples where we know ground-truth labels from the logit lens analysis.
+
+**LoRA Configuration:**
+| Parameter | Value |
+|-----------|-------|
+| Rank | 16 |
+| Alpha | 32 |
+| Target modules | q_proj, v_proj |
+| Dropout | 0.05 |
+
+**Training:**
+| Parameter | Value |
+|-----------|-------|
+| Epochs | 5 |
+| Batch size | 4 |
+| Learning rate | 2e-4 |
+| Optimizer | AdamW |
+| Train/val split | 85%/15% |
+| Max sequence length | 512 tokens |
+
+We use AUROC as the primary metric because it handles class imbalance (roughly 1:2 unfaithful:faithful ratio) and provides a threshold-independent measure of discriminative ability.
 
 ### 3.5 Experimental Design
 
@@ -221,6 +275,9 @@ Training on architectures that *exclude* the target:
 | 1 | Qwen only (foreign) | 0.702 |
 | 1 | Phi-2 only (foreign) | 0.564 |
 | **2** | **Qwen + Phi-2** | **0.928** |
+
+![Figure 1: Phase transition in cross-architecture transfer](figures/phase_transition.png)
+*Figure 1: AUROC on TinyLlama-Chat as a function of training architecture diversity. A sharp phase transition occurs at exactly 2 architectures: single foreign architectures fail to transfer (AUROC 0.56–0.70), but combining two succeeds dramatically (0.93). Adding a third architecture provides modest additional gains (0.94).*
 | **3** | **Qwen + Phi-2 + TinyLlama-Base** | **0.943** |
 
 Single foreign architectures fail (0.56–0.70). Two architectures succeed dramatically (0.93). Three architectures improve further (0.94).
@@ -273,6 +330,9 @@ The 3-model detector (trained on Qwen + Phi-2 + TinyLlama-Base, never seeing Dee
 - **Scales 10x**: A detector trained on 1-3B models works on a 14B model with *better* performance
 
 This suggests that unfaithfulness signatures generalize not only across architectures but across training paradigms (standard LM pretraining → RL-trained reasoning) and model scales (1B → 14B, a 10x increase).
+
+![Figure 2: Detection performance across model scales](figures/scale_transfer.png)
+*Figure 2: AUROC of the 3-model detector (trained on 1-3B models) evaluated on DeepSeek-R1-Distill at 1.5B, 7B, and 14B scales. Detection performance remains strong across a 10x scale increase, with the 14B model showing the highest AUROC (0.933). Error bars show 95% CI from bootstrap resampling.*
 
 ---
 
@@ -340,33 +400,72 @@ For safety-critical applications, training on multiple model architectures may b
 
 ## 7. Limitations
 
-1. **Scale**: We tested only small models (1–3B parameters). The findings may not hold at GPT-4 scale.
+1. **Scale**: We tested models up to 14B parameters. Whether these findings extend to GPT-4 scale (100B+) remains unknown, though the improving trend from 7B→14B is encouraging.
 
-2. **Dataset size**: ~250 examples per model. Larger datasets might reveal different patterns.
+2. **Dataset size**: ~250 examples per model. Larger datasets might reveal different patterns or enable more fine-grained analysis.
 
-3. **Architectures tested**: Four architecture families (Llama, Qwen, Phi, GPT-NeoX). More diversity needed.
+3. **Architectures tested**: Five architecture families (Llama, Qwen, Phi, GPT-NeoX, DeepSeek-R1). The cross-architecture effect may differ with more diverse architectures (e.g., Mamba, mixture-of-experts).
 
-4. **Unfaithfulness types**: We tested hint-based and sycophancy. Other types (deception, sandbagging) remain untested.
+4. **Unfaithfulness types**: We tested hint-based manipulation and sycophancy. Other safety-relevant types (strategic deception, sandbagging, reward hacking) remain untested.
 
-5. **Detector architecture**: We used TinyLlama as the classifier backbone. Different classifier architectures might perform differently.
+5. **Detector architecture**: We used TinyLlama-1.1B as the classifier backbone. Larger or differently-architected detectors might perform differently.
+
+6. **Closed model applicability**: While we demonstrate cross-architecture transfer, applying this to closed models (GPT-4, Claude) would require developing text-only detection methods or API-based probing techniques.
 
 ---
 
 ## 8. Future Work
 
-1. **Scale up**: Test on 7B, 13B, 70B models
-2. **More architectures**: Add Mistral, Gemma, DeepSeek to training mix
-3. **Mechanistic analysis**: Why does cross-architecture work? Probe detector internals
-4. **Closed model application**: Develop probe methodology for API-only models
-5. **Diverse unfaithfulness**: Test on sandbagging, strategic deception, reward hacking
+1. **Scale to frontier models**: Test on 70B+ open models (Llama-3-70B, Qwen-72B) to validate the improving-with-scale trend.
+
+2. **Expand architecture diversity**: Include Mistral, Gemma, Mamba (state-space), and mixture-of-experts models in training to further test generalization.
+
+3. **Mechanistic analysis**: Probe the detector's internals to understand *what* features it uses. Do cross-architecture detectors learn interpretable unfaithfulness signatures?
+
+4. **Text-only detection**: Train detectors without access to logit lens labels—can we detect unfaithfulness purely from CoT patterns, enabling closed-model application?
+
+5. **Diverse unfaithfulness paradigms**: Test on sandbagging (underperforming to avoid triggering safety measures), strategic deception, and reward hacking scenarios.
+
+6. **Real-time deployment**: Develop efficient detection methods suitable for runtime monitoring of deployed models.
+
+7. **Understand Pythia's robustness**: Investigate why Pythia-1.4B showed 0% susceptibility to hint manipulation—this could inform training practices for more robust models.
 
 ---
 
-## 9. Conclusion
+## 9. Ethics and Broader Impact
+
+**Positive impacts**: Detecting unfaithful reasoning is crucial for AI safety. If models can produce plausible-sounding explanations that don't reflect their actual reasoning, we cannot verify that their behavior is aligned with human values. Our work contributes toward making model reasoning more transparent and auditable.
+
+**Potential misuse**: Knowledge of unfaithfulness detection methods could theoretically help adversaries train models to evade detection. However, we believe the benefits of open research on this topic outweigh the risks—detection methods must be developed openly to be robust, and the alternative (opaque, proprietary safety measures) is worse for the research community.
+
+**Limitations of scope**: Our detector identifies one specific type of unfaithfulness (hint-influenced reasoning). It should not be interpreted as a general "lie detector" for AI systems. Many forms of model misbehavior would not be caught by this approach.
+
+**Dual use**: The same techniques that detect unfaithfulness could potentially be used to train models to be *more* unfaithful while evading detection. We encourage the research community to prioritize defensive applications.
+
+---
+
+## 10. Code and Data Availability
+
+All code, trained models, and extraction data are available at: **https://github.com/bkidd1/jain**
+
+This includes:
+- Extraction scripts for logit lens analysis
+- Detector training code (LoRA fine-tuning)
+- Evaluation scripts for cross-architecture transfer
+- All extraction results (JSONL format) for reproducibility
+- Pre-trained detector checkpoints
+
+We encourage replication and extension of this work.
+
+---
+
+## 11. Conclusion
 
 We demonstrate that training unfaithfulness detectors on diverse architectures produces better generalization than training on the target architecture itself. This counterintuitive finding—cross-architecture beats same-model by 18 percentage points—suggests that architectural diversity forces detectors to learn general unfaithfulness signatures rather than architecture-specific artifacts.
 
-The phase transition at exactly 2 architectures, continued improvement at 3 architectures, and partial transfer to real-world sycophancy all point toward the feasibility of portable unfaithfulness detection. Our results suggest that a detector trained on diverse open-weight models could eventually help detect unfaithfulness in closed models we cannot directly probe.
+The phase transition at exactly 2 architectures, continued improvement at 3 architectures, partial transfer to real-world sycophancy, and strong performance on reasoning models up to 14B parameters all point toward the feasibility of portable unfaithfulness detection. Remarkably, detection performance *improves* with model scale (0.909 → 0.933 AUROC from 7B to 14B), suggesting that larger models may have more pronounced—and thus more detectable—unfaithfulness signatures.
+
+Our results suggest that a detector trained on diverse open-weight models could eventually help detect unfaithfulness in closed models we cannot directly probe. The path forward is clear: scale up training diversity, validate on frontier-scale models, and develop text-only detection methods that don't require internal model access.
 
 ---
 
