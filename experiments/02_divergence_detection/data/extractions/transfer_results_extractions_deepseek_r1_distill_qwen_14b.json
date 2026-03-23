@@ -1,0 +1,17 @@
+{
+  "model_dir": "/Users/demosthenes/jain/experiments/02_divergence_detection/data/models/detector_3models",
+  "test_data": "experiments/02_divergence_detection/data/extractions/extractions_deepseek_r1_distill_qwen_14b.jsonl",
+  "n_examples": 255,
+  "n_unfaithful": 79,
+  "metrics": {
+    "auroc": 0.933364499424626,
+    "accuracy": 0.9176470588235294,
+    "precision": 0.8020833333333334,
+    "recall": 0.9746835443037974,
+    "f1": 0.88,
+    "true_positives": 77,
+    "false_positives": 19,
+    "true_negatives": 157,
+    "false_negatives": 2
+  }
+}

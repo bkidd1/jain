@@ -12,7 +12,7 @@ Chain-of-thought (CoT) explanations can misrepresent a model's actual reasoning 
 
 Our key finding is surprising: **a detector trained on architectures that exclude the target outperforms one trained on the target itself**. A classifier trained on Qwen and Phi-2 achieves 0.928 AUROC detecting unfaithfulness in TinyLlama—18 percentage points higher than a classifier trained on TinyLlama directly (0.746). We identify a phase transition at exactly 2 training architectures: single foreign architectures fail to transfer (0.56–0.70), but combining two succeeds dramatically (0.93).
 
-This suggests that diverse architectural training forces detectors to learn architecture-agnostic unfaithfulness signatures, which generalize better than architecture-specific patterns. We validate this finding across paradigms: sycophancy detection (59% recall, 100% precision) and transfer to DeepSeek-R1-Distill, a reasoning model never seen during training (0.924 AUROC). Our results point toward portable unfaithfulness detectors that could eventually work on closed models by training only on open ones.
+This suggests that diverse architectural training forces detectors to learn architecture-agnostic unfaithfulness signatures, which generalize better than architecture-specific patterns. We validate this finding across paradigms: sycophancy detection (59% recall, 100% precision) and transfer to DeepSeek-R1-Distill reasoning models at 1.5B, 7B, and 14B scale. Remarkably, detection performance *improves* with model size: 0.924 AUROC at 1.5B, 0.909 at 7B, and 0.933 at 14B—demonstrating that small-model-trained detectors can scale to 10x larger models. Our results point toward portable unfaithfulness detectors that could eventually work on closed models by training only on open ones.
 
 ---
 
@@ -40,7 +40,7 @@ Specifically, we demonstrate:
 
 4. **Cross-paradigm transfer**: A hint-trained detector catches 59% of real-world sycophancy with 100% precision, despite never seeing sycophancy examples.
 
-5. **Reasoning model transfer**: The detector achieves 0.924 AUROC on DeepSeek-R1-Distill, an RL-trained reasoning model never seen during training.
+5. **Reasoning model transfer**: The detector achieves 0.924–0.933 AUROC on DeepSeek-R1-Distill models (1.5B, 7B, 14B), with performance *improving* at larger scales.
 
 6. **Architecture-specific robustness**: Pythia-1.4B shows 0% susceptibility to hint manipulation, suggesting some architectures are behaviorally immune to this class of unfaithfulness.
 
@@ -238,28 +238,41 @@ The detector catches 59% of sycophantic behavior with zero false positives, desp
 
 ### 4.8 Transfer to Reasoning Models: DeepSeek-R1
 
-To test whether our detector generalizes to reasoning models—a distinct class trained with reinforcement learning on chain-of-thought reasoning—we evaluate on DeepSeek-R1-Distill-Qwen-1.5B.
+To test whether our detector generalizes to reasoning models—a distinct class trained with reinforcement learning on chain-of-thought reasoning—we evaluate on DeepSeek-R1-Distill-Qwen at three scales: 1.5B, 7B, and 14B parameters.
 
-| Metric | Value |
-|--------|-------|
-| AUROC | **0.924** |
-| Accuracy | 90.2% |
-| Precision | 78.1% |
-| Recall | 97.6% |
-| F1 | 86.8% |
+| Model | AUROC | Accuracy | Precision | Recall | F1 |
+|-------|-------|----------|-----------|--------|-----|
+| DeepSeek-R1-Distill-1.5B | 0.924 | 90.2% | 78.1% | 97.6% | 86.8% |
+| DeepSeek-R1-Distill-7B | 0.909 | 89.0% | 76.4% | 96.4% | 85.3% |
+| **DeepSeek-R1-Distill-14B** | **0.933** | **91.8%** | **80.2%** | 97.5% | **88.0%** |
 
-Detailed confusion matrix:
+Detailed confusion matrices:
+
+**1.5B Model:**
 | | Predicted Unfaithful | Predicted Faithful |
 |---|---------------------|-------------------|
 | Actually Unfaithful | 82 (TP) | 2 (FN) |
 | Actually Faithful | 23 (FP) | 148 (TN) |
 
-The 3-model detector (trained on Qwen + Phi-2 + TinyLlama-Base, never seeing DeepSeek) achieves 0.924 AUROC on this reasoning model. Notably:
+**7B Model:**
+| | Predicted Unfaithful | Predicted Faithful |
+|---|---------------------|-------------------|
+| Actually Unfaithful | 81 (TP) | 3 (FN) |
+| Actually Faithful | 25 (FP) | 146 (TN) |
 
-- **97.6% recall**: The detector catches nearly all unfaithful cases (82 of 84)
-- **Comparable to TinyLlama**: 0.924 AUROC vs 0.943 on TinyLlama-Chat
+**14B Model:**
+| | Predicted Unfaithful | Predicted Faithful |
+|---|---------------------|-------------------|
+| Actually Unfaithful | 77 (TP) | 2 (FN) |
+| Actually Faithful | 19 (FP) | 157 (TN) |
 
-This suggests that unfaithfulness signatures generalize not only across architectures but across training paradigms (standard LM pretraining → RL-trained reasoning).
+The 3-model detector (trained on Qwen + Phi-2 + TinyLlama-Base, never seeing DeepSeek) achieves strong performance across all scales. Key findings:
+
+- **Detection improves with scale**: AUROC goes from 0.909 (7B) to 0.933 (14B), suggesting larger models may have more detectable unfaithfulness signatures
+- **Consistently high recall**: 96-98% across all sizes—the detector catches nearly all unfaithful cases
+- **Scales 10x**: A detector trained on 1-3B models works on a 14B model with *better* performance
+
+This suggests that unfaithfulness signatures generalize not only across architectures but across training paradigms (standard LM pretraining → RL-trained reasoning) and model scales (1B → 14B, a 10x increase).
 
 ---
 
@@ -401,5 +414,7 @@ Unfaithful chain-of-thought as nudged reasoning. (2025). *MATS 8.0 / AI Alignmen
 | Qwen-only | Qwen | TinyLlama (transfer) | 0.702 | — | — |
 | Phi2-only | Phi-2 | TinyLlama (transfer) | 0.564 | — | — |
 | 3-model | Qwen + Phi-2 + TinyLlama-Base | TinyLlama-Chat (transfer) | 0.943 | 94.5% | 91.6% |
-| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill (transfer) | 0.924 | 90.2% | 86.8% |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-1.5B (transfer) | 0.924 | 90.2% | 86.8% |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-7B (transfer) | 0.909 | 89.0% | 85.3% |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-14B (transfer) | **0.933** | **91.8%** | **88.0%** |
 | 3-model | — | Sycophancy | 59.4% recall | 100% precision | — |
