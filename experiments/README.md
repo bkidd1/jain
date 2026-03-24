@@ -1,32 +1,32 @@
 # Experiments
 
-This project evolved through two phases, each documented as a separate experiment.
-
 ## Research Arc
 
 **Starting question:** Can we reconstruct the implicit reasoning steps an LLM took?
 
-**What we learned:** Full reconstruction may be structurally intractable. The more achievable and safety-relevant goal is *detecting* when reasoning goes wrong.
+**What we learned:** Full reconstruction is intractable. The achievable goal is *detecting* when reasoning goes wrong.
 
-**Refined question:** Can we detect when stated reasoning doesn't match actual computation?
+**Refined question:** Can we detect when stated reasoning doesn't match internal computation?
 
 ## Experiments
 
 ### [01_reconstruction](./01_reconstruction/)
-*Feb 2026 — Complete*
+*Feb 2026 — Exploratory pilot*
 
-Trained a model to predict reasoning traces using logit lens outputs as ground truth. Achieved 40% F1 on cross-model transfer (Llama → Mistral), but identified fundamental limitations in the reconstruction framing.
+Early exploration of predicting reasoning traces using logit lens. Helped identify limitations that led us to pivot to detection.
 
 ### [02_divergence_detection](./02_divergence_detection/)
-*Mar 2026 — In Progress*
+*Mar 2026 — Main results*
 
-Pivoted to binary classification: detect faithful vs unfaithful chain-of-thought. Uses hint paradigm to generate labeled pairs, trains a classifier, tests cross-model transfer.
+Binary classification: detect hidden hint usage in chain-of-thought. Key finding: cross-architecture training outperforms same-model training by 18 AUROC points.
 
-## Shared Infrastructure
+### [03_posthoc_transfer](./03_posthoc_transfer/)
+*Mar 2026 — Null result*
 
-Core library code lives in `/src/`:
-- `dataset.py` — Original dataset generators
-- `ground_truth.py` — Logit lens extraction utilities
-- `tuned_lens_extraction.py` — Alternative extraction methods
+Tested whether the hint detector transfers to post-hoc rationalization detection. Result: no transfer (AUROC ~0.58), suggesting these are structurally different phenomena.
 
-Both experiments import from `src/` to avoid code duplication.
+## Shared Code
+
+Core utilities in `/src/`:
+- `ground_truth.py` — Logit lens extraction
+- `dataset.py` — Dataset generators
