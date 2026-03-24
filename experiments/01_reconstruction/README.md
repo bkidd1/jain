@@ -1,7 +1,9 @@
 # Experiment 01: Reasoning Trace Reconstruction
 
-**Status:** Complete (exploratory pilot)  
+**Status:** Complete (early exploration — see Experiment 02 for main results)  
 **Dates:** Feb 2026
+
+> ⚠️ This was an initial exploratory experiment that helped us identify limitations in the reconstruction approach. The main findings are in **Experiment 02: Cross-Architecture Hint Detection**.
 
 ## Goal
 
