@@ -12,7 +12,7 @@ Chain-of-thought (CoT) explanations can misrepresent a model's actual reasoning 
 
 Our key finding is surprising: **a detector trained on architectures that exclude the target outperforms one trained on the target itself**. A classifier trained on Qwen and Phi-2 achieves 0.928 AUROC detecting unfaithfulness in TinyLlama—18 percentage points higher than a classifier trained on TinyLlama directly (0.746). We identify a phase transition at exactly 2 training architectures: single foreign architectures fail to transfer (0.56–0.70), but combining two succeeds dramatically (0.93).
 
-This suggests that diverse architectural training forces detectors to learn architecture-agnostic unfaithfulness signatures, which generalize better than architecture-specific patterns. We validate this finding across paradigms: sycophancy detection (59% recall, 100% precision) and transfer to DeepSeek-R1-Distill reasoning models at 1.5B, 7B, and 14B scale. Remarkably, detection performance *improves* with model size: 0.924 AUROC at 1.5B, 0.909 at 7B, and 0.933 at 14B—demonstrating that small-model-trained detectors can scale to 10x larger models. Our results point toward portable unfaithfulness detectors that could eventually work on closed models by training only on open ones.
+This suggests that diverse architectural training forces detectors to learn architecture-agnostic unfaithfulness signatures, which generalize better than architecture-specific patterns. We validate this finding across paradigms: sycophancy detection (59% recall, 100% precision), transfer to DeepSeek-R1-Distill reasoning models at 1.5B, 7B, and 14B scale, and transfer to Mistral-7B—a completely different architecture family. Remarkably, detection performance *improves* with model size: 0.924 AUROC at 1.5B, 0.909 at 7B, and 0.933 at 14B—demonstrating that small-model-trained detectors can scale to 10x larger models. The detector also achieves 0.893 AUROC on Mistral-7B, confirming transfer across architecture families, not just model scales. Our results point toward portable unfaithfulness detectors that could eventually work on closed models by training only on open ones.
 
 ---
 
@@ -42,7 +42,9 @@ Specifically, we demonstrate:
 
 5. **Reasoning model transfer**: The detector achieves 0.924–0.933 AUROC on DeepSeek-R1-Distill models (1.5B, 7B, 14B), with performance *improving* at larger scales.
 
-6. **Architecture-specific robustness**: Pythia-1.4B shows 0% susceptibility to hint manipulation, suggesting some architectures are behaviorally immune to this class of unfaithfulness.
+6. **Cross-architecture family transfer**: The detector achieves 0.893 AUROC on Mistral-7B-Instruct—a completely different architecture family from all training models—confirming that unfaithfulness signatures generalize across architecture lineages.
+
+7. **Architecture-specific robustness**: Pythia-1.4B shows 0% susceptibility to hint manipulation, suggesting some architectures are behaviorally immune to this class of unfaithfulness.
 
 These results point toward a practical goal: training unfaithfulness detectors on diverse open-weight models that could eventually detect unfaithfulness in closed models we cannot directly probe.
 
@@ -334,6 +336,30 @@ This suggests that unfaithfulness signatures generalize not only across architec
 ![Figure 2: Detection performance across model scales](figures/scale_transfer.png)
 *Figure 2: AUROC of the 3-model detector (trained on 1-3B models) evaluated on DeepSeek-R1-Distill at 1.5B, 7B, and 14B scales. Detection performance remains strong across a 10x scale increase, with the 14B model showing the highest AUROC (0.933). Error bars show 95% CI from bootstrap resampling.*
 
+### 4.9 Cross-Architecture Family Transfer: Mistral
+
+The DeepSeek-R1-Distill models share architectural DNA with Qwen (they are distilled from Qwen). To test whether our detector generalizes to a *completely different* architecture family, we evaluate on Mistral-7B-Instruct-v0.3—a model with distinct lineage from all training architectures (Qwen, Phi, Llama).
+
+Critically, Mistral is also *not* a reasoning-distilled model. Unlike DeepSeek-R1-Distill (trained via RL on chain-of-thought), Mistral uses standard instruction tuning. This tests whether the detector works on "natural" CoT—reasoning that emerges from instruction-following rather than explicit reasoning training.
+
+| Model | AUROC | Accuracy | Precision | Recall | F1 |
+|-------|-------|----------|-----------|--------|-----|
+| **Mistral-7B-Instruct-v0.3** | **0.893** | 89.8% | 83.5% | 85.5% | 84.5% |
+
+**Confusion Matrix:**
+| | Predicted Unfaithful | Predicted Faithful |
+|---|---------------------|-------------------|
+| Actually Unfaithful | 71 (TP) | 12 (FN) |
+| Actually Faithful | 14 (FP) | 158 (TN) |
+
+Key findings:
+
+- **True cross-architecture transfer**: Mistral shares no architectural lineage with any training model, yet the detector achieves 0.893 AUROC
+- **Works on natural CoT**: Unlike reasoning-distilled models, Mistral's chain-of-thought emerges from standard instruction tuning—the detector generalizes across training paradigms
+- **Balanced precision/recall**: 83.5% precision and 85.5% recall show robust detection without sacrificing either metric
+
+This result is arguably the strongest evidence for architecture-agnostic unfaithfulness signatures. The detector was trained exclusively on Qwen, Phi-2, and TinyLlama (Llama family). Mistral represents a sixth architecture family, with different training data, architecture choices, and instruction-tuning approach—yet unfaithfulness patterns remain detectable.
+
 ---
 
 ## 5. Analysis
@@ -404,7 +430,7 @@ For safety-critical applications, training on multiple model architectures may b
 
 2. **Dataset size**: ~250 examples per model. Larger datasets might reveal different patterns or enable more fine-grained analysis.
 
-3. **Architectures tested**: Five architecture families (Llama, Qwen, Phi, GPT-NeoX, DeepSeek-R1). The cross-architecture effect may differ with more diverse architectures (e.g., Mamba, mixture-of-experts).
+3. **Architectures tested**: Six architecture families (Llama, Qwen, Phi, GPT-NeoX, DeepSeek-R1, Mistral). The cross-architecture effect may differ with more diverse architectures (e.g., Mamba, mixture-of-experts).
 
 4. **Unfaithfulness types**: We tested hint-based manipulation and sycophancy. Other safety-relevant types (strategic deception, sandbagging, reward hacking) remain untested.
 
@@ -418,7 +444,7 @@ For safety-critical applications, training on multiple model architectures may b
 
 1. **Scale to frontier models**: Test on 70B+ open models (Llama-3-70B, Qwen-72B) to validate the improving-with-scale trend.
 
-2. **Expand architecture diversity**: Include Mistral, Gemma, Mamba (state-space), and mixture-of-experts models in training to further test generalization.
+2. **Expand architecture diversity**: Include Gemma, Mamba (state-space), and mixture-of-experts models in training to further test generalization (Mistral already validated).
 
 3. **Mechanistic analysis**: Probe the detector's internals to understand *what* features it uses. Do cross-architecture detectors learn interpretable unfaithfulness signatures?
 
@@ -516,4 +542,5 @@ Unfaithful chain-of-thought as nudged reasoning. (2025). *MATS 8.0 / AI Alignmen
 | 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-1.5B (transfer) | 0.924 | 90.2% | 86.8% |
 | 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-7B (transfer) | 0.909 | 89.0% | 85.3% |
 | 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-14B (transfer) | **0.933** | **91.8%** | **88.0%** |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | Mistral-7B-Instruct-v0.3 (transfer) | 0.893 | 89.8% | 84.5% |
 | 3-model | — | Sycophancy | 59.4% recall | 100% precision | — |

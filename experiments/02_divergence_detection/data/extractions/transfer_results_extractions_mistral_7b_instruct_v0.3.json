@@ -1,0 +1,17 @@
+{
+  "model_dir": "experiments/02_divergence_detection/data/models/detector_3models",
+  "test_data": "experiments/02_divergence_detection/data/extractions/extractions_mistral_7b_instruct_v0.3.jsonl",
+  "n_examples": 255,
+  "n_unfaithful": 83,
+  "metrics": {
+    "auroc": 0.8925469319137014,
+    "accuracy": 0.8980392156862745,
+    "precision": 0.8352941176470589,
+    "recall": 0.8554216867469879,
+    "f1": 0.8452380952380952,
+    "true_positives": 71,
+    "false_positives": 14,
+    "true_negatives": 158,
+    "false_negatives": 12
+  }
+}
