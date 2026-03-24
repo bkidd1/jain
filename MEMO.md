@@ -71,7 +71,9 @@ You can detect when a model's reasoning was influenced by a hint it didn't ackno
 
 ### Relation to Prior Work
 
-Chua & Evans (2025) found that DeepSeek R1 verbalizes hints only 59% of the time — meaning 41% of hint usage is hidden. Our detector provides a potential method to catch some of that hidden usage from text alone.
+Chua & Evans (2025) found that DeepSeek R1 verbalizes hints only 59% of the time — meaning 41% of hint usage is hidden. This is part of broader work by Owain Evans and collaborators on CoT faithfulness, including the TruthfulQA benchmark and studies of how reasoning models handle privileged information.
+
+Our detector provides a potential method to catch some of that hidden usage from text alone — addressing the gap between "model used hint" and "model acknowledged using hint."
 
 ---
 
