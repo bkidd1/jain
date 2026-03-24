@@ -31,17 +31,22 @@ See **[MEMO.md](MEMO.md)** for detailed methodology and results.
 jain/
 ├── MEMO.md                           # Full writeup
 ├── experiments/
-│   ├── 01_reconstruction/            # Initial RTP experiment
+│   ├── 01_reconstruction/            # Initial RTP experiment (historical)
 │   ├── 02_divergence_detection/      # Main hint detection work
 │   │   ├── data/
 │   │   │   ├── hint_pairs/           # Generated prompt pairs
 │   │   │   ├── extractions/          # Model outputs + labels
 │   │   │   └── models/               # Trained detectors
 │   │   └── scripts/                  # Extraction & evaluation
-│   └── 03_posthoc_transfer/          # Post-hoc rationalization test
+│   ├── 03_posthoc_transfer/          # Post-hoc rationalization test (null result)
+│   └── 04_response_only_ablation/    # Testing signal source (CoT vs prompt)
 ├── src/                              # Shared utilities
 └── notebooks/                        # Exploration
 ```
+
+## Current Status
+
+⚠️ **Experiments 02 results** used `prompt + response` as input. Since the hint appears in the prompt itself, we're running ablations to verify the signal is actually in the chain-of-thought. See `experiments/04_response_only_ablation`.
 
 ## Quick Start
 

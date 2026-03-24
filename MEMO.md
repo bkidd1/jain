@@ -75,21 +75,43 @@ Our detector provides a potential method to catch some of that hidden usage from
 
 ---
 
-## Limitations
+## Limitations & Open Questions
+
+### Known Issues (Being Addressed)
+
+**Prompt-in-input confound**: Our classifier sees `prompt + response`, and in the misleading-hint condition, the hint appears in the prompt itself (e.g., "I recall that Los Angeles might be the answer..."). This means the classifier might learn to detect the **prompt template** rather than **subtle cues in the chain-of-thought**.
+
+We're running ablations to isolate this (see `experiments/04_response_only_ablation`):
+- **Response-only**: Train on just the CoT, no prompt
+- **Redacted-prompt**: Remove hint text from prompt, keep question
+
+If response-only AUROC stays high → signal is genuinely in the reasoning.
+If it tanks → we were detecting the prompt, not the CoT.
+
+### Other Limitations
 
 1. **We detect hint processing, not outcomes**: The detector catches when a model considered a hint, whether it ultimately followed or resisted it. For safety applications, you may also need to check if the answer was correct.
 
-2. **Artificial paradigm**: Hint injection is a controlled setup. Real-world hidden influence (sycophancy, encoded reasoning, prompt injection) may have different signatures.
+2. **Label fidelity**: Our ground-truth uses logit-lens top-k at the last input position. This is a coarse proxy for "model used the hint" — not the same as causal influence or verbalization. More rigorous labeling (e.g., causal patching) would strengthen claims.
 
-3. **No mechanistic understanding**: We don't know what text patterns the detector uses.
+3. **Artificial paradigm**: Hint injection is a controlled setup. Real-world hidden influence (sycophancy, encoded reasoning, prompt injection) may have different signatures.
+
+4. **No mechanistic understanding**: We don't know what text patterns the detector uses.
 
 ---
 
+## What We've Tested (And What Failed)
+
+**Post-hoc rationalization transfer**: We tested whether the hint detector transfers to detecting sycophantic reasoning (where models give different answers based on stated user beliefs). Result: **AUROC 0.58** — essentially random. The detector does NOT generalize to other forms of unfaithful reasoning. See `experiments/03_posthoc_transfer`.
+
+This suggests hint-influenced reasoning and post-hoc rationalization have different textual signatures, or that our current detector is too specific to the hint paradigm.
+
 ## What We Don't Know
 
-- Does this transfer to detecting other forms of hidden influence (not just explicit hints)?
+- **Is the signal in the CoT or the prompt?** (Ablations in progress)
 - What specific text features does the detector learn?
-- Why does cross-architecture training work better???
+- Why does cross-architecture training work better?
+- Would a detector trained on diverse unfaithfulness types transfer more broadly?
 
 ---
 

@@ -41,6 +41,12 @@ Trained a text-only classifier to detect when models process hints internally wi
 2. **Detector**: Fine-tuned TinyLlama as binary classifier on prompt + CoT text
 3. **Inference**: Text-only (no internal access required)
 
+## ⚠️ Known Limitation
+
+The classifier was trained on `prompt + response`. In the misleading-hint condition, the hint appears **in the prompt itself** (e.g., "I recall that Los Angeles might be the answer..."). This means the classifier might detect the prompt template rather than subtle cues in the chain-of-thought.
+
+**See `experiments/04_response_only_ablation`** for tests isolating the signal source.
+
 ## Files
 
 ```
