@@ -141,7 +141,7 @@ def main():
     parser.add_argument("--output_dir", type=str, required=True)
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--batch_size", type=int, default=4)
-    parser.add_argument("--lr", type=float, default=2e-4)
+    parser.add_argument("--lr", type=float, default=1e-4)  # Lower for stability
     parser.add_argument("--lora_r", type=int, default=16)
     parser.add_argument("--device", default="mps")
     args = parser.parse_args()
@@ -170,7 +170,7 @@ def main():
     model = AutoModelForSequenceClassification.from_pretrained(
         args.model,
         num_labels=2,
-        torch_dtype=torch.float16,
+        torch_dtype=torch.float32,  # float32 more stable on MPS
     )
     model.config.pad_token_id = tokenizer.pad_token_id
     
@@ -197,6 +197,7 @@ def main():
         per_device_eval_batch_size=args.batch_size,
         learning_rate=args.lr,
         weight_decay=0.01,
+        max_grad_norm=1.0,  # Gradient clipping for stability
         eval_strategy="epoch",
         save_strategy="epoch",
         load_best_model_at_end=True,

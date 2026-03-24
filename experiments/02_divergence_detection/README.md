@@ -1,9 +1,18 @@
 # Experiment 02: Cross-Architecture Hint Detection
 
-**Status:** Complete  
+**Status:** Complete (but see caveat below)  
 **Dates:** Mar 2026
 
-## Summary
+## ⚠️ Important Caveat
+
+**These results are confounded.** The detector was trained on `prompt + response`, and the prompt contains the hint. Ablation testing (see `experiments/04_response_only_ablation`) showed:
+
+- Response-only AUROC: **0.67** (barely above chance)
+- The signal is in the prompt template, not the chain-of-thought
+
+The cross-architecture "transfer" was real but trivial — prompt templates are architecture-agnostic.
+
+## Original Summary (for historical reference)
 
 Trained a text-only classifier to detect when models process hints internally without acknowledging them. Key finding: **training on diverse architectures that exclude the target outperforms same-model training by 18 AUROC points.**
 

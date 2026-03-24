@@ -17,7 +17,7 @@ echo ""
 
 # 1. Train with full prompt+response (baseline, replicates exp 02)
 echo "=== Training: full (prompt + response) ==="
-python scripts/train_ablation.py \
+python3 scripts/train_ablation.py \
     --data "$TRAIN_DATA" \
     --input-format full \
     --output_dir "$OUTPUT_DIR/full" \
@@ -26,7 +26,7 @@ python scripts/train_ablation.py \
 # 2. Train with response-only (the key test)
 echo ""
 echo "=== Training: response-only ==="
-python scripts/train_ablation.py \
+python3 scripts/train_ablation.py \
     --data "$TRAIN_DATA" \
     --input-format response-only \
     --output_dir "$OUTPUT_DIR/response_only" \
@@ -35,7 +35,7 @@ python scripts/train_ablation.py \
 # 3. Train with redacted prompt (question only, no hint)
 echo ""
 echo "=== Training: redacted (question only + response) ==="
-python scripts/train_ablation.py \
+python3 scripts/train_ablation.py \
     --data "$TRAIN_DATA" \
     --input-format redacted \
     --output_dir "$OUTPUT_DIR/redacted" \
@@ -44,7 +44,7 @@ python scripts/train_ablation.py \
 # 4. Evaluate all models
 echo ""
 echo "=== Evaluating all conditions ==="
-python scripts/evaluate_ablation.py \
+python3 scripts/evaluate_ablation.py \
     --test-data "$TRAIN_DATA" \
     --models-dir "$OUTPUT_DIR" \
     --output "$SCRIPT_DIR/results/ablation_results.json"

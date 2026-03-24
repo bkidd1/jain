@@ -1,48 +1,61 @@
 # Experiment 04: Response-Only Ablation
 
+**Status:** Complete  
+**Date:** March 2026
+
 ## Motivation
 
-Experiments 02 trained a detector on `prompt + response`. But in the misleading-hint condition, the hint appears **in the prompt itself** (e.g., "I recall that Los Angeles might be the answer. What is the capital?").
+Experiments 02 trained a detector on `prompt + response`. But in the misleading-hint condition, the hint appears **in the prompt itself** (e.g., "I recall that Los Angeles might be the answer...").
 
-This means the classifier might learn to detect the **prompt template** rather than **subtle cues in the chain-of-thought**. That's a much weaker claim than "detect hidden hint usage from reasoning text."
+This means the classifier might learn to detect the **prompt template** rather than **subtle cues in the chain-of-thought**.
 
 ## The Question
 
 **How much signal is in the CoT vs the prompt?**
 
-If we train on response-only and AUROC stays high → signal is in the reasoning.
-If AUROC tanks → we were just detecting the prompt template.
+## Results
 
-## Ablations
+| Training Format | Eval Format | AUROC |
+|-----------------|-------------|-------|
+| full | full | **1.000** |
+| full | response-only | 0.653 |
+| full | redacted | 0.936 |
+| response-only | response-only | **0.670** |
+| redacted | redacted | 0.998 |
+| redacted | response-only | 0.598 |
 
-| Condition | Input Format | Tests |
-|-----------|--------------|-------|
-| full (baseline) | `{prompt}\n\nResponse: {response}` | Replicates exp 02 |
-| response-only | `{response}` | Isolates CoT signal |
-| redacted-prompt | `{question_only}\n\nResponse: {response}` | Removes hint from prompt |
+## Interpretation
 
-## Scripts
+### The signal is in the prompt, not the CoT
 
-- `train_ablation.py` — Train detector with configurable input format
-- `evaluate_ablation.py` — Evaluate all conditions
+1. **Response-only training achieves only 0.67 AUROC** — barely above chance. If there were detectable patterns in hint-influenced reasoning, this should be much higher.
 
-## Expected Outcomes
+2. **Full model drops from 1.0 → 0.65** when evaluated on response-only. The model learned prompt features, not CoT features.
 
-- **Response-only matches full**: Signal is genuinely in the CoT ✅
-- **Response-only tanks**: Signal was in the prompt, not the reasoning ❌
-- **Redacted-prompt matches full**: Hint text itself wasn't the feature (maybe template style?)
+3. **Even redacted prompts leak the condition** — removing the hint text ("I recall that X...") still gives 0.998 AUROC. The template structure itself signals the experimental condition.
 
-## Usage
+### What this means
 
-```bash
-# Train response-only detector
-python scripts/train_ablation.py \
-    --data ../02_divergence_detection/data/extractions/combined_3models.jsonl \
-    --input-format response-only \
-    --output_dir data/models/response_only
+The original claim — "detect hidden hint usage from text alone" — is **not supported**. The detector in experiment 02 was learning to recognize:
+- The presence of hint preambles in prompts
+- Structural differences in prompt templates
 
-# Compare all conditions
-python scripts/evaluate_ablation.py \
-    --test-data ../02_divergence_detection/data/extractions/combined_3models.jsonl \
-    --models data/models/
+NOT subtle patterns in the chain-of-thought reasoning.
+
+The ~0.67 AUROC from response-only likely reflects shallow correlations (e.g., wrong answers correlate with unfaithful labels) rather than detection of "hidden" influence.
+
+## Conclusion
+
+**Null result for CoT-based detection.** This is a methodologically important finding: prompt-in-input confounds are real and response-only baselines are essential for any claim about detecting reasoning patterns.
+
+## Files
+
+```
+data/models/
+├── full/           # Trained on prompt + response
+├── response_only/  # Trained on response only
+└── redacted/       # Trained on question + response (no hint text)
+
+results/
+└── ablation_results.json  # Full metrics
 ```

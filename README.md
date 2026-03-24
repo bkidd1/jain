@@ -1,29 +1,27 @@
-# JAIN: Cross-Architecture Detection of Hidden Hint Usage
+# JAIN: Attempting to Detect Hidden Hint Usage from CoT
 
-Detecting when language models secretly process hints without acknowledging them in their Chain-of-Thought — using only text output.
+An experiment in detecting when language models secretly process hints — and a lesson in why ablations matter.
 
-## Key Finding
+## TL;DR
 
-A detector trained on architectures that **exclude** the target outperforms same-model training by 18 AUROC points.
+We tried to detect hidden hint usage from Chain-of-Thought text alone. Initial results looked great (0.93+ AUROC, cross-architecture transfer). Then we ran ablations.
 
-| Training Data | Test Model | AUROC |
-|---------------|------------|-------|
-| TinyLlama (same model) | TinyLlama | 0.746 |
-| Qwen + Phi-2 (excludes target) | TinyLlama | **0.928** |
+**The signal was in the prompt, not the reasoning.**
 
-This transfers to larger models and different architecture families:
+| Training Format | Eval Format | AUROC |
+|-----------------|-------------|-------|
+| full (prompt + response) | full | 1.000 |
+| **response-only** | **response-only** | **0.670** |
 
-| Model | AUROC |
-|-------|-------|
-| DeepSeek-R1-7B | 0.909 |
-| DeepSeek-R1-14B | 0.933 |
-| Mistral-7B | 0.893 |
+Response-only detection barely beats chance. The detector learned to recognize prompt templates, not reasoning patterns.
 
-**Implication:** Train on small open models → deploy on large/closed models.
+## The Lesson
+
+Any claim about detecting patterns in model reasoning requires **response-only evaluation**. Without it, you might just be detecting your experimental setup.
 
 ## Full Writeup
 
-See **[MEMO.md](MEMO.md)** for detailed methodology and results.
+See **[MEMO.md](MEMO.md)** for the full story: what we tried, why it failed, and what would actually work.
 
 ## Project Structure
 
@@ -32,47 +30,37 @@ jain/
 ├── MEMO.md                           # Full writeup
 ├── experiments/
 │   ├── 01_reconstruction/            # Initial RTP experiment (historical)
-│   ├── 02_divergence_detection/      # Main hint detection work
-│   │   ├── data/
-│   │   │   ├── hint_pairs/           # Generated prompt pairs
-│   │   │   ├── extractions/          # Model outputs + labels
-│   │   │   └── models/               # Trained detectors
-│   │   └── scripts/                  # Extraction & evaluation
-│   ├── 03_posthoc_transfer/          # Post-hoc rationalization test (null result)
-│   └── 04_response_only_ablation/    # Testing signal source (CoT vs prompt)
-├── src/                              # Shared utilities
-└── notebooks/                        # Exploration
+│   ├── 02_divergence_detection/      # Original hint detection (confounded)
+│   ├── 03_posthoc_transfer/          # Post-hoc rationalization test (null)
+│   └── 04_response_only_ablation/    # The ablation that revealed the confound
+└── src/                              # Shared utilities
 ```
 
-## Current Status
+## Key Results
 
-⚠️ **Experiments 02 results** used `prompt + response` as input. Since the hint appears in the prompt itself, we're running ablations to verify the signal is actually in the chain-of-thought. See `experiments/04_response_only_ablation`.
+### Experiment 02: Original Detection (Confounded)
+- AUROC 0.93+ on full input — but this included the prompt
+- Cross-architecture "transfer" was real but trivial (prompt templates are architecture-agnostic)
 
-## Quick Start
+### Experiment 04: The Ablation
+- Response-only: **0.67 AUROC** — the actual signal in the CoT
+- The prompt (even with hint text redacted) carries nearly all the signal
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+### Experiment 03: Post-hoc Transfer
+- Tested if hint detector transfers to sycophancy detection
+- Result: 0.58 AUROC (null)
 
-# Run evaluation on new model
-cd experiments/02_divergence_detection
-python scripts/evaluate_transfer.py \
-    --model_dir data/models/detector_3models \
-    --test_data data/extractions/your_extractions.jsonl \
-    --device mps
-```
+## What Would Work?
 
-## Results Files
-
-Key results in `experiments/02_divergence_detection/data/extractions/`:
-- `transfer_results_*.json` — Per-model evaluation metrics
-- `extractions_*.jsonl` — Raw model outputs with labels
+1. Prompt templates that don't leak experimental condition
+2. Response-only training and evaluation
+3. More naturalistic hint injection (not "I recall that X...")
+4. Mechanistic analysis of what features matter
 
 ## Authors
 
 - Brinlee Kidd (brinlee0kidd@gmail.com)
-- Demosthenes (Brinlee's AI assistant)
+- Demosthenes (AI collaborator)
 
 ## License
 

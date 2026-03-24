@@ -4,120 +4,109 @@
 
 ---
 
-## The Problem
+## Summary
 
-When models receive hints or privileged information in their prompts, they may use that information without acknowledging it in their reasoning. The model's Chain-of-Thought looks like independent reasoning, but it was actually influenced by the hint.
+We attempted to build a detector that identifies hidden hint usage from Chain-of-Thought text alone. Initial results looked promising (high AUROC, cross-architecture transfer), but **ablation testing revealed the signal was in the prompt, not the reasoning.**
 
-This is a form of deceptive or unfaithful reasoning; the CoT doesn't accurately reflect how the model arrived at its answer.
-
-**Our question:** Can we detect when a model secretly used a hint, just by looking at its text output?
+This is a null result for CoT-based detection, but an important methodological lesson.
 
 ---
 
-## What We Built
+## The Original Idea
 
-A detector that identifies hidden hint usage from CoT text alone:
+When models receive hints in their prompts, they may use that information without acknowledging it. The CoT looks like independent reasoning, but was actually influenced by the hint.
 
-1. **Training**: We gave models misleading hints and used logit lens to check if the hint appeared in internal layer activations. This gave us ground-truth labels for "did the model process this hint?"
-
-2. **The detector**: Fine-tuned TinyLlama as a binary classifier on prompt + CoT text. At inference, it predicts whether the model processed a hint without needing access to internals.
-
-3. **Key capability**: The detector learns textual signatures of hint-influenced reasoning that transfer across model architectures.
+**Our question:** Can we detect this from the text output alone?
 
 ---
 
-## Results
+## What We Tried
 
-### Cross-Architecture Transfer Works
+1. **Training**: Gave models misleading hints, used logit lens to label whether hints appeared in internal activations
+2. **Detector**: Fine-tuned TinyLlama as binary classifier on prompt + CoT text
+3. **Initial results**: High AUROC (0.93+), transfer across architectures
 
-| Training Data | Test Model | AUROC |
-|---------------|------------|-------|
-| TinyLlama only | TinyLlama | 0.746 |
-| Qwen + Phi-2 (no TinyLlama) | TinyLlama | **0.928** |
-
-Training on OTHER architectures beats training on the target by 18 points!
-
-### Transfers to Larger Models
-
-| Model | AUROC |
-|-------|-------|
-| DeepSeek-R1-Distill-7B | 0.909 |
-| DeepSeek-R1-Distill-14B | 0.933 |
-| Mistral-7B-Instruct | 0.893 |
-
-The detector (trained on 1-3B models) works on 7-14B models from different architecture families.
-
-### Phase Transition at 2 Architectures
-
-- 1 same-model architecture: 0.746
-- 1 foreign architecture: 0.56–0.70
-- 2 foreign architectures: **0.928**
-- 3 architectures: 0.943
-
-You need diversity — a single foreign architecture doesn't transfer well, but two together do.
+This looked promising — until we tested what the detector was actually learning.
 
 ---
 
-## Why This Matters
+## The Ablation That Changed Everything
 
-You can detect when a model's reasoning was influenced by a hint it didn't acknowledge, using only the text output. This works on models you didn't train on.
+We trained and evaluated detectors with different input formats:
 
-**Implications:**
-- Train detector on small open models where you CAN inspect internals
-- Deploy on large/closed models where you CAN'T
-- Detect hidden influence from prompt injections, system prompts, or other privileged information
+| Training Format | Eval Format | AUROC |
+|-----------------|-------------|-------|
+| full (prompt + response) | full | 1.000 |
+| full | response-only | 0.653 |
+| **response-only** | **response-only** | **0.670** |
+| redacted (no hint text) | redacted | 0.998 |
 
-### Relation to Prior Work
+### What this shows
 
-Chua & Evans (2025) found that DeepSeek R1 verbalizes hints only 59% of the time — meaning 41% of hint usage is hidden. This is part of broader work by Owain Evans and collaborators on CoT faithfulness, including the TruthfulQA benchmark and studies of how reasoning models handle privileged information.
+1. **Response-only training: 0.67 AUROC** — barely above chance. If hint-influenced reasoning had detectable text patterns, this would be much higher.
 
-Our detector provides a potential method to catch some of that hidden usage from text alone; addressing the gap between "model used hint" and "model acknowledged using hint."
+2. **Full model collapses without prompt**: 1.0 → 0.65 when evaluated on response-only. It learned prompt features.
 
----
+3. **Even redacted prompts leak**: Removing "I recall that X might be the answer" still gives 0.998. The template structure itself signals the condition.
 
-## Limitations & Open Questions
-
-### Known Issues (Being Addressed)
-
-**Prompt-in-input confound**: Our classifier sees `prompt + response`, and in the misleading-hint condition, the hint appears in the prompt itself (e.g., "I recall that Los Angeles might be the answer..."). This means the classifier might learn to detect the **prompt template** rather than **subtle cues in the chain-of-thought**.
-
-We're running ablations to isolate this (see `experiments/04_response_only_ablation`):
-- **Response-only**: Train on just the CoT, no prompt
-- **Redacted-prompt**: Remove hint text from prompt, keep question
-
-If response-only AUROC stays high → signal is genuinely in the reasoning.
-If it tanks → we were detecting the prompt, not the CoT.
-
-### Other Limitations
-
-1. **We detect hint processing, not outcomes**: The detector catches when a model considered a hint, whether it ultimately followed or resisted it. For safety applications, you may also need to check if the answer was correct.
-
-2. **Label fidelity**: Our ground-truth uses logit-lens top-k at the last input position. This is a coarse proxy for "model used the hint" — not the same as causal influence or verbalization. More rigorous labeling (e.g., causal patching) would strengthen claims.
-
-3. **Artificial paradigm**: Hint injection is a controlled setup. Real-world hidden influence (sycophancy, encoded reasoning, prompt injection) may have different signatures.
-
-4. **No mechanistic understanding**: We don't know what text patterns the detector uses.
+**Conclusion:** The detector learned to recognize prompt templates, not reasoning patterns.
 
 ---
 
-## What We've Tested (And What Failed)
+## What We Learned
 
-**Post-hoc rationalization transfer**: We tested whether the hint detector transfers to detecting sycophantic reasoning (where models give different answers based on stated user beliefs). Result: **AUROC 0.58** — essentially random. The detector does NOT generalize to other forms of unfaithful reasoning. See `experiments/03_posthoc_transfer`.
+### The cross-architecture "transfer" was an artifact
 
-This suggests hint-influenced reasoning and post-hoc rationalization have different textual signatures, or that our current detector is too specific to the hint paradigm.
+The impressive transfer results (training on Qwen+Phi-2, testing on TinyLlama/DeepSeek/Mistral) were real — but they were detecting **prompt format consistency**, not generalizable reasoning signatures.
 
-## What We Don't Know
+All models saw the same prompt templates. The detector learned "this prompt has a hint preamble" which transfers trivially across architectures.
 
-- **Is the signal in the CoT or the prompt?** (Ablations in progress)
-- What specific text features does the detector learn?
-- Why does cross-architecture training work better?
-- Would a detector trained on diverse unfaithfulness types transfer more broadly?
+### The "+18 AUROC" finding was confounded
+
+Same-model training (0.746) vs cross-architecture (0.928) likely reflects overfitting to model-specific response quirks vs learning the more robust prompt signal. Not a deep insight about generalization.
+
+### Response-only is the real test
+
+Any claim about detecting reasoning patterns requires response-only evaluation. Without it, you might just be detecting your experimental setup.
+
+---
+
+## The Honest Results
+
+| Claim | Status |
+|-------|--------|
+| Detect hint usage from CoT text alone | ❌ Not supported (0.67 AUROC) |
+| Cross-architecture transfer | ⚠️ Real but confounded (prompt signal) |
+| Train small → deploy large | ⚠️ Works, but for prompt detection |
+
+---
+
+## What Would Actually Work?
+
+To genuinely detect hidden influence from reasoning text, you'd need:
+
+1. **Prompts that don't leak condition** — same template for hint/no-hint, with hints embedded more subtly
+2. **Response-only training and evaluation** — the only honest test
+3. **Diverse hint injection methods** — not just "I recall that X..."
+4. **Mechanistic validation** — what text features does the detector use?
+
+---
+
+## Relation to Prior Work
+
+Chua & Evans (2025) found R1 verbalizes hints only 59% of the time. Our work tried to catch the other 41% from text alone.
+
+**We failed** — but the failure is informative. It suggests either:
+- Hidden hint usage doesn't leave detectable text traces, or
+- Our paradigm (explicit hint preambles) was too easy to game
+
+A proper test would need more naturalistic hint injection.
 
 ---
 
 ## Bottom Line
 
-We can detect when a model secretly processed a hint, just from its text output, and this detection transfers across architectures. The "exclude target" finding (+18 points) suggests diverse training produces more generalizable detectors.
+We set out to detect hidden hint usage from CoT text. We ended up detecting prompt templates. The lesson: **ablate your inputs before trusting your metrics.**
 
 ---
 

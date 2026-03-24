@@ -113,6 +113,12 @@ def evaluate_model(model_dir: Path, test_examples: list[dict], input_format: Inp
     
     all_probs = np.array(all_probs)
     all_labels = np.array(all_labels)
+    
+    # Handle NaN values (broken models)
+    if np.any(np.isnan(all_probs)):
+        print("  WARNING: Model produced NaN probabilities")
+        return None
+    
     preds = (all_probs > 0.5).astype(int)
     
     auroc = roc_auc_score(all_labels, all_probs)
