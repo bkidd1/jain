@@ -1,72 +1,73 @@
-# JAIN: Interpretability Transfer for Reasoning Detection
+# JAIN: Cross-Architecture Detection of Hidden Hint Usage
 
-A research project investigating whether interpretability insights from open-weight models can transfer to detect reasoning anomalies in unseen architectures.
+Detecting when language models secretly process hints without acknowledging them in their Chain-of-Thought — using only text output.
 
-## Research Arc
+## Key Finding
 
-**Initial question:** Can we reconstruct the implicit reasoning steps an LLM took but didn't verbalize?
+A detector trained on architectures that **exclude** the target outperforms same-model training by 18 AUROC points.
 
-**What we learned:** Full reconstruction may be structurally intractable (see Nanda's "pragmatic interpretability" pivot, Sept 2025). The more achievable and safety-relevant goal is *detecting* when reasoning goes wrong.
+| Training Data | Test Model | AUROC |
+|---------------|------------|-------|
+| TinyLlama (same model) | TinyLlama | 0.746 |
+| Qwen + Phi-2 (excludes target) | TinyLlama | **0.928** |
 
-**Refined question:** Can a classifier trained on divergence patterns in open-weight models detect unfaithful chain-of-thought in unseen architectures?
+This transfers to larger models and different architecture families:
+
+| Model | AUROC |
+|-------|-------|
+| DeepSeek-R1-7B | 0.909 |
+| DeepSeek-R1-14B | 0.933 |
+| Mistral-7B | 0.893 |
+
+**Implication:** Train on small open models → deploy on large/closed models.
+
+## Full Writeup
+
+See **[MEMO.md](MEMO.md)** for detailed methodology and results.
 
 ## Project Structure
 
 ```
 jain/
+├── MEMO.md                           # Full writeup
 ├── experiments/
-│   ├── 01_reconstruction/     # Original RTP experiment (complete)
-│   │   ├── data/              # Prompts, traces, training data
-│   │   ├── models/            # TinyLlama + LoRA checkpoints
-│   │   ├── scripts/           # Extraction, training, evaluation
-│   │   └── results/           # Cross-model transfer results
-│   └── 02_divergence_detection/  # Current work (in progress)
-│       ├── data/              # Hint pairs, labeled examples
-│       ├── models/            # Detector checkpoints
-│       └── scripts/           # Generation, training, evaluation
-├── src/                       # Shared library code
-│   ├── ground_truth.py        # Logit lens extraction
-│   ├── dataset.py             # Dataset generators
-│   └── tuned_lens_extraction.py
-├── paper/                     # LaTeX source
-├── docs/                      # Research notes, figures
-└── notebooks/                 # Exploration
+│   ├── 01_reconstruction/            # Initial RTP experiment
+│   ├── 02_divergence_detection/      # Main hint detection work
+│   │   ├── data/
+│   │   │   ├── hint_pairs/           # Generated prompt pairs
+│   │   │   ├── extractions/          # Model outputs + labels
+│   │   │   └── models/               # Trained detectors
+│   │   └── scripts/                  # Extraction & evaluation
+│   └── 03_posthoc_transfer/          # Post-hoc rationalization test
+├── src/                              # Shared utilities
+└── notebooks/                        # Exploration
 ```
 
-## Key Results (Experiment 01)
-
-- Trained TinyLlama + LoRA to predict reasoning traces from logit lens outputs
-- Achieved **40% F1** on cross-model transfer (Llama → Mistral)
-- Identified limitations: small dataset (74 examples), token F1 metric issues, zero ablation outdated
-
-These findings motivated the pivot to divergence detection.
-
-## Current Work (Experiment 02)
-
-Detecting unfaithful chain-of-thought via binary classification:
-1. Generate hint/no-hint prompt pairs on Llama
-2. Extract internal traces + CoT outputs
-3. Train classifier: does stated reasoning match internal computation?
-4. Test transfer to Mistral, Qwen, DeepSeek
-
-## Setup
+## Quick Start
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+
+# Run evaluation on new model
+cd experiments/02_divergence_detection
+python scripts/evaluate_transfer.py \
+    --model_dir data/models/detector_3models \
+    --test_data data/extractions/your_extractions.jsonl \
+    --device mps
 ```
+
+## Results Files
+
+Key results in `experiments/02_divergence_detection/data/extractions/`:
+- `transfer_results_*.json` — Per-model evaluation metrics
+- `extractions_*.jsonl` — Raw model outputs with labels
 
 ## Authors
 
 - Brinlee Kidd (brinlee@gmail.com)
 - Demosthenes (demo.hegemon@gmail.com)
-
-## References
-
-- [Anthropic CoT Faithfulness Study](https://arxiv.org/abs/2305.04388)
-- [TransformerLens](https://github.com/TransformerLensOrg/TransformerLens)
-- Nanda, N. "From Ambitious to Pragmatic Interpretability" (2025)
 
 ## License
 

@@ -1,69 +1,73 @@
-# Experiment 02: Divergence Detection
+# Experiment 02: Cross-Architecture Hint Detection
 
-**Status:** In Progress  
-**Dates:** Mar 2026 -
+**Status:** Complete  
+**Dates:** Mar 2026
 
-## Goal
+## Summary
 
-Detect when a model's stated reasoning (chain-of-thought) doesn't match its actual internal computation. This is a binary classification problem, not reconstruction.
+Trained a text-only classifier to detect when models process hints internally without acknowledging them. Key finding: **training on diverse architectures that exclude the target outperforms same-model training by 18 AUROC points.**
 
-## Research Question
+## Results
 
-> Can a lightweight classifier, trained on divergence patterns between internal representations and stated reasoning in open-weight models, detect unfaithful chain-of-thought in unseen model architectures?
+### Cross-Architecture Transfer
 
-## Approach
+| Training Data | Test: TinyLlama | AUROC |
+|---------------|-----------------|-------|
+| TinyLlama (same model) | TinyLlama | 0.746 |
+| Qwen + Phi-2 (excludes target) | TinyLlama | **0.928** |
 
-### Phase 1: Build Faithful/Unfaithful Dataset
-- Use the Anthropic hint paradigm on Llama
-- Give biased hints on some prompts, no hints on others
-- Extract internal traces via logit lens (using mean ablation)
-- Label: did the model use the hint (unfaithful) or not (faithful)?
+### Phase Transition at 2 Architectures
 
-### Phase 2: Train Divergence Detector
-- Input: prompt + model's CoT output
-- Output: binary classification (faithful vs unfaithful)
-- Architecture: TinyLlama backbone with classification head
+| # Architectures | Composition | AUROC |
+|-----------------|-------------|-------|
+| 1 (same model) | TinyLlama | 0.746 |
+| 1 (foreign) | Qwen only | 0.702 |
+| 1 (foreign) | Phi-2 only | 0.564 |
+| 2 (foreign) | Qwen + Phi-2 | **0.928** |
+| 3 | All three | 0.943 |
 
-### Phase 3: Cross-Model Transfer Test
-- Train on Llama faithful/unfaithful pairs
-- Test on Mistral, Qwen, DeepSeek R1 distill
-- Can we detect unfaithful reasoning in models we've never seen internals of?
+### Transfer to Larger Models
 
-## Success Metrics
+| Model | AUROC |
+|-------|-------|
+| DeepSeek-R1-1.5B | 0.924 |
+| DeepSeek-R1-7B | 0.909 |
+| DeepSeek-R1-14B | 0.933 |
+| Mistral-7B | 0.893 |
 
-- **Primary:** AUROC on binary classification
-- **Secondary:** Precision/recall on unfaithful detection
-- **Transfer:** Performance delta between same-model and cross-model
+## Method
 
-## Why This Is Better Than Reconstruction
-
-| Aspect | Reconstruction | Detection |
-|--------|---------------|-----------|
-| Task type | Generation | Classification |
-| Evaluation | Token F1 (problematic) | AUROC (clean) |
-| Ground truth | Logit lens proxy | Binary hint label |
-| Safety relevance | Indirect | Direct (catches unfaithful CoT) |
+1. **Labeling**: Used logit lens to check if misleading hints appeared in internal layer activations
+2. **Detector**: Fine-tuned TinyLlama as binary classifier on prompt + CoT text
+3. **Inference**: Text-only (no internal access required)
 
 ## Files
 
 ```
 data/
-  hint_pairs/     # Prompt + hint/no-hint variants
-  extractions/    # Logit lens + CoT outputs
-  labeled/        # Train/val with faithful/unfaithful labels
-models/
-  detector_v1/    # Classification model checkpoints
+├── hint_pairs/
+│   └── hint_pairs.jsonl          # Generated prompt pairs
+├── extractions/
+│   ├── extractions_*.jsonl       # Model outputs with labels
+│   └── transfer_results_*.json   # Evaluation metrics
+└── models/
+    └── detector_3models/         # Best detector (Qwen + Phi-2 + TinyLlama-Base)
+
 scripts/
-  generate_hint_pairs.py
-  extract_with_cot.py
-  train_detector.py
-  evaluate_transfer.py
-results/
-  (pending)
+├── extract_with_cot.py           # Generate extractions from models
+├── train_classifier.py           # Train detector
+└── evaluate_transfer.py          # Evaluate on held-out models
 ```
 
-## References
+## Reproduction
 
-- Anthropic hint paradigm for unfaithful CoT
-- Neel Nanda's "pragmatic interpretability" pivot (Sept 2025)
-- AI Alignment Forum work on CoT monitors being fooled
+```bash
+# Extract from a new model
+python scripts/extract_with_cot.py --model "model-name" --device cuda
+
+# Evaluate transfer
+python scripts/evaluate_transfer.py \
+    --model_dir data/models/detector_3models \
+    --test_data data/extractions/extractions_newmodel.jsonl \
+    --device cuda
+```
