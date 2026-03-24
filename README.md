@@ -67,7 +67,7 @@ Key results in `experiments/02_divergence_detection/data/extractions/`:
 ## Authors
 
 - Brinlee Kidd (brinlee@gmail.com)
-- Demosthenes (demo.hegemon@gmail.com)
+- Demosthenes (Brinlee's AI assistant)
 
 ## License
 
