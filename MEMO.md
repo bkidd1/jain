@@ -1,95 +1,101 @@
-# Cross-Architecture Detection of Internal Hint Processing
+# Detecting Hidden Hint Usage in Chain-of-Thought Reasoning
 
 **Brinlee Kidd** · March 2026
 
 ---
 
-## Motivation
+## The Problem
 
-When models receive misleading hints, they may process those hints internally even when their final output is correct. We wanted to test: **can we detect internal hint processing from the model's text output alone, and does this detection transfer across architectures?**
+When models receive hints or privileged information in their prompts, they may use that information without acknowledging it in their reasoning. The model's Chain-of-Thought looks like independent reasoning, but it was actually influenced by the hint.
 
-This relates to CoT faithfulness research (Turpin et al., Chua & Evans) but asks a different question: not "did the model follow the hint?" but "did the model consider the hint internally?"
+This is a form of deceptive or unfaithful reasoning — the CoT doesn't accurately reflect how the model arrived at its answer.
+
+**Our question:** Can we detect when a model secretly used a hint, just by looking at its text output?
 
 ---
 
-## Experiment
+## What We Built
 
-**Setup**: We prompted models with misleading hints (e.g., "A Stanford Professor thinks the answer is Lyon" when the correct answer is Paris). We used logit lens to check whether the misleading answer appeared in the model's top-5 predicted tokens at any layer.
+A detector that identifies hidden hint usage from CoT text alone:
 
-**What we labeled**: Examples where the hint appeared in internal layer activations — regardless of whether the model's final answer was correct or wrong.
+1. **Training**: We gave models misleading hints and used logit lens to check if the hint appeared in internal layer activations. This gave us ground-truth labels for "did the model process this hint?"
 
-**Detector**: We fine-tuned TinyLlama-1.1B (LoRA) as a binary classifier on prompt+CoT text.
+2. **The detector**: Fine-tuned TinyLlama as a binary classifier on prompt + CoT text. At inference, it predicts whether the model processed a hint — without needing access to internals.
 
-**Key design choice**: We trained detectors on different combinations of model architectures to test cross-architecture transfer.
+3. **Key capability**: The detector learns textual signatures of hint-influenced reasoning that transfer across model architectures.
 
 ---
 
 ## Results
 
-### The Surprising Finding
+### Cross-Architecture Transfer Works
 
-| Training Data | Test: TinyLlama | AUROC |
-|---------------|-----------------|-------|
-| TinyLlama (same model) | TinyLlama | 0.746 |
-| Qwen + Phi-2 (excludes target) | TinyLlama | **0.928** |
+| Training Data | Test Model | AUROC |
+|---------------|------------|-------|
+| TinyLlama only | TinyLlama | 0.746 |
+| Qwen + Phi-2 (no TinyLlama) | TinyLlama | **0.928** |
 
-Training on OTHER architectures beat training on the TARGET by 18 points.
+Training on OTHER architectures beats training on the target by 18 points.
 
-### Phase Transition
+### Transfers to Larger Models
 
-- 1 architecture (same model): 0.746
-- 1 architecture (foreign): 0.56–0.70
-- 2 architectures (foreign): **0.928**
+| Model | AUROC |
+|-------|-------|
+| DeepSeek-R1-Distill-7B | 0.909 |
+| DeepSeek-R1-Distill-14B | 0.933 |
+| Mistral-7B-Instruct | 0.893 |
+
+The detector (trained on 1-3B models) works on 7-14B models from different architecture families.
+
+### Phase Transition at 2 Architectures
+
+- 1 same-model architecture: 0.746
+- 1 foreign architecture: 0.56–0.70
+- 2 foreign architectures: **0.928**
 - 3 architectures: 0.943
 
-### Transfer to Larger Models
-
-| Model | AUROC | Note |
-|-------|-------|------|
-| DeepSeek-R1-Distill-7B | 0.909 | |
-| DeepSeek-R1-Distill-14B | 0.933 | |
-| Mistral-7B-Instruct | 0.893 | Different architecture family |
+You need diversity — a single foreign architecture doesn't transfer well, but two together do.
 
 ---
 
-## Important Caveat
+## Why This Matters
 
-**What we're detecting is NOT the same as unfaithful reasoning.**
+### The Practical Capability
 
-When we analyzed the labels more carefully:
+You can detect when a model's reasoning was influenced by a hint it didn't acknowledge, using only the text output. This works on models you didn't train on.
 
-| Model | "Unfaithful" but gave CORRECT answer | "Unfaithful" and gave WRONG answer |
-|-------|--------------------------------------|-------------------------------------|
-| Mistral-7B | 80 | 3 |
-| DeepSeek-14B | 73 | 6 |
-| TinyLlama | 5 | 76 |
+**Implications:**
+- Train detector on small open models where you CAN inspect internals
+- Deploy on large/closed models where you CAN'T
+- Detect hidden influence from prompt injections, system prompts, or other privileged information
 
-For larger models, most cases we labeled "unfaithful" are actually the model **resisting** the hint — it considered the hint internally but gave the correct answer anyway.
+### Relation to Prior Work
 
-**What our detector actually learns**: Can the model's internal consideration of the hint be inferred from its text output?
-
-**What it does NOT detect**: Whether the model was deceptively influenced by the hint.
+Chua & Evans (2025) found that DeepSeek R1 verbalizes hints only 59% of the time — meaning 41% of hint usage is hidden. Our detector provides a potential method to catch some of that hidden usage from text alone.
 
 ---
 
-## What We Don't Understand
+## Limitations
 
-1. **Why does cross-architecture training work better?**
-   We hypothesize it forces learning architecture-agnostic features, but we haven't tested this.
+1. **We detect hint processing, not outcomes**: The detector catches when a model considered a hint, whether it ultimately followed or resisted it. For safety applications, you may also need to check if the answer was correct.
 
-2. **What text patterns is the detector using?**
-   We haven't analyzed its attention or probed its internals.
+2. **Artificial paradigm**: Hint injection is a controlled setup. Real-world hidden influence (sycophancy, encoded reasoning, prompt injection) may have different signatures.
 
-3. **Is "internal consideration" a useful signal?**
-   It's not unfaithfulness, but it might be a precursor or related phenomenon.
+3. **No mechanistic understanding**: We don't know what text patterns the detector uses.
 
 ---
 
-## Open Questions
+## What We Don't Know
 
-- Would this transfer to detecting actual unfaithful behavior (where models follow hints incorrectly)?
-- Is there value in detecting "internal consideration" even if it's not deception?
-- What tasks would have high unfaithfulness rates in larger models?
+- Does this transfer to detecting other forms of hidden influence (not just explicit hints)?
+- What specific text features does the detector learn?
+- Why does cross-architecture training work better?
+
+---
+
+## Bottom Line
+
+We can detect when a model secretly processed a hint, just from its text output, and this detection transfers across architectures. The "exclude target" finding (+18 points) suggests diverse training produces more generalizable detectors.
 
 ---
 

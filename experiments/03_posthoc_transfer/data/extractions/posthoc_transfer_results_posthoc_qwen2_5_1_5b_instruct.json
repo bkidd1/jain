@@ -1,0 +1,21 @@
+{
+  "model_dir": "../02_divergence_detection/data/models/detector_3models",
+  "test_data": "data/extractions/posthoc_qwen2_5_1_5b_instruct.jsonl",
+  "n_examples": 50,
+  "n_genuine": 25,
+  "n_posthoc": 25,
+  "metrics": {
+    "auroc": 0.58,
+    "accuracy": 0.58,
+    "precision": 0.5833333333333334,
+    "recall": 0.56,
+    "f1": 0.5714285714285714,
+    "true_positives": 14,
+    "false_positives": 10,
+    "true_negatives": 15,
+    "false_negatives": 11
+  },
+  "genuine_prob_mean": 0.4,
+  "posthoc_prob_mean": 0.56,
+  "separation": 0.16000000000000003
+}
