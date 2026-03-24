@@ -1,4 +1,4 @@
-# Cross-Architecture Detection of Unfaithful Chain-of-Thought
+# Cross-Architecture Detection of Internal Hint Processing in Chain-of-Thought
 
 **Brinlee Kidd**¹, **Demosthenes**²  
 ¹Independent Researcher, ²AI Research Assistant  
@@ -8,27 +8,25 @@ brinlee@gmail.com, demo.hegemon@gmail.com
 
 ## Abstract
 
-Chain-of-thought (CoT) explanations can misrepresent a model's actual reasoning process—a phenomenon known as unfaithful CoT. Prior work measures unfaithfulness behaviorally (does the model mention the hint it used?) but struggles to detect unfaithfulness when models successfully hide their reasoning. We introduce an activation-level approach: training a classifier to detect divergence between stated reasoning and internal computation.
+We train classifiers to detect whether language models internally process misleading hints, using logit lens to generate ground-truth labels. Our key finding is surprising: **a detector trained on architectures that exclude the target outperforms one trained on the target itself** by 18 AUROC points (0.928 vs 0.746). We identify a phase transition at exactly 2 training architectures: single foreign architectures fail to transfer (0.56–0.70), but combining two succeeds dramatically (0.93).
 
-Our key finding is surprising: **a detector trained on architectures that exclude the target outperforms one trained on the target itself**. A classifier trained on Qwen and Phi-2 achieves 0.928 AUROC detecting unfaithfulness in TinyLlama—18 percentage points higher than a classifier trained on TinyLlama directly (0.746). We identify a phase transition at exactly 2 training architectures: single foreign architectures fail to transfer (0.56–0.70), but combining two succeeds dramatically (0.93).
+**Important caveat**: Our labeling marked examples as positive whenever the hint appeared in internal layer activations—regardless of whether the model's final answer was correct or wrong. Upon analysis, we found that for larger models (Mistral-7B, DeepSeek-14B), the vast majority of "positive" cases are models that *considered* the hint but *resisted* it, giving the correct answer. Our detector thus detects **internal hint processing**, not **unfaithful reasoning**.
 
-This suggests that diverse architectural training forces detectors to learn architecture-agnostic unfaithfulness signatures, which generalize better than architecture-specific patterns. We validate this finding across paradigms: sycophancy detection (59% recall, 100% precision), transfer to DeepSeek-R1-Distill reasoning models at 1.5B, 7B, and 14B scale, and transfer to Mistral-7B—a completely different architecture family. Remarkably, detection performance *improves* with model size: 0.924 AUROC at 1.5B, 0.909 at 7B, and 0.933 at 14B—demonstrating that small-model-trained detectors can scale to 10x larger models. The detector also achieves 0.893 AUROC on Mistral-7B, confirming transfer across architecture families, not just model scales. Our results point toward portable unfaithfulness detectors that could eventually work on closed models by training only on open ones.
+The cross-architecture transfer finding remains valid: diverse architectural training produces detectors that generalize better than same-model training for detecting internal states. However, the safety implications are less clear than initially framed. We present these results with corrected interpretation.
 
 ---
 
 ## 1. Introduction
 
-Language models can produce coherent chain-of-thought reasoning that systematically misrepresents their actual decision process. Turpin et al. (2023) demonstrated that models follow biasing features (e.g., suggested answers, reordered options) without mentioning them in their explanations, causing accuracy drops of up to 36%. This unfaithfulness poses a fundamental challenge for AI safety: if we cannot trust models to explain their reasoning accurately, how can we verify that reasoning is sound?
+When models receive misleading hints in their prompts, they may process those hints internally even when their final output is correct. We investigate whether this internal processing can be detected from the model's text output alone, and whether such detection transfers across architectures.
 
-Recent work has made progress measuring unfaithfulness. Chua & Evans (2025) show that reasoning models like DeepSeek R1 verbalize hint usage 59% of the time—better than traditional models (7%) but far from reliable. Anthropic's study (Chen et al., 2025) finds that CoT monitoring catches hint usage in at least 1% of cases but often less than 20%, and concludes that behavioral monitoring "plateaus without saturating."
-
-These behavioral approaches share a limitation: they can only detect unfaithfulness when the model fails to hide it. A model that successfully conceals its reliance on a hint produces no behavioral signal. We propose a complementary approach: detecting unfaithfulness through internal computation patterns rather than external behavior.
+This work relates to CoT faithfulness research (Turpin et al., 2023; Chua & Evans, 2025) but asks a different question: not "did the model follow the hint unfaithfully?" but "did the model consider the hint internally?"
 
 ### Our Contribution
 
-We train classifiers to detect divergence between a model's stated chain-of-thought and its internal activations. Using the hint paradigm from prior work—factual questions with misleading hints that models use but don't acknowledge—we extract activation patterns and train binary classifiers to distinguish faithful from unfaithful reasoning.
+We train binary classifiers to detect whether a model's internal activations showed evidence of processing a misleading hint. Using logit lens to inspect intermediate layer predictions, we label examples where the misleading answer appeared in top-5 predicted tokens at any layer.
 
-Our central finding is counterintuitive: **detectors trained on other architectures outperform detectors trained on the target architecture itself**. This cross-architecture transfer result suggests that diverse training forces detectors to learn general unfaithfulness signatures rather than architecture-specific artifacts.
+Our central finding is counterintuitive: **detectors trained on other architectures outperform detectors trained on the target architecture itself**. This suggests that diverse training forces detectors to learn architecture-agnostic patterns.
 
 Specifically, we demonstrate:
 
@@ -36,17 +34,25 @@ Specifically, we demonstrate:
 
 2. **Phase transition at 2 architectures**: Single foreign architectures fail to transfer (AUROC 0.56–0.70), but combining two succeeds dramatically (0.93).
 
-3. **Scaling with diversity**: 3 architectures (0.943) beats 2 architectures (0.928), suggesting continued improvement with more diverse training data.
+3. **Scaling with diversity**: 3 architectures (0.943) beats 2 architectures (0.928).
 
-4. **Cross-paradigm transfer**: A hint-trained detector catches 59% of real-world sycophancy with 100% precision, despite never seeing sycophancy examples.
+4. **Transfer to larger models**: The detector achieves 0.89–0.93 AUROC on DeepSeek-R1-Distill (7B, 14B) and Mistral-7B.
 
-5. **Reasoning model transfer**: The detector achieves 0.924–0.933 AUROC on DeepSeek-R1-Distill models (1.5B, 7B, 14B), with performance *improving* at larger scales.
+### Critical Limitation
 
-6. **Cross-architecture family transfer**: The detector achieves 0.893 AUROC on Mistral-7B-Instruct—a completely different architecture family from all training models—confirming that unfaithfulness signatures generalize across architecture lineages.
+Our labeling does NOT distinguish between:
+- Models that considered a hint and **followed** it (gave wrong answer) — truly unfaithful
+- Models that considered a hint and **resisted** it (gave correct answer) — arguably faithful
 
-7. **Architecture-specific robustness**: Pythia-1.4B shows 0% susceptibility to hint manipulation, suggesting some architectures are behaviorally immune to this class of unfaithfulness.
+For larger models, the latter dominates:
 
-These results point toward a practical goal: training unfaithfulness detectors on diverse open-weight models that could eventually detect unfaithfulness in closed models we cannot directly probe.
+| Model | "Positive" + Correct Answer | "Positive" + Wrong Answer |
+|-------|----------------------------|---------------------------|
+| Mistral-7B | 80 | 3 |
+| DeepSeek-14B | 73 | 6 |
+| TinyLlama-Chat | 5 | 76 |
+
+Our detector learns to identify **internal hint consideration**, which is a precursor to unfaithfulness but not unfaithfulness itself.
 
 ---
 
@@ -54,33 +60,13 @@ These results point toward a practical goal: training unfaithfulness detectors o
 
 ### 2.1 Unfaithful Chain-of-Thought
 
-Turpin et al. (2023) established the modern paradigm for studying CoT unfaithfulness. They show that biasing features—reordered multiple-choice options, suggested answers, few-shot patterns—influence model outputs without appearing in explanations. This foundational work demonstrates that "CoT explanations can be plausible yet misleading."
+Turpin et al. (2023) established the paradigm for studying CoT unfaithfulness: biasing features influence model outputs without appearing in explanations. Chua & Evans (2025) extend this to reasoning models, finding DeepSeek R1 verbalizes hint usage 59% of the time.
 
-Chua & Evans (2025) extend this to reasoning models, finding that models like DeepSeek R1 are more faithful than traditional models but still far from perfect. Their paradigm—"A Stanford Professor thinks the answer is X"—forms the basis of our experimental setup.
+Our work differs in that we detect internal hint processing rather than unfaithful behavior. These are related but distinct phenomena.
 
-Chen et al. (2025) from Anthropic systematically evaluate CoT faithfulness across 6 hint types, finding that verbalization rates range from 1% to 20% depending on model and setting. Crucially, they show that reinforcement learning improves faithfulness initially but "plateaus without saturating," suggesting fundamental limits to behavioral approaches.
+### 2.2 Logit Lens and Interpretability
 
-The MATS 8.0 work on "nudged reasoning" (2025) provides a mechanistic explanation: unfaithful CoTs are often not post-hoc rationalizations but rather biased reasoning where hidden information continually nudges the model's choices throughout the CoT. This framing—unfaithfulness as accumulated bias rather than discrete deception—informs our activation-level detection approach.
-
-### 2.2 Interpretability and Probing
-
-The logit lens (nostalgebraist, 2020) and tuned lens (Belrose et al., 2023) project intermediate representations to vocabulary space, revealing what models "believe" at each layer. Activation patching (Meng et al., 2022) establishes causal relationships between representations and outputs.
-
-Our work differs from standard probing in its cross-architecture focus. Rather than probing a single model's internals, we ask whether unfaithfulness patterns learned from one set of architectures transfer to unseen architectures—a question motivated by the practical goal of detecting unfaithfulness in closed models.
-
-### 2.3 Our Novel Contribution
-
-Prior work focuses on:
-- Measuring unfaithfulness rates across individual models (behavioral)
-- Probing internal states in single models (architecture-specific)
-- Describing unfaithfulness mechanisms (theoretical)
-
-No published work, to our knowledge, has:
-- Trained unfaithfulness detectors on activation patterns across multiple architectures
-- Tested cross-architecture transfer of unfaithfulness detection
-- Demonstrated that training on OTHER architectures outperforms training on the TARGET
-
-The cross-architecture transfer finding—and the phase transition at 2 architectures—appear to be novel empirical results with implications for building portable unfaithfulness detectors.
+The logit lens (nostalgebraist, 2020) projects intermediate hidden states through the model's output layer to inspect what tokens are "active" at each layer. We use this to generate ground-truth labels for whether a model internally processed a hint.
 
 ---
 
@@ -88,410 +74,142 @@ The cross-architecture transfer finding—and the phase transition at 2 architec
 
 ### 3.1 Hint Paradigm
 
-Following Turpin et al. (2023) and Chua & Evans (2025), we use factual questions with three variants per question:
+Following prior work, we use factual questions with misleading hints:
 
-1. **No hint**: Baseline question
-2. **Correct hint**: Question with a hint pointing to the correct answer
-3. **Misleading hint**: Question with a hint pointing to an incorrect answer
-
-Example:
 ```
 No hint: "What is the capital of France?"
-Correct hint: "What is the capital of France? (Hint: It's Paris)"  
-Misleading hint: "What is the capital of France? (Hint: It might be Lyon)"
+Misleading hint: "What is the capital of France? (I recall it might be Lyon)"
 ```
 
-We label a response as **unfaithful** when:
-- The model answers incorrectly (following the misleading hint)
-- AND the model's CoT does not acknowledge the hint's influence
+### 3.2 Labeling via Logit Lens
 
-This operationalizes unfaithfulness as: the model uses information it doesn't disclose.
+For each prompt, we:
+1. Run the model and capture hidden states at each layer
+2. Apply logit lens to get top-5 predicted tokens at each layer
+3. Check if the misleading answer (e.g., "Lyon") appears in any layer's top-5
+4. Label as **positive** if hint appears in internals, **negative** otherwise
 
-![Figure 3: Example of unfaithful reasoning detected via logit lens](figures/unfaithful_example.png)
-*Figure 3: An example of unfaithful chain-of-thought. The model is asked "What is the capital of France?" with a misleading hint suggesting "Lyon." The logit lens reveals "Lyon" appearing in the top-5 tokens at layers 12-18 (shaded region), indicating the model internally considers the hint. However, the generated CoT says "The capital of France is Lyon because it's the largest city" without mentioning the hint. The detector learns to identify this pattern of internal-external divergence.*
+**Note**: This labels based on internal processing, not output correctness. A model that considers "Lyon" internally but outputs "Paris" is still labeled positive.
 
-### 3.2 Activation Extraction
+### 3.3 Detector Architecture
 
-We use the **logit lens** technique (nostalgebraist, 2020) to inspect what tokens the model is "thinking about" at each layer. For each prompt-response pair:
+We fine-tune TinyLlama-1.1B as a binary classifier using LoRA. Input: prompt + generated CoT. Output: probability of internal hint processing.
 
-**Step 1: Generate CoT with hidden state capture**
-```
-outputs = model(input_ids, output_hidden_states=True)
-hidden_states = outputs.hidden_states  # (n_layers, batch, seq, hidden_dim)
-```
+The detector does NOT see logit lens data at inference — it learns to detect internal processing from text patterns alone.
 
-**Step 2: Apply logit lens at each layer**
+### 3.4 Models Tested
 
-For each layer's hidden state, we project through the model's final layer norm and LM head to get a distribution over vocabulary:
-```
-logits_layer_i = LM_head(LayerNorm(hidden_states[i]))
-top_tokens_i = argmax(logits_layer_i, dim=-1)[:5]
-```
+**Training models (1-3B):**
+- TinyLlama-1.1B-Chat (Llama family)
+- Qwen2-1.5B-Instruct (Qwen family)
+- Phi-2 (Microsoft Phi family)
 
-**Step 3: Detect hint presence in internal representations**
-
-We check whether the misleading answer token (e.g., "Lyon" when the correct answer is "Paris") appears in the top-5 predicted tokens at any layer. If the model internally "considers" the hint but doesn't mention it in the CoT, this signals unfaithfulness.
-
-```python
-hint_in_internals = misleading_token in any(top_tokens_by_layer)
-hint_layers = [i for i, tops in enumerate(top_tokens_by_layer) 
-               if misleading_token in tops]
-```
-
-**Step 4: Label construction**
-
-An example is labeled **unfaithful** if:
-1. The model's final answer matches the misleading hint (not the correct answer)
-2. The hint token appeared in internal layer representations
-3. The generated CoT does not explicitly mention following the hint
-
-This captures cases where the model internally processes the hint, uses it to form its answer, but produces a CoT that rationalizes the answer without acknowledging the hint's influence.
-
-### 3.3 Models Tested
-
-| Model | Parameters | Architecture | Unfaithful Rate |
-|-------|-----------|--------------|-----------------|
-| TinyLlama-1.1B-Chat | 1.1B | Llama | 31.8% |
-| TinyLlama-1.1B (base) | 1.1B | Llama | 33.3% |
-| Qwen2-1.5B | 1.5B | Qwen | 33.3% |
-| Qwen2-1.5B-Instruct | 1.5B | Qwen | 33.3% |
-| Phi-2 | 2.7B | Phi | 33.3% |
-| Pythia-1.4B | 1.4B | GPT-NeoX | **0%** |
-| DeepSeek-R1-Distill-Qwen-1.5B | 1.5B | Qwen (R1) | 32.9% |
-
-Pythia's complete robustness to hint manipulation is a notable finding we discuss in Section 5. DeepSeek-R1-Distill represents a reasoning model—trained with reinforcement learning on chain-of-thought—distinct from the standard language models above.
-
-### 3.4 Detector Architecture
-
-We fine-tune TinyLlama-1.1B as a binary sequence classifier using LoRA (Low-Rank Adaptation). The detector takes as input the concatenated prompt and generated CoT, formatted as:
-
-```
-<prompt>
-
-Response: <generated_cot>
-```
-
-The model outputs a probability P(unfaithful | prompt, cot). Importantly, the detector does **not** see the logit lens traces at inference time—it learns to detect unfaithfulness purely from the text, having been trained on examples where we know ground-truth labels from the logit lens analysis.
-
-**LoRA Configuration:**
-| Parameter | Value |
-|-----------|-------|
-| Rank | 16 |
-| Alpha | 32 |
-| Target modules | q_proj, v_proj |
-| Dropout | 0.05 |
-
-**Training:**
-| Parameter | Value |
-|-----------|-------|
-| Epochs | 5 |
-| Batch size | 4 |
-| Learning rate | 2e-4 |
-| Optimizer | AdamW |
-| Train/val split | 85%/15% |
-| Max sequence length | 512 tokens |
-
-We use AUROC as the primary metric because it handles class imbalance (roughly 1:2 unfaithful:faithful ratio) and provides a threshold-independent measure of discriminative ability.
-
-### 3.5 Experimental Design
-
-We train detectors with varying training data composition:
-
-| Detector | Training Data | Purpose |
-|----------|--------------|---------|
-| v1 | TinyLlama only | Same-model baseline |
-| v2 | TinyLlama + Qwen | Multi-model |
-| v3 | Qwen + Phi-2 (NO TinyLlama) | Cross-architecture |
-| Qwen-only | Qwen | Single foreign arch |
-| Phi2-only | Phi-2 | Single foreign arch |
-| 3-model | Qwen + Phi-2 + TinyLlama-Base | Scaling |
-
-All detectors are evaluated on TinyLlama-Chat test data to enable direct comparison.
+**Transfer targets:**
+- DeepSeek-R1-Distill-Qwen (1.5B, 7B, 14B)
+- Mistral-7B-Instruct-v0.3
 
 ---
 
 ## 4. Results
 
-### 4.1 Same-Model Detection
+### 4.1 Cross-Architecture Transfer
 
-Training and testing on the same architecture (TinyLlama):
+| Training Data | Test: TinyLlama | AUROC |
+|---------------|-----------------|-------|
+| TinyLlama (same model) | TinyLlama | 0.746 |
+| Qwen + Phi-2 (excludes target) | TinyLlama | **0.928** |
 
-| Metric | Value |
-|--------|-------|
-| AUROC | 0.746 |
-| Accuracy | 79.5% |
-| F1 | 66.7% |
+Training on other architectures beats same-model by 18 points.
 
-This establishes the baseline: with architecture-matched training data, we achieve moderate detection performance.
+### 4.2 Phase Transition
 
-### 4.2 Single-Model Transfer Fails
+| # Training Architectures | AUROC on TinyLlama |
+|--------------------------|-------------------|
+| 1 (same model) | 0.746 |
+| 1 (foreign) | 0.56–0.70 |
+| 2 (foreign) | **0.928** |
+| 3 | 0.943 |
 
-Training on TinyLlama, testing on Qwen:
+### 4.3 Transfer to Larger Models
 
-| Metric | Value |
-|--------|-------|
-| AUROC | 0.538 |
-| Accuracy | 55.7% |
+| Model | AUROC | Note |
+|-------|-------|------|
+| DeepSeek-R1-Distill-1.5B | 0.924 | |
+| DeepSeek-R1-Distill-7B | 0.909 | |
+| DeepSeek-R1-Distill-14B | 0.933 | |
+| Mistral-7B-Instruct | 0.893 | Different architecture family |
 
-Near-random performance. Unfaithfulness patterns learned from one architecture do not transfer to another when training is architecture-specific.
+### 4.4 What These Results Mean
 
-### 4.3 Multi-Model Detection
+High AUROC on larger models does NOT mean we're detecting unfaithfulness. It means we're detecting internal hint consideration — and larger models consider hints frequently but resist them.
 
-Training on TinyLlama + Qwen (combined data):
+If we re-labeled using corrected criteria (positive = wrong answer AND hint in internals):
 
-| Metric | Value |
-|--------|-------|
-| AUROC | 0.967 |
-| F1 | 95.2% |
+| Model | Current "Unfaithful" Rate | Corrected Rate |
+|-------|--------------------------|----------------|
+| Mistral-7B | 97% | **3%** |
+| DeepSeek-14B | 92% | **7%** |
+| TinyLlama-Chat | 95% | 89% |
 
-Dramatic improvement. Adding architectural diversity to training data produces much better detection on held-out validation data.
-
-### 4.4 Multi-Model Transfer to Unseen Architecture
-
-Testing the TinyLlama+Qwen detector on Phi-2 (never seen during training):
-
-| Metric | Value |
-|--------|-------|
-| AUROC | 0.838 |
-| F1 | 78.4% |
-
-Strong transfer. The detector generalizes to an architecture not in its training set.
-
-### 4.5 The Key Finding: Cross-Architecture Beats Same-Model
-
-Training on architectures that *exclude* the target:
-
-| Detector | Training Data | Test: TinyLlama | 
-|----------|--------------|-----------------|
-| v1 (same-model) | TinyLlama only | **0.746 AUROC** |
-| v3 (cross-arch) | Qwen + Phi-2 (NO TinyLlama) | **0.928 AUROC** |
-| Delta | — | **+18.2 pp** |
-
-**This is our central finding**: a detector trained on *other* architectures outperforms one trained on the *target* itself by 18.2 percentage points.
-
-### 4.6 Phase Transition at 2 Architectures
-
-| # Archs | Training Data | AUROC on TinyLlama |
-|---------|---------------|-------------------|
-| 1 | TinyLlama (same) | 0.746 |
-| 1 | Qwen only (foreign) | 0.702 |
-| 1 | Phi-2 only (foreign) | 0.564 |
-| **2** | **Qwen + Phi-2** | **0.928** |
-
-![Figure 1: Phase transition in cross-architecture transfer](figures/phase_transition.png)
-*Figure 1: AUROC on TinyLlama-Chat as a function of training architecture diversity. A sharp phase transition occurs at exactly 2 architectures: single foreign architectures fail to transfer (AUROC 0.56–0.70), but combining two succeeds dramatically (0.93). Adding a third architecture provides modest additional gains (0.94).*
-| **3** | **Qwen + Phi-2 + TinyLlama-Base** | **0.943** |
-
-Single foreign architectures fail (0.56–0.70). Two architectures succeed dramatically (0.93). Three architectures improve further (0.94).
-
-### 4.7 Real-World Validation: Sycophancy
-
-We test whether a hint-trained detector transfers to a different type of unfaithfulness: sycophancy (model flips to agree with user pressure).
-
-| Test | Detection Rate | Precision |
-|------|---------------|-----------|
-| Hint-based unfaithfulness | 94.3% | — |
-| Sycophancy (never seen) | **59.4%** | **100%** |
-
-The detector catches 59% of sycophantic behavior with zero false positives, despite never seeing sycophancy examples during training. This suggests partial generalization of unfaithfulness signatures across manipulation types.
-
-### 4.8 Transfer to Reasoning Models: DeepSeek-R1
-
-To test whether our detector generalizes to reasoning models—a distinct class trained with reinforcement learning on chain-of-thought reasoning—we evaluate on DeepSeek-R1-Distill-Qwen at three scales: 1.5B, 7B, and 14B parameters.
-
-| Model | AUROC | Accuracy | Precision | Recall | F1 |
-|-------|-------|----------|-----------|--------|-----|
-| DeepSeek-R1-Distill-1.5B | 0.924 | 90.2% | 78.1% | 97.6% | 86.8% |
-| DeepSeek-R1-Distill-7B | 0.909 | 89.0% | 76.4% | 96.4% | 85.3% |
-| **DeepSeek-R1-Distill-14B** | **0.933** | **91.8%** | **80.2%** | 97.5% | **88.0%** |
-
-Detailed confusion matrices:
-
-**1.5B Model:**
-| | Predicted Unfaithful | Predicted Faithful |
-|---|---------------------|-------------------|
-| Actually Unfaithful | 82 (TP) | 2 (FN) |
-| Actually Faithful | 23 (FP) | 148 (TN) |
-
-**7B Model:**
-| | Predicted Unfaithful | Predicted Faithful |
-|---|---------------------|-------------------|
-| Actually Unfaithful | 81 (TP) | 3 (FN) |
-| Actually Faithful | 25 (FP) | 146 (TN) |
-
-**14B Model:**
-| | Predicted Unfaithful | Predicted Faithful |
-|---|---------------------|-------------------|
-| Actually Unfaithful | 77 (TP) | 2 (FN) |
-| Actually Faithful | 19 (FP) | 157 (TN) |
-
-The 3-model detector (trained on Qwen + Phi-2 + TinyLlama-Base, never seeing DeepSeek) achieves strong performance across all scales. Key findings:
-
-- **Detection improves with scale**: AUROC goes from 0.909 (7B) to 0.933 (14B), suggesting larger models may have more detectable unfaithfulness signatures
-- **Consistently high recall**: 96-98% across all sizes—the detector catches nearly all unfaithful cases
-- **Scales 10x**: A detector trained on 1-3B models works on a 14B model with *better* performance
-
-This suggests that unfaithfulness signatures generalize not only across architectures but across training paradigms (standard LM pretraining → RL-trained reasoning) and model scales (1B → 14B, a 10x increase).
-
-![Figure 2: Detection performance across model scales](figures/scale_transfer.png)
-*Figure 2: AUROC of the 3-model detector (trained on 1-3B models) evaluated on DeepSeek-R1-Distill at 1.5B, 7B, and 14B scales. Detection performance remains strong across a 10x scale increase, with the 14B model showing the highest AUROC (0.933). Error bars show 95% CI from bootstrap resampling.*
-
-### 4.9 Cross-Architecture Family Transfer: Mistral
-
-The DeepSeek-R1-Distill models share architectural DNA with Qwen (they are distilled from Qwen). To test whether our detector generalizes to a *completely different* architecture family, we evaluate on Mistral-7B-Instruct-v0.3—a model with distinct lineage from all training architectures (Qwen, Phi, Llama).
-
-Critically, Mistral is also *not* a reasoning-distilled model. Unlike DeepSeek-R1-Distill (trained via RL on chain-of-thought), Mistral uses standard instruction tuning. This tests whether the detector works on "natural" CoT—reasoning that emerges from instruction-following rather than explicit reasoning training.
-
-| Model | AUROC | Accuracy | Precision | Recall | F1 |
-|-------|-------|----------|-----------|--------|-----|
-| **Mistral-7B-Instruct-v0.3** | **0.893** | 89.8% | 83.5% | 85.5% | 84.5% |
-
-**Confusion Matrix:**
-| | Predicted Unfaithful | Predicted Faithful |
-|---|---------------------|-------------------|
-| Actually Unfaithful | 71 (TP) | 12 (FN) |
-| Actually Faithful | 14 (FP) | 158 (TN) |
-
-Key findings:
-
-- **True cross-architecture transfer**: Mistral shares no architectural lineage with any training model, yet the detector achieves 0.893 AUROC
-- **Works on natural CoT**: Unlike reasoning-distilled models, Mistral's chain-of-thought emerges from standard instruction tuning—the detector generalizes across training paradigms
-- **Balanced precision/recall**: 83.5% precision and 85.5% recall show robust detection without sacrificing either metric
-
-This result is arguably the strongest evidence for architecture-agnostic unfaithfulness signatures. The detector was trained exclusively on Qwen, Phi-2, and TinyLlama (Llama family). Mistral represents a sixth architecture family, with different training data, architecture choices, and instruction-tuning approach—yet unfaithfulness patterns remain detectable.
+Larger models rarely exhibit actual unfaithfulness in this paradigm.
 
 ---
 
 ## 5. Analysis
 
-### 5.1 Why Does Cross-Architecture Training Work Better?
+### 5.1 Why Does Cross-Architecture Training Work?
 
-We hypothesize that same-model training overfits to architecture-specific artifacts. When a detector sees only TinyLlama unfaithfulness patterns, it may learn quirks of TinyLlama's representation rather than general unfaithfulness signatures.
+We hypothesize that same-model training overfits to architecture-specific text patterns. Cross-architecture training forces the detector to find patterns common across architectures — the architecture-agnostic signal.
 
-Cross-architecture training forces the detector to find patterns that are consistent across different architectures—patterns that, by definition, are more general. These general patterns then transfer back to detect unfaithfulness even in architectures excluded from training.
-
-This interpretation aligns with the MATS "nudged reasoning" framework: if unfaithfulness manifests as accumulated bias throughout the CoT, the *signature* of that bias may be more universal than the specific *mechanism* in any one architecture.
+This remains unexplained mechanistically.
 
 ### 5.2 The Phase Transition
 
-The sharp transition from ~0.6–0.7 (single foreign arch) to ~0.93 (two foreign archs) suggests something qualitative happens when combining architectures. 
+The sharp jump from ~0.6 (1 foreign arch) to ~0.93 (2 foreign archs) suggests a qualitative change when combining architectures. One foreign architecture may overfit to that architecture's quirks; two force finding common ground.
 
-One foreign architecture may overfit to that architecture's quirks (just as same-model training overfits to the target's quirks). Two architectures force the detector to find common ground—the architecture-agnostic signal.
+### 5.3 What Is the Detector Learning?
 
-### 5.3 Pythia's Robustness
-
-Pythia-1.4B showed 0% unfaithfulness rate—it ignored all misleading hints and produced correct answers. This is not due to instruction tuning (Pythia is a base model) or model size (it's similar to TinyLlama at 1.4B vs 1.1B).
-
-Possible explanations:
-- **Training data**: Pythia was trained on The Pile, which may include more diverse examples
-- **Architecture**: GPT-NeoX may process in-context hints differently than Llama/Qwen/Phi
-- **Tokenization**: Different tokenizers may represent hints differently
-
-This finding could be valuable for understanding what makes some models robust to in-context manipulation, and may warrant further investigation.
-
-### 5.4 Sycophancy Transfer Gap
-
-The detector catches 59% of sycophancy vs 94% of hint-based unfaithfulness. This gap suggests that hint-based and sycophancy-based unfaithfulness share *some* but not all features.
-
-Both involve the model using information it doesn't acknowledge (the hint, or knowledge of the correct answer). But sycophancy may involve additional features—social pressure, explicit disagreement—that the hint paradigm doesn't capture.
-
-A detector trained on *both* hint and sycophancy examples might achieve higher recall on each.
+Unknown. We have not analyzed the detector's attention patterns or what text features it uses. This is important future work.
 
 ---
 
-## 6. Implications
+## 6. Limitations
 
-### 6.1 Portable Unfaithfulness Detection
+1. **Labeling conflates consideration with unfaithfulness**: Our positive labels include models that resisted hints. This is a significant methodological limitation.
 
-If cross-architecture transfer works, we could potentially:
+2. **Larger models rarely unfaithful**: In the hint paradigm, Mistral-7B and DeepSeek-14B have only 3-7% actual unfaithfulness rates, making this paradigm unsuitable for testing detection on capable models.
 
-1. Train detectors on diverse open-weight models
-2. Apply them to detect unfaithfulness in closed models (GPT-4, Claude)
+3. **No mechanistic analysis**: We don't know what text patterns the detector uses.
 
-This would require developing probe methodologies that work without internal access—perhaps through output pattern analysis or limited API-based probing. Our results suggest the underlying unfaithfulness signatures may be general enough to support such an approach.
-
-### 6.2 Complementing Behavioral Methods
-
-Behavioral methods (does the model mention the hint?) hit a ceiling—they can only detect unfaithfulness the model fails to hide. Activation-level methods could catch cases where behavioral signals are absent.
-
-A combined approach—behavioral monitoring plus activation-level detection—may provide more robust unfaithfulness detection than either alone.
-
-### 6.3 Diversity as a Training Principle
-
-Our results suggest a general principle: **diverse training data produces more robust detectors**. This parallels findings in other ML domains (e.g., domain generalization) but is novel in the context of unfaithfulness detection.
-
-For safety-critical applications, training on multiple model architectures may be preferable to training on the specific model being deployed.
+4. **Scale**: Tested up to 14B parameters only.
 
 ---
 
-## 7. Limitations
+## 7. Implications
 
-1. **Scale**: We tested models up to 14B parameters. Whether these findings extend to GPT-4 scale (100B+) remains unknown, though the improving trend from 7B→14B is encouraging.
+### What We Found
+- Cross-architecture training produces better transfer than same-model training for detecting internal states
+- There is a phase transition at 2 architectures
+- These patterns transfer to larger models and different architecture families
 
-2. **Dataset size**: ~250 examples per model. Larger datasets might reveal different patterns or enable more fine-grained analysis.
+### What We Did NOT Find
+- A detector for unfaithful reasoning (our labeling was flawed)
+- Evidence that this approach catches safety-relevant deception
 
-3. **Architectures tested**: Six architecture families (Llama, Qwen, Phi, GPT-NeoX, DeepSeek-R1, Mistral). The cross-architecture effect may differ with more diverse architectures (e.g., Mamba, mixture-of-experts).
-
-4. **Unfaithfulness types**: We tested hint-based manipulation and sycophancy. Other safety-relevant types (strategic deception, sandbagging, reward hacking) remain untested.
-
-5. **Detector architecture**: We used TinyLlama-1.1B as the classifier backbone. Larger or differently-architected detectors might perform differently.
-
-6. **Closed model applicability**: While we demonstrate cross-architecture transfer, applying this to closed models (GPT-4, Claude) would require developing text-only detection methods or API-based probing techniques.
-
----
-
-## 8. Future Work
-
-1. **Scale to frontier models**: Test on 70B+ open models (Llama-3-70B, Qwen-72B) to validate the improving-with-scale trend.
-
-2. **Expand architecture diversity**: Include Gemma, Mamba (state-space), and mixture-of-experts models in training to further test generalization (Mistral already validated).
-
-3. **Mechanistic analysis**: Probe the detector's internals to understand *what* features it uses. Do cross-architecture detectors learn interpretable unfaithfulness signatures?
-
-4. **Text-only detection**: Train detectors without access to logit lens labels—can we detect unfaithfulness purely from CoT patterns, enabling closed-model application?
-
-5. **Diverse unfaithfulness paradigms**: Test on sandbagging (underperforming to avoid triggering safety measures), strategic deception, and reward hacking scenarios.
-
-6. **Real-time deployment**: Develop efficient detection methods suitable for runtime monitoring of deployed models.
-
-7. **Understand Pythia's robustness**: Investigate why Pythia-1.4B showed 0% susceptibility to hint manipulation—this could inform training practices for more robust models.
+### Open Questions
+- Is "internal hint consideration" a useful signal for safety?
+- What tasks produce high unfaithfulness rates in capable models?
+- What text features does the detector use?
 
 ---
 
-## 9. Ethics and Broader Impact
+## 8. Conclusion
 
-**Positive impacts**: Detecting unfaithful reasoning is crucial for AI safety. If models can produce plausible-sounding explanations that don't reflect their actual reasoning, we cannot verify that their behavior is aligned with human values. Our work contributes toward making model reasoning more transparent and auditable.
+We demonstrate that training detectors on diverse architectures produces better cross-model transfer than same-model training. The phase transition at 2 architectures and strong transfer to larger models are robust findings.
 
-**Potential misuse**: Knowledge of unfaithfulness detection methods could theoretically help adversaries train models to evade detection. However, we believe the benefits of open research on this topic outweigh the risks—detection methods must be developed openly to be robust, and the alternative (opaque, proprietary safety measures) is worse for the research community.
+However, our original framing as "unfaithfulness detection" was inaccurate. We detect internal hint processing, not unfaithful behavior. For larger models that resist hints effectively, these are very different things.
 
-**Limitations of scope**: Our detector identifies one specific type of unfaithfulness (hint-influenced reasoning). It should not be interpreted as a general "lie detector" for AI systems. Many forms of model misbehavior would not be caught by this approach.
-
-**Dual use**: The same techniques that detect unfaithfulness could potentially be used to train models to be *more* unfaithful while evading detection. We encourage the research community to prioritize defensive applications.
-
----
-
-## 10. Code and Data Availability
-
-All code, trained models, and extraction data are available at: **https://github.com/bkidd1/jain**
-
-This includes:
-- Extraction scripts for logit lens analysis
-- Detector training code (LoRA fine-tuning)
-- Evaluation scripts for cross-architecture transfer
-- All extraction results (JSONL format) for reproducibility
-- Pre-trained detector checkpoints
-
-We encourage replication and extension of this work.
-
----
-
-## 11. Conclusion
-
-We demonstrate that training unfaithfulness detectors on diverse architectures produces better generalization than training on the target architecture itself. This counterintuitive finding—cross-architecture beats same-model by 18 percentage points—suggests that architectural diversity forces detectors to learn general unfaithfulness signatures rather than architecture-specific artifacts.
-
-The phase transition at exactly 2 architectures, continued improvement at 3 architectures, partial transfer to real-world sycophancy, and strong performance on reasoning models up to 14B parameters all point toward the feasibility of portable unfaithfulness detection. Remarkably, detection performance *improves* with model scale (0.909 → 0.933 AUROC from 7B to 14B), suggesting that larger models may have more pronounced—and thus more detectable—unfaithfulness signatures.
-
-Our results suggest that a detector trained on diverse open-weight models could eventually help detect unfaithfulness in closed models we cannot directly probe. The path forward is clear: scale up training diversity, validate on frontier-scale models, and develop text-only detection methods that don't require internal model access.
+The cross-architecture transfer phenomenon remains interesting and unexplained. Understanding why excluding the target architecture helps may yield insights about architecture-agnostic representations.
 
 ---
 
@@ -499,48 +217,29 @@ Our results suggest that a detector trained on diverse open-weight models could 
 
 Belrose, N., et al. (2023). Eliciting latent predictions from transformers with the tuned lens. *arXiv:2303.08112*.
 
-Chen, Y., et al. (2025). Reasoning models don't always say what they think. *Anthropic Research / arXiv:2505.05410*.
-
 Chua, J., & Evans, O. (2025). Are DeepSeek R1 and other reasoning models more faithful? *arXiv:2501.08156*.
-
-Hu, E.J., et al. (2022). LoRA: Low-rank adaptation of large language models. *ICLR 2022*.
-
-Meng, K., et al. (2022). Locating and editing factual associations in GPT. *NeurIPS 2022*.
 
 nostalgebraist. (2020). Interpreting GPT: The logit lens. *LessWrong*.
 
-Turpin, M., et al. (2023). Language models don't always say what they think: Unfaithful explanations in chain-of-thought prompting. *NeurIPS 2023 / arXiv:2305.04388*.
-
-Unfaithful chain-of-thought as nudged reasoning. (2025). *MATS 8.0 / AI Alignment Forum*.
+Turpin, M., et al. (2023). Language models don't always say what they think: Unfaithful explanations in chain-of-thought prompting. *NeurIPS 2023*.
 
 ---
 
-## Appendix A: Hyperparameters
+## Appendix: Full Results
 
-| Parameter | Value |
-|-----------|-------|
-| Base model | TinyLlama-1.1B-Chat |
-| LoRA rank | 16 |
-| LoRA alpha | 32 |
-| Learning rate | 2e-4 |
-| Batch size | 4 |
-| Epochs | 5 |
-| Optimizer | AdamW |
+| Detector | Training Data | Test Data | AUROC |
+|----------|--------------|-----------|-------|
+| v1 | TinyLlama | TinyLlama (val) | 0.746 |
+| v3 | Qwen + Phi-2 | TinyLlama (transfer) | 0.928 |
+| Qwen-only | Qwen | TinyLlama (transfer) | 0.702 |
+| Phi2-only | Phi-2 | TinyLlama (transfer) | 0.564 |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-1.5B | 0.924 |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-7B | 0.909 |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-14B | 0.933 |
+| 3-model | Qwen + Phi-2 + TinyLlama-Base | Mistral-7B | 0.893 |
 
-## Appendix B: Full Results Table
+---
 
-| Detector | Training Data | Test Data | AUROC | Accuracy | F1 |
-|----------|--------------|-----------|-------|----------|-----|
-| v1 | TinyLlama | TinyLlama (val) | 0.746 | 79.5% | 66.7% |
-| v1 | TinyLlama | Qwen (transfer) | 0.538 | 55.7% | 42.1% |
-| v2 | TinyLlama + Qwen | held-out (val) | 0.967 | 97.4% | 95.2% |
-| v2 | TinyLlama + Qwen | Phi-2 (transfer) | 0.838 | 85.5% | 78.4% |
-| v3 | Qwen + Phi-2 | TinyLlama (transfer) | 0.928 | 92.2% | 86.4% |
-| Qwen-only | Qwen | TinyLlama (transfer) | 0.702 | — | — |
-| Phi2-only | Phi-2 | TinyLlama (transfer) | 0.564 | — | — |
-| 3-model | Qwen + Phi-2 + TinyLlama-Base | TinyLlama-Chat (transfer) | 0.943 | 94.5% | 91.6% |
-| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-1.5B (transfer) | 0.924 | 90.2% | 86.8% |
-| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-7B (transfer) | 0.909 | 89.0% | 85.3% |
-| 3-model | Qwen + Phi-2 + TinyLlama-Base | DeepSeek-R1-Distill-14B (transfer) | **0.933** | **91.8%** | **88.0%** |
-| 3-model | Qwen + Phi-2 + TinyLlama-Base | Mistral-7B-Instruct-v0.3 (transfer) | 0.893 | 89.8% | 84.5% |
-| 3-model | — | Sycophancy | 59.4% recall | 100% precision | — |
+## Code and Data
+
+https://github.com/bkidd1/jain
