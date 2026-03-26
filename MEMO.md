@@ -92,14 +92,23 @@ The 0.79 AUROC with matched prompts shows that hint-influenced CoT does leave tr
 
 Training on Qwen+Phi-2 → testing on TinyLlama achieved 0.928 AUROC. But this was detecting prompt format (architecture-agnostic) more than reasoning patterns.
 
-### 4. "Exclude target" improves transfer
+### 4. "Exclude target" was an artifact
+
+In exp02 (confounded), excluding the target architecture from training improved transfer:
 
 | Training Set | Test (TinyLlama) AUROC |
 |--------------|------------------------|
 | Including TinyLlama | 0.746 |
 | Excluding TinyLlama | 0.928 |
 
-Excluding the target architecture **improved** transfer by +18 points. Hypothesis: Including the target causes overfitting to model-specific artifacts. Exclusion forces learning more generalizable features (which happen to be prompt-based).
+This seemed interesting (+18 points). But when we tested with matched prompts (exp05):
+
+| Training Set | Test (TinyLlama) AUROC |
+|--------------|------------------------|
+| Including TinyLlama | **0.793** |
+| Excluding TinyLlama | 0.588 |
+
+**The effect reversed.** With prompt confounds removed, including the target helps (as expected). The original "exclude target" finding was the classifier learning architecture-agnostic prompt patterns better when forced to ignore architecture-specific features.
 
 ### 5. Unfaithful reasoning is rare
 
@@ -116,7 +125,8 @@ Only ~4% of responses showed unfaithful reasoning. Models don't sycophantically 
 |-------|--------|
 | Detect hint usage from CoT text alone | ⚠️ Marginal (0.79 AUROC) |
 | Practical detection for deployment | ❌ Not viable |
-| Cross-architecture transfer | ⚠️ Real but confounded |
+| Cross-architecture transfer | ❌ Artifact of prompt confounds |
+| "Exclude target" improves transfer | ❌ Artifact (reverses with matched prompts) |
 | Response-only carries any signal | ✅ Yes (~20%) |
 
 ---

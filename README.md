@@ -26,11 +26,15 @@ We tried to detect hidden hint usage from Chain-of-Thought text alone. Initial r
 - **~80% in prompt context** (even with hint text redacted)
 - **~20% in CoT response** (with proper controls)
 
-### Cross-architecture transfer paradox
-Training on Qwen+Phi-2, excluding TinyLlama, then testing on TinyLlama: **0.928 AUROC**
-Training including TinyLlama: **0.746 AUROC**
+### Cross-architecture transfer was an artifact
+In exp02 (confounded), "excluding target" seemed to help (+18 points). But with matched prompts (exp05):
 
-Excluding the target improves transfer by +18 points. Likely explanation: avoiding model-specific artifacts forces learning more generalizable features.
+| Training Set | TinyLlama AUROC |
+|--------------|-----------------|
+| Including TinyLlama | **0.79** |
+| Excluding TinyLlama | 0.59 |
+
+**The effect reversed.** The original finding was the classifier learning architecture-agnostic prompt confounds better when forced to ignore architecture-specific patterns.
 
 ### Unfaithful reasoning is rare
 Only ~4% of responses showed unfaithful reasoning (hint appeared in internal activations without verbalization). This limits practical applicability.
@@ -79,7 +83,7 @@ jain/
 
 1. **Response-only detection is marginally possible** (0.79) but not practical
 2. **Most signal is in prompts** — future work must control for this
-3. **Cross-arch "exclude target" finding** is interesting and worth investigating
+3. **Cross-arch "exclude target" finding was an artifact** — reverses with proper controls
 4. **Unfaithful reasoning is rare** (~4%), limiting real-world applicability
 
 ## What Would Actually Work?
