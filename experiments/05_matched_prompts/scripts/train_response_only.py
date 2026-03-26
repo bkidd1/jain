@@ -193,7 +193,14 @@ def main():
     )
     
     print("\n=== Training RESPONSE-ONLY detector ===")
-    trainer.train()
+    # Resume from checkpoint if one exists
+    last_checkpoint = None
+    if output_dir.exists():
+        checkpoints = list(output_dir.glob("checkpoint-*"))
+        if checkpoints:
+            last_checkpoint = max(checkpoints, key=lambda x: int(x.name.split("-")[1]))
+            print(f"Resuming from {last_checkpoint}")
+    trainer.train(resume_from_checkpoint=last_checkpoint)
     
     print("\nFinal evaluation:")
     results = trainer.evaluate()

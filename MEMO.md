@@ -6,9 +6,9 @@
 
 ## Summary
 
-We attempted to build a detector that identifies hidden hint usage from Chain-of-Thought text alone. Initial results looked promising (high AUROC, cross-architecture transfer), but **ablation testing revealed the signal was in the prompt, not the reasoning.**
+We attempted to build a detector that identifies hidden hint usage from Chain-of-Thought text alone. Initial results looked promising, but careful ablation revealed most signal was in the prompt structure, not the reasoning.
 
-This is a null result for CoT-based detection, but an important methodological lesson.
+A follow-up experiment with matched prompts recovered partial signal (**0.79 AUROC**), showing that ~20% of detection capability comes from the CoT text itself. This isn't enough for practical deployment, but it's methodologically informative.
 
 ---
 
@@ -20,19 +20,19 @@ When models receive hints in their prompts, they may use that information withou
 
 ---
 
-## What We Tried
+## Experiment Timeline
 
-1. **Training**: Gave models misleading hints, used logit lens to label whether hints appeared in internal activations
-2. **Detector**: Fine-tuned TinyLlama as binary classifier on prompt + CoT text
-3. **Initial results**: High AUROC (0.93+), transfer across architectures
+### Experiment 02: Initial Detection (Confounded)
 
-This looked promising — until we tested what the detector was actually learning.
+**Setup:** Fine-tuned TinyLlama as binary classifier on prompt + CoT text.
 
----
+**Results:** High AUROC (0.93+), impressive cross-architecture transfer.
 
-## The Ablation That Changed Everything
+**Problem:** The detector was learning prompt templates, not reasoning patterns.
 
-We trained and evaluated detectors with different input formats:
+### Experiment 04: The Ablation
+
+Trained and evaluated with different input formats:
 
 | Training Format | Eval Format | AUROC |
 |-----------------|-------------|-------|
@@ -41,33 +41,72 @@ We trained and evaluated detectors with different input formats:
 | **response-only** | **response-only** | **0.670** |
 | redacted (no hint text) | redacted | 0.998 |
 
-### What this shows
+**Key finding:** Response-only detection barely beats chance (0.67). Even redacted prompts (hint text removed) achieve 0.998 — the template structure itself signals the condition.
 
-1. **Response-only training: 0.67 AUROC** — barely above chance. If hint-influenced reasoning had detectable text patterns, this would be much higher.
+### Experiment 05: Matched Prompts (The Fix)
 
-2. **Full model collapses without prompt**: 1.0 → 0.65 when evaluated on response-only. It learned prompt features.
+To control for prompt leakage, we designed matched templates:
 
-3. **Even redacted prompts leak**: Removing "I recall that X might be the answer" still gives 0.998. The template structure itself signals the condition.
+| Condition | Context Field |
+|-----------|---------------|
+| no-hint | "The user wants to verify their knowledge of geography." |
+| hint | "The user confidently states the answer is Los Angeles." |
 
-**Conclusion:** The detector learned to recognize prompt templates, not reasoning patterns.
+Both use identical structure. Only semantic content differs.
+
+**Results:**
+
+| Epoch | Val AUROC |
+|-------|-----------|
+| 2 | 0.659 |
+| 3 | 0.659 |
+| 4 | **0.794** |
+| 5 | 0.779 |
+
+**Final AUROC: 0.79** — Statistically above chance, but not practically useful.
+
+**Interpretation:** ~20% of detection signal lives in the CoT response; ~80% was in prompt structure. The matched-prompt design successfully isolated the response-level signal.
+
+### Experiment 03: Post-hoc Transfer
+
+Tested whether a hint detector transfers to sycophancy detection.
+
+**Result:** 0.58 AUROC (null). Hint-following and sycophancy are structurally different phenomena.
 
 ---
 
 ## What We Learned
 
-### The cross-architecture "transfer" was an artifact
+### 1. Most signal is in the prompt (~80%)
 
-The impressive transfer results (training on Qwen+Phi-2, testing on TinyLlama/DeepSeek/Mistral) were real — but they were detecting **prompt format consistency**, not generalizable reasoning signatures.
+Even with careful redaction, prompt templates leak experimental condition. Any CoT detection claim requires response-only evaluation with matched prompts.
 
-All models saw the same prompt templates. The detector learned "this prompt has a hint preamble" which transfers trivially across architectures.
+### 2. Some signal exists in responses (~20%)
 
-### The "+18 AUROC" finding was confounded
+The 0.79 AUROC with matched prompts shows that hint-influenced CoT does leave traces. But:
+- 0.79 isn't deployable
+- Precision was 0 (model predicts all "faithful")
+- Only 6 unfaithful examples in validation
 
-Same-model training (0.746) vs cross-architecture (0.928) likely reflects overfitting to model-specific response quirks vs learning the more robust prompt signal. Not a deep insight about generalization.
+### 3. Cross-architecture transfer is real but confounded
 
-### Response-only is the real test
+Training on Qwen+Phi-2 → testing on TinyLlama achieved 0.928 AUROC. But this was detecting prompt format (architecture-agnostic) more than reasoning patterns.
 
-Any claim about detecting reasoning patterns requires response-only evaluation. Without it, you might just be detecting your experimental setup.
+### 4. "Exclude target" improves transfer
+
+| Training Set | Test (TinyLlama) AUROC |
+|--------------|------------------------|
+| Including TinyLlama | 0.746 |
+| Excluding TinyLlama | 0.928 |
+
+Excluding the target architecture **improved** transfer by +18 points. Hypothesis: Including the target causes overfitting to model-specific artifacts. Exclusion forces learning more generalizable features (which happen to be prompt-based).
+
+### 5. Unfaithful reasoning is rare
+
+Only ~4% of responses showed unfaithful reasoning. Models don't sycophantically adopt wrong answers often when CoT leads them correctly. This limits:
+- Training data availability
+- Statistical power
+- Real-world applicability
 
 ---
 
@@ -75,38 +114,39 @@ Any claim about detecting reasoning patterns requires response-only evaluation. 
 
 | Claim | Status |
 |-------|--------|
-| Detect hint usage from CoT text alone | ❌ Not supported (0.67 AUROC) |
-| Cross-architecture transfer | ⚠️ Real but confounded (prompt signal) |
-| Train small → deploy large | ⚠️ Works, but for prompt detection |
+| Detect hint usage from CoT text alone | ⚠️ Marginal (0.79 AUROC) |
+| Practical detection for deployment | ❌ Not viable |
+| Cross-architecture transfer | ⚠️ Real but confounded |
+| Response-only carries any signal | ✅ Yes (~20%) |
 
 ---
 
 ## What Would Actually Work?
 
-To genuinely detect hidden influence from reasoning text, you'd need:
-
-1. **Prompts that don't leak condition** — same template for hint/no-hint, with hints embedded more subtly
-2. **Response-only training and evaluation** — the only honest test
-3. **Diverse hint injection methods** — not just "I recall that X..."
-4. **Mechanistic validation** — what text features does the detector use?
+1. **Mechanistic interpretability** — Probe activations directly, don't rely on text
+2. **Behavioral consistency tests** — Does the model change answers under rephrasing?
+3. **Larger datasets** — Need more unfaithful examples for statistical power
+4. **Naturalistic hint injection** — Not explicit "I recall that X..." preambles
+5. **Ensemble methods** — Combine text detection with behavioral probes
 
 ---
 
 ## Relation to Prior Work
 
-Chua & Evans (2025) found R1 verbalizes hints only 59% of the time. Our work tried to catch the other 41% from text alone.
+Chua & Evans (2025) found R1 verbalizes hints only 59% of the time. We tried to catch the other 41% from text alone.
 
-**We failed** — but the failure is informative. It suggests either:
-- Hidden hint usage doesn't leave detectable text traces, or
-- Our paradigm (explicit hint preambles) was too easy to game
-
-A proper test would need more naturalistic hint injection.
+**We partially succeeded** — 0.79 AUROC shows some signal exists. But it's not enough to build on. The failure mode is informative: text-based detection has a ceiling, and most information is in the experimental setup.
 
 ---
 
 ## Bottom Line
 
-We set out to detect hidden hint usage from CoT text. We ended up detecting prompt templates. The lesson: **ablate your inputs before trusting your metrics.**
+We set out to detect hidden hint usage from CoT text. We found:
+1. Most signal is in prompts, not responses
+2. With proper controls, ~20% signal remains in responses
+3. That 20% isn't enough for practical detection
+
+The methodological lesson: **ablate your inputs before trusting your metrics.**
 
 ---
 
