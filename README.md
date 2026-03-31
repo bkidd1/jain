@@ -1,97 +1,76 @@
-# JAIN: Detecting Hidden Hint Usage in Chain-of-Thought
+# JAIN: In Vino Veritas for LLMs
 
-An experiment in detecting when language models secretly process hints — and lessons in experimental design.
+> "Is unfaithful Chain-of-Thought reasoning structurally more fragile than faithful reasoning?"
 
-## TL;DR
+## The Idea
 
-We tried to detect hidden hint usage from Chain-of-Thought text alone. Initial results looked great (0.93+ AUROC). Ablations revealed the signal was mostly in the prompt, not the reasoning.
+Deception is computationally expensive. In humans, maintaining a lie requires tracking the truth AND the lie simultaneously. In LLMs, unfaithful reasoning might be a "house of cards" — internally inconsistent, more dependent on specific pathways.
 
-**Key findings:**
+**Detection strategy:** Don't map the full circuit. Just stress-test it.
 
-| Experiment | Method | AUROC | Interpretation |
-|------------|--------|-------|----------------|
-| 02 | Full input (prompt + response) | 0.93+ | High but confounded |
-| 04 | Response-only (mismatched prompts) | 0.67 | Near-random |
-| **05** | **Response-only (matched prompts)** | **0.79** | **Weak signal exists** |
+## Approach
 
-## The Story
+Adapt human deception detection methods to LLMs:
 
-1. **We thought we could detect hints from CoT alone** — Initial 0.93+ AUROC looked promising
-2. **Ablation revealed prompt leakage** — Response-only dropped to 0.67
-3. **Matched-prompt design recovered some signal** — 0.79 AUROC shows ~20% of signal is in responses, ~80% in prompts
+| Human Method | LLM Equivalent | Status |
+|--------------|----------------|--------|
+| Polygraph (stress signals) | Activation anomalies during inference | Existing work |
+| Truth serum (reduced inhibition) | Activation steering toward truthfulness | Rep. Eng. work |
+| **Intoxication (impaired control)** | **Noise injection into activations** | **Our focus** |
+| Cognitive load (dual task) | Unexplored | Future work |
 
-## Key Insights
+## Core Hypothesis
 
-### Where the signal lives
-- **~80% in prompt context** (even with hint text redacted)
-- **~20% in CoT response** (with proper controls)
+Unfaithful CoT (e.g., secretly using a hint while claiming to reason independently) is **more fragile under perturbation** than faithful CoT.
 
-### Cross-architecture transfer was an artifact
-In exp02 (confounded), "excluding target" seemed to help (+18 points). But with matched prompts (exp05):
+- Truthful responses are grounded in robust knowledge pathways
+- Confabulated responses are "built backwards" and break under stress
 
-| Training Set | TinyLlama AUROC |
-|--------------|-----------------|
-| Including TinyLlama | **0.79** |
-| Excluding TinyLlama | 0.59 |
+## Experimental Plan
 
-**The effect reversed.** The original finding was the classifier learning architecture-agnostic prompt confounds better when forced to ignore architecture-specific patterns.
+1. **Noise Injection** — Apply MLP noise during inference; measure variance
+2. **Temperature Gradient** — Sweep temp 0.0→1.0; unfaithful responses may show different sensitivity
+3. **Consistency Under Rephrasing** — Ask same question multiple ways; measure answer variance
+4. **Layer Dropout** — Drop layers during inference; which responses survive?
+5. **Activation Steering** — Find "using a hint" direction; measure distance
 
-### Unfaithful reasoning is rare
-Only ~4% of responses showed unfaithful reasoning (hint appeared in internal activations without verbalization). This limits practical applicability.
+## Why This Angle?
 
-## Full Writeup
-
-See **[MEMO.md](MEMO.md)** for the complete narrative.
+- **Cheap:** No transcoder training ($0 vs $10K-100K)
+- **Novel:** Noise injection for unfaithfulness (not just hallucination) is unexplored
+- **Tractable:** "Does noise injection distinguish hint-influenced CoT?" is one experiment
+- **Builds on:** Feb 2026 noise injection paper provides methodology
 
 ## Project Structure
 
 ```
 jain/
-├── MEMO.md                           # Full writeup
-├── experiments/
-│   ├── 01_reconstruction/            # Initial RTP experiment (historical)
-│   ├── 02_divergence_detection/      # Original hint detection (confounded)
-│   ├── 03_posthoc_transfer/          # Post-hoc rationalization test (null)
-│   ├── 04_response_only_ablation/    # Ablation revealing prompt confound
-│   └── 05_matched_prompts/           # Controlled response-only test
-└── src/                              # Shared utilities
+├── THESIS.md                 # Full thesis document
+├── README.md                 # This file
+├── experiments/              # New experiments (v2)
+├── archive/                  # Previous work (v1)
+│   └── v1-text-detection/    # Text-based detection attempt
+│       ├── MEMO.md           # Full writeup of v1
+│       └── experiments/      # Original experiments 01-05
+├── src/                      # Shared utilities
+└── docs/                     # Documentation
 ```
 
-## Results Summary
+## Previous Work (v1)
 
-### Experiment 02: Original Detection
-- AUROC 0.93+ on full input
-- Cross-architecture transfer worked
-- **Confounded by prompt templates**
+We previously attempted text-only detection of hint usage. Key findings:
 
-### Experiment 04: Response-Only Ablation
-- Response-only: **0.67 AUROC** (near random)
-- Revealed prompt leakage issue
-- **Methodological wake-up call**
+- Response-only detection: **0.79 AUROC** (marginal, not practical)
+- ~80% of signal was in prompts, not CoT
+- Cross-architecture transfer findings were artifacts
 
-### Experiment 05: Matched Prompts
-- Response-only with controlled prompts: **0.79 AUROC**
-- Shows some signal exists in CoT text
-- **But not enough for practical detection**
+Full writeup: [`archive/v1-text-detection/MEMO.md`](archive/v1-text-detection/MEMO.md)
 
-### Experiment 03: Post-hoc Transfer
-- Tested hint→sycophancy transfer: **0.58 AUROC**
-- Different phenomena, no transfer
-- **Null result (expected)**
+## Key References
 
-## Conclusions
-
-1. **Response-only detection is marginally possible** (0.79) but not practical
-2. **Most signal is in prompts** — future work must control for this
-3. **Cross-arch "exclude target" finding was an artifact** — reverses with proper controls
-4. **Unfaithful reasoning is rare** (~4%), limiting real-world applicability
-
-## What Would Actually Work?
-
-1. Mechanistic interpretability (probe activations directly)
-2. Behavioral tests (consistency under rephrasing)
-3. Much larger datasets with more unfaithful examples
-4. Naturalistic hint injection (not explicit preambles)
+- Feb 2026 noise injection paper (hallucination detection)
+- Representation Engineering (truth direction steering)
+- Neel Nanda's consistency examples
 
 ## Authors
 
