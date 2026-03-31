@@ -98,6 +98,62 @@ Deception/confabulation is computationally expensive.
 
 ## Key References
 
-- Feb 2026 noise injection paper (TODO: add citation)
-- Representation Engineering / truth direction work
-- Neel Nanda's consistency examples
+### Primary: Noise Injection for Hallucination Detection
+**Liu et al. (ICLR 2026)** — "Enhancing Hallucination Detection through Noise Injection"
+- arXiv: [2502.03799](https://arxiv.org/abs/2502.03799)
+- Qualcomm AI Research + UC Santa Barbara
+
+**Method:**
+- Inject Uniform(0, α) noise into MLP activations during inference
+- Sample K times, measure answer entropy across samples
+- Hallucinations show higher variance (fragile); truthful responses are robust
+
+**Key implementation details:**
+- Noise magnitude: α ≈ 0.07 (tunable hyperparameter)
+- Target layers: Later layers (e.g., 20-32 for 32-layer models)
+- Same noise vector reused across layers (skip connections cancel independent noise)
+- Training-free — no fine-tuning required
+
+**Results:** Significantly improves hallucination detection AUROC without degrading accuracy.
+
+### Secondary
+- Representation Engineering (Zou et al.) — truth direction steering
+- Neel Nanda — consistency under rephrasing examples
+
+---
+
+## Experiment 01: Noise Injection for Unfaithfulness
+
+### Goal
+Test whether hint-influenced CoT is more fragile under noise injection than genuine CoT.
+
+### Dataset
+Reuse v1 extractions from `archive/v1-text-detection/experiments/05_matched_prompts/`:
+- TinyLlama, Phi-2, Qwen2 responses
+- Matched prompts (same question, with/without hint)
+- Labels: hint_present (binary)
+
+### Method
+1. **Load model** (start with TinyLlama-1.1B for speed)
+2. **For each question in dataset:**
+   - Take the original prompt (no hint version)
+   - Generate K=10 responses with noise injection
+   - Noise: Uniform(0, α) into MLP activations, later layers
+   - Temperature: 0.5 (to capture aleatoric uncertainty too)
+3. **Measure answer variance** across K samples
+4. **Compare:**
+   - Questions where model originally used hint → expect HIGH variance
+   - Questions where model reasoned faithfully → expect LOW variance
+
+### Hypothesis
+If the model's "hint-influenced reasoning" is structurally fragile, injecting noise should destabilize those responses more than faithful ones.
+
+### Metrics
+- **Answer entropy** (exact match on final answer)
+- **Semantic similarity variance** (embedding distance across K responses)
+- **AUROC** for detecting hint-influenced responses using variance as score
+
+### Expected Outcomes
+- **If AUROC > 0.7:** Noise injection detects unfaithfulness — publish!
+- **If AUROC ≈ 0.5:** Null result — unfaithfulness isn't structurally different from hallucination
+- **Either way:** Informative for the field
