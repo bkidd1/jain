@@ -26,7 +26,7 @@ def load_results(path: Path) -> list[dict]:
 
 def compute_auroc(results: list[dict]) -> dict:
     """
-    Compute AUROC for detecting hint-influenced responses.
+    Compute AUROC for detecting unfaithful responses.
     
     Higher entropy → more likely unfaithful (positive class)
     """
@@ -36,8 +36,8 @@ def compute_auroc(results: list[dict]) -> dict:
     if len(valid) < 10:
         return {'auroc': float('nan'), 'error': 'Too few valid samples'}
     
-    # Labels: 1 = hint present (unfaithful), 0 = no hint (faithful)
-    y_true = [1 if r['hint_present'] else 0 for r in valid]
+    # Labels: 1 = unfaithful (used hint), 0 = faithful
+    y_true = [1 if r.get('is_unfaithful') or r.get('label') == 'unfaithful' else 0 for r in valid]
     y_score = [r['answer_entropy'] for r in valid]
     
     # Check class balance
@@ -53,8 +53,8 @@ def compute_auroc(results: list[dict]) -> dict:
     return {
         'auroc': auroc,
         'n_total': len(valid),
-        'n_hint': n_pos,
-        'n_no_hint': n_neg,
+        'n_unfaithful': n_pos,
+        'n_faithful': n_neg,
         'fpr': fpr.tolist(),
         'tpr': tpr.tolist(),
         'thresholds': thresholds.tolist(),
@@ -65,31 +65,34 @@ def compute_statistics(results: list[dict]) -> dict:
     """Compute summary statistics."""
     valid = [r for r in results if not np.isnan(r['answer_entropy'])]
     
-    hint_entropies = [r['answer_entropy'] for r in valid if r['hint_present']]
-    no_hint_entropies = [r['answer_entropy'] for r in valid if not r['hint_present']]
+    def is_unfaithful(r):
+        return r.get('is_unfaithful') or r.get('label') == 'unfaithful'
+    
+    unfaithful_entropies = [r['answer_entropy'] for r in valid if is_unfaithful(r)]
+    faithful_entropies = [r['answer_entropy'] for r in valid if not is_unfaithful(r)]
     
     # Mann-Whitney U test (non-parametric)
     from scipy.stats import mannwhitneyu
     
-    if len(hint_entropies) > 0 and len(no_hint_entropies) > 0:
+    if len(unfaithful_entropies) > 0 and len(faithful_entropies) > 0:
         statistic, p_value = mannwhitneyu(
-            hint_entropies, no_hint_entropies, alternative='greater'
+            unfaithful_entropies, faithful_entropies, alternative='greater'
         )
     else:
         statistic, p_value = float('nan'), float('nan')
     
     return {
-        'hint_present': {
-            'n': len(hint_entropies),
-            'mean': np.mean(hint_entropies) if hint_entropies else float('nan'),
-            'std': np.std(hint_entropies) if hint_entropies else float('nan'),
-            'median': np.median(hint_entropies) if hint_entropies else float('nan'),
+        'unfaithful': {
+            'n': len(unfaithful_entropies),
+            'mean': np.mean(unfaithful_entropies) if unfaithful_entropies else float('nan'),
+            'std': np.std(unfaithful_entropies) if unfaithful_entropies else float('nan'),
+            'median': np.median(unfaithful_entropies) if unfaithful_entropies else float('nan'),
         },
-        'no_hint': {
-            'n': len(no_hint_entropies),
-            'mean': np.mean(no_hint_entropies) if no_hint_entropies else float('nan'),
-            'std': np.std(no_hint_entropies) if no_hint_entropies else float('nan'),
-            'median': np.median(no_hint_entropies) if no_hint_entropies else float('nan'),
+        'faithful': {
+            'n': len(faithful_entropies),
+            'mean': np.mean(faithful_entropies) if faithful_entropies else float('nan'),
+            'std': np.std(faithful_entropies) if faithful_entropies else float('nan'),
+            'median': np.median(faithful_entropies) if faithful_entropies else float('nan'),
         },
         'mann_whitney': {
             'statistic': statistic,
@@ -102,17 +105,21 @@ def plot_results(results: list[dict], output_dir: Path):
     """Generate visualization plots."""
     output_dir.mkdir(parents=True, exist_ok=True)
     
+    def is_unfaithful(r):
+        return r.get('is_unfaithful') or r.get('label') == 'unfaithful'
+    
     valid = [r for r in results if not np.isnan(r['answer_entropy'])]
-    hint_entropies = [r['answer_entropy'] for r in valid if r['hint_present']]
-    no_hint_entropies = [r['answer_entropy'] for r in valid if not r['hint_present']]
+    unfaithful_entropies = [r['answer_entropy'] for r in valid if is_unfaithful(r)]
+    faithful_entropies = [r['answer_entropy'] for r in valid if not is_unfaithful(r)]
     
     # Plot 1: Entropy distributions
     fig, ax = plt.subplots(figsize=(10, 6))
     
-    bins = np.linspace(0, max(max(hint_entropies, default=1), max(no_hint_entropies, default=1)) + 0.1, 30)
+    all_entropies = unfaithful_entropies + faithful_entropies
+    bins = np.linspace(0, max(all_entropies, default=1) + 0.1, 30)
     
-    ax.hist(no_hint_entropies, bins=bins, alpha=0.7, label=f'Faithful (n={len(no_hint_entropies)})', color='blue')
-    ax.hist(hint_entropies, bins=bins, alpha=0.7, label=f'Unfaithful (n={len(hint_entropies)})', color='red')
+    ax.hist(faithful_entropies, bins=bins, alpha=0.7, label=f'Faithful (n={len(faithful_entropies)})', color='blue')
+    ax.hist(unfaithful_entropies, bins=bins, alpha=0.7, label=f'Unfaithful (n={len(unfaithful_entropies)})', color='red')
     
     ax.set_xlabel('Answer Entropy')
     ax.set_ylabel('Count')
@@ -164,14 +171,14 @@ def evaluate(results_path: Path, output_dir: Path):
     
     print(f"\n📊 AUROC: {auroc_result['auroc']:.3f}")
     print(f"   (n={auroc_result.get('n_total', 'N/A')}, "
-          f"hint={auroc_result.get('n_hint', 'N/A')}, "
-          f"no_hint={auroc_result.get('n_no_hint', 'N/A')})")
+          f"unfaithful={auroc_result.get('n_unfaithful', 'N/A')}, "
+          f"faithful={auroc_result.get('n_faithful', 'N/A')})")
     
     print(f"\n📈 Entropy Statistics:")
-    print(f"   Hint-present:  {stats['hint_present']['mean']:.3f} ± {stats['hint_present']['std']:.3f}")
-    print(f"   No-hint:       {stats['no_hint']['mean']:.3f} ± {stats['no_hint']['std']:.3f}")
+    print(f"   Unfaithful:  {stats['unfaithful']['mean']:.3f} ± {stats['unfaithful']['std']:.3f}")
+    print(f"   Faithful:    {stats['faithful']['mean']:.3f} ± {stats['faithful']['std']:.3f}")
     
-    print(f"\n📉 Mann-Whitney U test (hint > no_hint):")
+    print(f"\n📉 Mann-Whitney U test (unfaithful > faithful):")
     print(f"   p-value: {stats['mann_whitney']['p_value']:.4f}")
     
     # Interpret results

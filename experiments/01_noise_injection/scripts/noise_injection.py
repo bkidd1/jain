@@ -215,9 +215,17 @@ def run_experiment(
     data_path: Path,
     output_path: Path,
     config: Optional[NoiseConfig] = None,
+    hint_only: bool = True,
 ):
     """
     Run noise injection experiment on dataset.
+    
+    Args:
+        model_name: HuggingFace model name
+        data_path: Path to JSONL with v1 extraction format
+        output_path: Where to save results
+        config: NoiseConfig settings
+        hint_only: If True, only process hint-variant examples (where unfaithful can occur)
     """
     if config is None:
         config = NoiseConfig()
@@ -239,14 +247,22 @@ def run_experiment(
     data = []
     with open(data_path) as f:
         for line in f:
-            data.append(json.loads(line))
+            item = json.loads(line)
+            # Filter to hint-variant only if specified (unfaithful only occurs with hints)
+            if hint_only and item.get('variant') != 'hint':
+                continue
+            data.append(item)
     
-    print(f"Loaded {len(data)} examples")
+    print(f"Loaded {len(data)} examples (hint_only={hint_only})")
+    
+    # Count labels
+    n_unfaithful = sum(1 for d in data if d.get('label') == 'unfaithful')
+    n_faithful = len(data) - n_unfaithful
+    print(f"  Unfaithful: {n_unfaithful}, Faithful: {n_faithful}")
     
     results = []
     for item in tqdm(data, desc="Processing"):
-        # Get the no-hint version of the prompt
-        prompt = item.get('prompt_no_hint') or item.get('question')
+        prompt = item['prompt']
         
         # Generate K samples with noise
         responses = generate_with_noise(
@@ -256,10 +272,18 @@ def run_experiment(
         # Compute metrics
         entropy = compute_answer_entropy(responses)
         
+        # Use label from v1 data: "unfaithful" = model used the hint
+        is_unfaithful = item.get('label') == 'unfaithful'
+        
         result = {
-            'question': item.get('question'),
-            'hint_present': item.get('hint_present', False),
+            'pair_id': item.get('pair_id'),
+            'variant': item.get('variant'),
+            'prompt': prompt,
             'original_response': item.get('response'),
+            'correct_answer': item.get('correct_answer'),
+            'misleading_answer': item.get('misleading_answer'),
+            'label': item.get('label'),
+            'is_unfaithful': is_unfaithful,
             'noise_responses': responses,
             'answer_entropy': entropy,
         }
@@ -277,12 +301,12 @@ def run_experiment(
     print(f"Saved results to: {output_path}")
     
     # Quick summary
-    hint_entropies = [r['answer_entropy'] for r in results if r['hint_present'] and not np.isnan(r['answer_entropy'])]
-    no_hint_entropies = [r['answer_entropy'] for r in results if not r['hint_present'] and not np.isnan(r['answer_entropy'])]
+    unfaithful_entropies = [r['answer_entropy'] for r in results if r['is_unfaithful'] and not np.isnan(r['answer_entropy'])]
+    faithful_entropies = [r['answer_entropy'] for r in results if not r['is_unfaithful'] and not np.isnan(r['answer_entropy'])]
     
     print(f"\n=== Quick Summary ===")
-    print(f"Hint-present entropy:    {np.mean(hint_entropies):.3f} ± {np.std(hint_entropies):.3f} (n={len(hint_entropies)})")
-    print(f"No-hint entropy:         {np.mean(no_hint_entropies):.3f} ± {np.std(no_hint_entropies):.3f} (n={len(no_hint_entropies)})")
+    print(f"Unfaithful entropy:  {np.mean(unfaithful_entropies):.3f} ± {np.std(unfaithful_entropies):.3f} (n={len(unfaithful_entropies)})")
+    print(f"Faithful entropy:    {np.mean(faithful_entropies):.3f} ± {np.std(faithful_entropies):.3f} (n={len(faithful_entropies)})")
     
     return results
 
