@@ -313,6 +313,23 @@ Train a classifier on layer 14 activations to detect hint-influenced reasoning.
 2. **A handful of dimensions carry most signal** — not distributed across all 2048
 3. **Simple classifier suffices** — no need for neural networks
 
+### Multi-Layer Comparison
+
+Tested probes on layers with highest KL divergence (3-5) vs layer 14:
+
+| Layer | Accuracy | AUROC | Notes |
+|-------|----------|-------|-------|
+| 3 | 97.5% | 0.998 | High KL (0.014) |
+| 4 | 98.7% | 0.998 | Highest KL (0.052) |
+| 5 | 97.5% | 0.998 | Second-highest KL |
+| **14** | **100%** | **1.000** | "Deception layer" |
+
+**Key insight**: Early layers (3-5) show the biggest *logit changes* (KL divergence) during amplification, but layer 14 has the most *discriminative representation* for classification.
+
+This suggests a two-stage processing:
+1. **Layers 3-5**: Initial hint processing (distributional shifts)
+2. **Layer 14**: Hint-awareness encoded in cleanly separable form
+
 ### Caveats
 
 1. **Detects hint presence, not hint usage** — structural cue in prompt
