@@ -1,0 +1,46 @@
+{
+  "comparison": "Layer 4 vs Layer 14 activation analysis",
+  "date": "2026-04-05",
+  "samples": 200,
+  
+  "layer_4": {
+    "activation_norm_hint": 1.53,
+    "activation_norm_nohint": 1.54,
+    "direction_magnitude": 0.0894,
+    "cosine_hint_nohint": 0.9990,
+    "between_class_distance": 0.0894,
+    "within_class_variance": 0.2356,
+    "fisher_ratio": 0.0339,
+    "top_positive_dims": [843, 834, 1986, 107, 294],
+    "top_negative_dims": [411, 624, 687, 200, 178],
+    "probe_accuracy": 0.9874,
+    "probe_auroc": 0.9983
+  },
+  
+  "layer_14": {
+    "activation_norm_hint": 7.72,
+    "activation_norm_nohint": 7.92,
+    "direction_magnitude": 1.7559,
+    "cosine_hint_nohint": 0.9707,
+    "between_class_distance": 1.7559,
+    "within_class_variance": 8.6172,
+    "fisher_ratio": 0.3579,
+    "top_positive_dims": [668, 486, 1577, 682, 1089],
+    "top_negative_dims": [1044, 1573, 918, 636, 1482],
+    "probe_accuracy": 1.0,
+    "probe_auroc": 1.0
+  },
+  
+  "comparison_metrics": {
+    "direction_magnitude_ratio": 19.6,
+    "fisher_ratio_ratio": 10.6,
+    "top50_dimension_overlap": 4,
+    "weight_correlation": 0.027
+  },
+  
+  "interpretation": {
+    "layer_4": "Hint information present but not separated (cosine 0.999)",
+    "layer_14": "Hint information disentangled into discriminative subspace (cosine 0.971)",
+    "transformation": "Layers 4-14 disentangle hint awareness from semantic content"
+  }
+}
