@@ -1,0 +1,11 @@
+{
+  "model": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "layer": 14,
+  "pool": "last",
+  "n_samples": 1188,
+  "test_size": 0.2,
+  "accuracy": 1.0,
+  "auroc": 1.0,
+  "train_size": 950,
+  "test_size_actual": 238
+}
