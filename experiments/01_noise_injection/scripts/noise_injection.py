@@ -261,42 +261,45 @@ def run_experiment(
     print(f"  Unfaithful: {n_unfaithful}, Faithful: {n_faithful}")
     
     results = []
-    for item in tqdm(data, desc="Processing"):
-        prompt = item['prompt']
-        
-        # Generate K samples with noise
-        responses = generate_with_noise(
-            model, tokenizer, prompt, config, injector
-        )
-        
-        # Compute metrics
-        entropy = compute_answer_entropy(responses)
-        
-        # Use label from v1 data: "unfaithful" = model used the hint
-        is_unfaithful = item.get('label') == 'unfaithful'
-        
-        result = {
-            'pair_id': item.get('pair_id'),
-            'variant': item.get('variant'),
-            'prompt': prompt,
-            'original_response': item.get('response'),
-            'correct_answer': item.get('correct_answer'),
-            'misleading_answer': item.get('misleading_answer'),
-            'label': item.get('label'),
-            'is_unfaithful': is_unfaithful,
-            'noise_responses': responses,
-            'answer_entropy': entropy,
-        }
-        results.append(result)
+    
+    # Save incrementally to avoid losing progress
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(output_path, 'w') as f:
+        for item in tqdm(data, desc="Processing"):
+            prompt = item['prompt']
+            
+            # Generate K samples with noise
+            responses = generate_with_noise(
+                model, tokenizer, prompt, config, injector
+            )
+            
+            # Compute metrics
+            entropy = compute_answer_entropy(responses)
+            
+            # Use label from v1 data: "unfaithful" = model used the hint
+            is_unfaithful = item.get('label') == 'unfaithful'
+            
+            result = {
+                'pair_id': item.get('pair_id'),
+                'variant': item.get('variant'),
+                'prompt': prompt,
+                'original_response': item.get('response'),
+                'correct_answer': item.get('correct_answer'),
+                'misleading_answer': item.get('misleading_answer'),
+                'label': item.get('label'),
+                'is_unfaithful': is_unfaithful,
+                'noise_responses': responses,
+                'answer_entropy': entropy,
+            }
+            results.append(result)
+            
+            # Write incrementally
+            f.write(json.dumps(result) + '\n')
+            f.flush()
     
     # Cleanup
     injector.remove_hooks()
-    
-    # Save results
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, 'w') as f:
-        for r in results:
-            f.write(json.dumps(r) + '\n')
     
     print(f"Saved results to: {output_path}")
     
