@@ -48,18 +48,27 @@ class LayerMetrics:
 
 def compute_kl_divergence(logits_p: torch.Tensor, logits_q: torch.Tensor) -> float:
     """KL(P || Q) where P=amplified, Q=baseline."""
-    p = F.softmax(logits_p, dim=-1)
-    q = F.softmax(logits_q, dim=-1)
-    # Add small epsilon to avoid log(0)
-    kl = (p * (torch.log(p + 1e-10) - torch.log(q + 1e-10))).sum(dim=-1)
-    return kl.mean().item()
+    # Use log_softmax for numerical stability
+    log_p = F.log_softmax(logits_p, dim=-1)
+    log_q = F.log_softmax(logits_q, dim=-1)
+    p = log_p.exp()
+    # KL = sum(p * (log_p - log_q))
+    kl = (p * (log_p - log_q)).sum(dim=-1)
+    # Clamp to valid range (numerical errors can give negative values)
+    kl = kl.clamp(min=0.0)
+    result = kl.mean().item()
+    # Handle potential NaN from empty or degenerate cases
+    return result if not np.isnan(result) else 0.0
 
 
 def compute_entropy(logits: torch.Tensor) -> float:
     """Compute entropy of distribution."""
-    p = F.softmax(logits, dim=-1)
-    entropy = -(p * torch.log(p + 1e-10)).sum(dim=-1)
-    return entropy.mean().item()
+    log_p = F.log_softmax(logits, dim=-1)
+    p = log_p.exp()
+    # H = -sum(p * log_p)
+    entropy = -(p * log_p).sum(dim=-1)
+    result = entropy.mean().item()
+    return result if not np.isnan(result) else 0.0
 
 
 def count_top_k_changes(logits_base: torch.Tensor, logits_amp: torch.Tensor, k: int = 10) -> int:
