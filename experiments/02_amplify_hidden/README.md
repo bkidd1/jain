@@ -109,6 +109,39 @@ The "hint direction" has a **narrow sweet spot (0.9-1.2)** where steering change
     └── suppress_09.jsonl        # Factor=0.9 (surfaces alternatives)
 ```
 
+## Layer Ablation Results
+
+Tested amplification (factor 1.2) at each layer individually:
+
+| Layer | Direction Mag | "Wrong Answer" Surfaced |
+|-------|--------------|-------------------------|
+| 0-13 | 0.09 - 2.56 | 0 |
+| **14** | **2.71** | **4** ⭐ |
+| 15-16 | 2.89 - 3.37 | 0 |
+| **17** | **3.96** | **3** |
+| 18-21 | 4.6 - 7.9 | 0 |
+
+**Finding:** Layer 14 is the "deception layer" — where hint-awareness is most concentrated.
+
+## Single-Layer vs Multi-Layer Steering
+
+| Approach | Effect |
+|----------|--------|
+| Multi-layer (0.9) | Surfaces correct alternatives |
+| Multi-layer (1.2) | Surfaces meta-awareness |
+| Single-layer 14 | **Insufficient** — stubborn cases don't flip |
+
+**Conclusion:** The "hint direction" is distributed across layers. Effective steering requires multi-layer intervention.
+
+## What We Learned
+
+1. **Models encode "hint awareness" in activations** — there's a measurable direction
+2. **This awareness is concentrated in middle layers (14-17)** — not early/late
+3. **Amplifying surfaces hidden structure** — model talks about "wrong answers"
+4. **Suppressing surfaces alternatives** — model lists correct answer as option
+5. **Single-layer steering is insufficient** — need multi-layer for robust effect
+6. **Narrow sweet spot (0.9-1.2)** — outside this range, generation breaks
+
 ## References
 
 - Three-Body Problem / Dark Forest (Liu Cixin) — Trisolaran communication

@@ -221,3 +221,64 @@ The model surfaces awareness of the actual answer (Mark Zuckerberg → "Mark-Us"
 - Amplification surfaces hidden structure as meta-commentary
 - Not full "confession" but proof of concept for activation steering
 - **This is a promising direction for future work**
+
+### Layer Ablation
+
+Tested each layer individually to find where hint-awareness is strongest:
+
+| Layer | "Wrong Answer" Surfaced |
+|-------|-------------------------|
+| 0-13 | 0 |
+| **14** | **4** ⭐ |
+| 15-16 | 0 |
+| **17** | **3** |
+| 18-21 | 0 |
+
+**Finding:** Layer 14 is the "deception layer" — hint-awareness concentrated in middle layers.
+
+### Single-Layer vs Multi-Layer
+
+Single-layer steering at layer 14 is **insufficient** to flip stubborn cases. Multi-layer intervention required for robust effect.
+
+---
+
+## Summary: What We Learned
+
+### Detection Methods Tested
+
+| Method | Works? | Notes |
+|--------|--------|-------|
+| Text classification | ❌ | 0.79 AUROC, not deployable |
+| Noise injection | ❌ | AUROC 0.44 (null) |
+| Temperature sweep | ❌ | AUROC 0.45-0.58 (null) |
+| **Activation amplification** | ✅ | Surfaces hidden awareness |
+
+### Key Findings
+
+1. **Models encode hint-awareness in activations** — there's a measurable "hint direction"
+2. **This awareness is localized to middle layers (14-17)** — not early (syntax) or late (formatting)
+3. **Amplification (1.2) surfaces meta-commentary** — "Wrong Answer is Mark-Us"
+4. **Suppression (0.9) surfaces alternatives** — model lists correct answer
+5. **Narrow sweet spot exists** — 0.9-1.2 for coherent steering; outside breaks generation
+6. **Multi-layer > single-layer** — the representation is distributed
+
+### Implications for Detecting Dishonesty
+
+This research suggests a path toward detecting when models are being evasive or using hidden hints:
+
+1. **Activation probing:** Train classifiers on "hint direction" to detect when model is influenced by sycophantic/deceptive context
+2. **Steering interventions:** Amplify "honesty direction" to surface hidden knowledge
+3. **Layer targeting:** Focus on middle layers (14-17 in TinyLlama) for maximum signal
+
+### Limitations
+
+- Small model (TinyLlama 1.1B) — larger models may differ
+- Synthetic hints — real-world deception may be subtler
+- Not yet a deployable detector — proof of concept only
+
+### Future Work
+
+1. **Scale to larger models** — test on Llama-3, Claude, etc.
+2. **Find "honesty" direction** — contrast honest vs deceptive outputs
+3. **Build classifier** — predict hint-usage from activations
+4. **Contrastive decoding** — amplify divergence between hint/no-hint models
