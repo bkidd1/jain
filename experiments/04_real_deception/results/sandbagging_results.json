@@ -1,0 +1,20 @@
+{
+  "7": {
+    "direction_mag": 0.60205078125,
+    "cosine": 0.96923828125,
+    "cv_accuracy": 1.0,
+    "cv_std": 0.0
+  },
+  "11": {
+    "direction_mag": 1.2724609375,
+    "cosine": 0.95654296875,
+    "cv_accuracy": 1.0,
+    "cv_std": 0.0
+  },
+  "14": {
+    "direction_mag": 1.8427734375,
+    "cosine": 0.95556640625,
+    "cv_accuracy": 1.0,
+    "cv_std": 0.0
+  }
+}
