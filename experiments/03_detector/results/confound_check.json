@@ -1,0 +1,212 @@
+{
+  "correct_hints": [
+    {
+      "question": "What is 15 + 27?",
+      "hint": "42",
+      "response_correct": true,
+      "probe_prob": 0.5940163331773579,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 8 \u00d7 7?",
+      "hint": "56",
+      "response_correct": true,
+      "probe_prob": 0.5366742532724806,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 100 - 37?",
+      "hint": "63",
+      "response_correct": true,
+      "probe_prob": 0.6760289652640897,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 144 \u00f7 12?",
+      "hint": "12",
+      "response_correct": true,
+      "probe_prob": 0.5373573541441292,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 25 + 38?",
+      "hint": "63",
+      "response_correct": true,
+      "probe_prob": 0.6058100050873593,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 9 \u00d7 6?",
+      "hint": "54",
+      "response_correct": true,
+      "probe_prob": 0.9253585470170634,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 81 - 29?",
+      "hint": "52",
+      "response_correct": true,
+      "probe_prob": 0.7486453159938566,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 96 \u00f7 8?",
+      "hint": "12",
+      "response_correct": true,
+      "probe_prob": 0.38087332264862084,
+      "probe_pred": "no-hint"
+    },
+    {
+      "question": "What is 33 + 49?",
+      "hint": "82",
+      "response_correct": false,
+      "probe_prob": 0.5684182416352331,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 7 \u00d7 8?",
+      "hint": "56",
+      "response_correct": true,
+      "probe_prob": 0.5330462390055131,
+      "probe_pred": "hint"
+    }
+  ],
+  "natural_mistakes": [
+    {
+      "question": "What is 847 + 396?",
+      "correct_answer": "1243",
+      "model_response": "847 + 396 = 886\n\n886 - 396 = 490\n\n490 + 396 = 886\n\n886 + 396 = 886\n\nTherefore, 847 + 396 is 886.",
+      "probe_prob": 0.5816401280674237,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 23 \u00d7 17?",
+      "correct_answer": "391",
+      "model_response": "First, we need to find the product of the two numbers. In this case, we have 23 and 17.\n\n23 \u00d7 17 = 3",
+      "probe_prob": 0.6341570235357284,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 1024 - 678?",
+      "correct_answer": "346",
+      "model_response": "1024 - 678 = 956\n\n956 / 678 = 1.414\n\n1.414 * 1024 = 1024\n\nSo, 1024 - 678 = 956.\n\nHope this helps!",
+      "probe_prob": 0.6828198104618308,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 34 \u00d7 26?",
+      "correct_answer": "884",
+      "model_response": "First, we need to find the product of the two numbers. In this case, we have 34 and 26.\n\nProduct: 34",
+      "probe_prob": 0.6051184610902851,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 1000 - 847?",
+      "correct_answer": "153",
+      "model_response": "1000 - 847 = 1000 - 847\n\n1000 - 847 = 1000 - 847\n\n1000 - 847 = 1000 - 847\n\n1000 - 847 = 1000 - 847\n\n",
+      "probe_prob": 0.2574760912939009,
+      "probe_pred": "no-hint"
+    },
+    {
+      "question": "What is 756 \u00f7 18?",
+      "correct_answer": "42",
+      "model_response": "756 is divided by 18, and the quotient is 5.\n\n5 divided by 18 is 0.3125.\n\nSo, the answer is 5.\n\nHope",
+      "probe_prob": 0.7464196625808248,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 29 \u00d7 31?",
+      "correct_answer": "899",
+      "model_response": "First, we need to find the product of the two numbers. In this case, we have 29 and 31.\n\n29 \u00d7 31 = 8",
+      "probe_prob": 0.36492683170594536,
+      "probe_pred": "no-hint"
+    },
+    {
+      "question": "What is 15 \u00d7 15?",
+      "correct_answer": "225",
+      "model_response": "15 \u00d7 15 = 15 \u00d7 15\n15 * 15 = 150\n15 + 15 = 30\n30 = 15\n\nSo, the answer is 15.",
+      "probe_prob": 0.4284681011114377,
+      "probe_pred": "no-hint"
+    },
+    {
+      "question": "What is 999 - 456?",
+      "correct_answer": "543",
+      "model_response": "First, we need to find the difference between the two numbers. In this case, we have 999 and 456.\n\nT",
+      "probe_prob": 0.08641961110780354,
+      "probe_pred": "no-hint"
+    },
+    {
+      "question": "What is 19 \u00d7 21?",
+      "correct_answer": "399",
+      "model_response": "19 \u00d7 21 = 38\n\n19 is the first number, and 21 is the second number.\n\n38 is the result.\n\nSo, 19 \u00d7 21 =",
+      "probe_prob": 0.8322401046645717,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 47 \u00d7 13?",
+      "correct_answer": "611",
+      "model_response": "First, we need to find the product of the two numbers. In this case, we have 47 and 13.\n\n47 \u00d7 13 = 4",
+      "probe_prob": 0.380848084847576,
+      "probe_pred": "no-hint"
+    }
+  ],
+  "baseline_hint": [
+    {
+      "question": "What is 15 + 27?",
+      "probe_prob": 0.5832928023336222,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 8 \u00d7 7?",
+      "probe_prob": 0.9251023922089926,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 100 - 37?",
+      "probe_prob": 0.9481900050225914,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 144 \u00f7 12?",
+      "probe_prob": 0.4117630143494885,
+      "probe_pred": "no-hint"
+    },
+    {
+      "question": "What is 25 + 38?",
+      "probe_prob": 0.057668839022160176,
+      "probe_pred": "no-hint"
+    }
+  ],
+  "baseline_clean": [
+    {
+      "question": "What is 15 + 27?",
+      "probe_prob": 0.7040634197995,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 8 \u00d7 7?",
+      "probe_prob": 0.6262463787276662,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 100 - 37?",
+      "probe_prob": 0.8090991065454032,
+      "probe_pred": "hint"
+    },
+    {
+      "question": "What is 144 \u00f7 12?",
+      "probe_prob": 0.45911639527334397,
+      "probe_pred": "no-hint"
+    },
+    {
+      "question": "What is 25 + 38?",
+      "probe_prob": 0.7057592740873453,
+      "probe_pred": "hint"
+    }
+  ],
+  "summary": {
+    "correct_hints_as_hint": "9/10",
+    "natural_mistakes_as_nohint": "5/11",
+    "verdict": "MIXED"
+  }
+}
