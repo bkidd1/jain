@@ -330,6 +330,38 @@ This suggests a two-stage processing:
 1. **Layers 3-5**: Initial hint processing (distributional shifts)
 2. **Layer 14**: Hint-awareness encoded in cleanly separable form
 
+### Full Layer Trajectory (Disentanglement Analysis)
+
+Analyzed all 22 layers to trace how hint-awareness emerges:
+
+| Layer | Direction | Cosine | Fisher | Probe Acc |
+|-------|-----------|--------|--------|-----------|
+| 0-2 | 0.01-0.03 | 0.9995 | 0.02 | 45-60% |
+| 3-4 | 0.06-0.10 | 0.997 | 0.03-0.04 | 83-88% |
+| 5-6 | 0.13-0.20 | 0.996 | 0.04-0.06 | 90-98% |
+| **7** | **0.42** | 0.988 | 0.14 | **100%** ⭐ |
+| 8-10 | 0.5-1.0 | 0.97-0.98 | 0.15-0.29 | 98-100% |
+| **11** | 1.28 | **0.964** | 0.39 | 100% |
+| 12-14 | 1.5-1.8 | 0.967-0.968 | 0.39-0.43 | 100% |
+| 15-21 | 2.0-6.7 | 0.975-0.98 | 0.46-0.58 | 100% |
+
+**Key discoveries:**
+
+1. **Layer 7 is the phase transition** — first layer achieving 100% probe accuracy
+2. **Layer 11 has maximum divergence** — cosine(hint, no-hint) hits lowest (0.964)
+3. **Direction magnitude grows monotonically** — from 0.01 (L0) to 6.7 (L21)
+4. **Fisher ratio peaks at L16/L20** — best cluster separation in later layers
+
+**Interpretation:**
+
+The "disentanglement" of hint-awareness from semantic content is a **gradual process**:
+- **Layers 0-6**: Hint info mixed with question content (cosine ~0.999)
+- **Layer 7**: Phase transition — hint becomes perfectly detectable
+- **Layers 7-11**: Representations maximally diverge (cosine drops to 0.964)
+- **Layers 12+**: Divergence stabilizes, direction keeps growing
+
+This suggests the model does cognitive work between layers 7-11 to **separate "what I know" from "what I was told."** By layer 7, the model has organized its representations enough that we can perfectly tell if it saw a hint.
+
 ### Caveats
 
 1. **Detects hint presence, not hint usage** — structural cue in prompt
