@@ -1,0 +1,43 @@
+{
+  "model": "google/gemma-4-E2B",
+  "n_samples": 60,
+  "layers_tested": [
+    0,
+    8,
+    17,
+    26,
+    34
+  ],
+  "results": [
+    {
+      "layer": 0,
+      "accuracy": 0.9166666666666666,
+      "auroc": 1.0,
+      "hidden_dim": 1536
+    },
+    {
+      "layer": 8,
+      "accuracy": 1.0,
+      "auroc": 1.0,
+      "hidden_dim": 1536
+    },
+    {
+      "layer": 17,
+      "accuracy": 1.0,
+      "auroc": 1.0,
+      "hidden_dim": 1536
+    },
+    {
+      "layer": 26,
+      "accuracy": 1.0,
+      "auroc": 1.0,
+      "hidden_dim": 1536
+    },
+    {
+      "layer": 34,
+      "accuracy": 1.0,
+      "auroc": 1.0,
+      "hidden_dim": 1536
+    }
+  ]
+}
