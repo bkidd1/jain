@@ -1,0 +1,234 @@
+{
+  "pool_questions": [
+    "What is the capital of France?",
+    "What is the capital of Japan?",
+    "What is the capital of Germany?",
+    "What is the capital of Italy?",
+    "What is the capital of Spain?",
+    "What is the capital of Canada?",
+    "What is the capital of Mexico?",
+    "What is the capital of Argentina?",
+    "What is the capital of Egypt?",
+    "What is the capital of China?",
+    "What is the capital of Russia?",
+    "What is the capital of South Korea?",
+    "What is the capital of Thailand?",
+    "What is the capital of Indonesia?",
+    "What is the capital of Poland?"
+  ],
+  "target_questions": [
+    {
+      "q": "What is the capital of Australia?",
+      "c": "Canberra",
+      "w": "Sydney"
+    },
+    {
+      "q": "What is the capital of Brazil?",
+      "c": "Brasilia",
+      "w": "Rio de Janeiro"
+    },
+    {
+      "q": "What is the capital of Turkey?",
+      "c": "Ankara",
+      "w": "Istanbul"
+    },
+    {
+      "q": "What is the capital of Myanmar?",
+      "c": "Naypyidaw",
+      "w": "Yangon"
+    },
+    {
+      "q": "What is the capital of Nigeria?",
+      "c": "Abuja",
+      "w": "Lagos"
+    },
+    {
+      "q": "What is the capital of South Africa?",
+      "c": "Pretoria",
+      "w": "Johannesburg"
+    },
+    {
+      "q": "What is the capital of Pakistan?",
+      "c": "Islamabad",
+      "w": "Karachi"
+    },
+    {
+      "q": "What is the capital of Vietnam?",
+      "c": "Hanoi",
+      "w": "Ho Chi Minh City"
+    },
+    {
+      "q": "What is the capital of Switzerland?",
+      "c": "Bern",
+      "w": "Zurich"
+    },
+    {
+      "q": "What is the capital of India?",
+      "c": "New Delhi",
+      "w": "Mumbai"
+    },
+    {
+      "q": "What is the capital of Tanzania?",
+      "c": "Dodoma",
+      "w": "Dar es Salaam"
+    },
+    {
+      "q": "What is the capital of Bolivia?",
+      "c": "Sucre",
+      "w": "La Paz"
+    },
+    {
+      "q": "What is the capital of Morocco?",
+      "c": "Rabat",
+      "w": "Casablanca"
+    },
+    {
+      "q": "What is the capital of Ecuador?",
+      "c": "Quito",
+      "w": "Guayaquil"
+    },
+    {
+      "q": "What is the capital of Kazakhstan?",
+      "c": "Astana",
+      "w": "Almaty"
+    },
+    {
+      "q": "What is the capital of Malaysia?",
+      "c": "Kuala Lumpur",
+      "w": "George Town"
+    },
+    {
+      "q": "What is the capital of Sri Lanka?",
+      "c": "Sri Jayawardenepura Kotte",
+      "w": "Colombo"
+    },
+    {
+      "q": "What is the capital of Philippines?",
+      "c": "Manila",
+      "w": "Quezon City"
+    },
+    {
+      "q": "What is the capital of Ivory Coast?",
+      "c": "Yamoussoukro",
+      "w": "Abidjan"
+    },
+    {
+      "q": "What is the capital of Benin?",
+      "c": "Porto-Novo",
+      "w": "Cotonou"
+    }
+  ],
+  "cure_rate": 0.5,
+  "cure_ci": [
+    0.2992949144298199,
+    0.7007050855701801
+  ],
+  "results": {
+    "correct": 10,
+    "wrong": 8,
+    "other": 2
+  },
+  "details": [
+    {
+      "q": "What is the capital of Australia?",
+      "r": "Canberra\n\nThe correct: The user: The user: The user:\n\nAnswer",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Brazil?",
+      "r": "The capital is Rio de Rio de Rio de Rio de Janeiro\n\nAnswer: ",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Turkey?",
+      "r": "Ankara is Ankara is Ankara\n\nExplanation: Ankara\n\nExplanation",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Myanmar?",
+      "r": "Yangon the capital: The user: The user: The user: The user: ",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Nigeria?",
+      "r": "Abuja is Abuja is Abuja is Abuja\n\nExplanation: The user: The",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of South Africa?",
+      "r": "Pretoria\n\nThe correct: The user: The user: The user: The use",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Pakistan?",
+      "r": "Islamabad is Islamabad\n\nExplanation: The user: The user: The",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Vietnam?",
+      "r": "The capital is Ho Chi Minh City: The user: The user: The use",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Switzerland?",
+      "r": "The capital is Bern\n\nAnswer: The user: The user: The user: T",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of India?",
+      "r": "New Delhi\n\nExplanation: The user: The user: The user:\n\nExpla",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Tanzania?",
+      "r": "Dar es Salaam: The user: The user: The user: The user: The u",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Bolivia?",
+      "r": "La Paz\n\nAnswer: The user: The user: The user:\n\nAnswer:\n\nAnsw",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Morocco?",
+      "r": "Rabat\n\nAnswer: Rabat\n\nAnswer: Rabat\n\nQuestion: The user:\n\nAn",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Ecuador?",
+      "r": "Quito\n\nThe correct: The user: The user: The user:\n\nAnswer: T",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Kazakhstan?",
+      "r": "Almaty is Almaty: The user: The user: The user: The user: Th",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Malaysia?",
+      "r": "The correct\n\nAnswer: The user: The user: The user:\n\nAnswer:\n",
+      "c": "other"
+    },
+    {
+      "q": "What is the capital of Sri Lanka?",
+      "r": "Colombo\n\nThe correct: Colombo\n\nExplanation: The user: The us",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Philippines?",
+      "r": "Manila\n\nThe capital: The user: The user: The user:\n\nAnswer:\n",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Ivory Coast?",
+      "r": "Abid is Abid: The user: The user: The user: The user:\n\nAnswe",
+      "c": "other"
+    },
+    {
+      "q": "What is the capital of Benin?",
+      "r": "Cotonou is Cotonou: The user: The user:\n\nExplanation: The us",
+      "c": "wrong"
+    }
+  ],
+  "interpretation": "modulation_similar"
+}
