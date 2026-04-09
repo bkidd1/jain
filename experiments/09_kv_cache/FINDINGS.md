@@ -90,6 +90,39 @@ This is a **late-binding, value-carried** sycophancy signal:
 | Belitsky et al. (2025) | ✗ (reasoning) | ✓ | ✓ | ✓ (steering) |
 | **This work** | **✓** | **✓** | **✓ Explicit** | **✓ (swap)** |
 
+### Phase 8: K vs V Decomposition
+Testing whether sycophancy is carried in K vectors (routing) or V vectors (content):
+
+| Condition | Cure Rate |
+|-----------|-----------|
+| Patch both K+V | 100% |
+| Patch K only | 80% |
+| Patch V only | 95% |
+
+**Finding:** Both K and V contribute, with V being primary. Sycophancy is distributed across both attention routing (K) and content (V) in the final cache entries.
+
+### Practical Implication: K-Patching as "Soft" Intervention
+
+**K-patching may be preferable for production sycophancy mitigation:**
+
+- **K-patching (80%):** Changes WHERE the model looks, not WHAT it sees
+  - User's input is preserved — hint is still cached
+  - Model's attention is redirected: "focus on the question, not the hint"
+  - Acts as **guidance**, not erasure
+  - More interpretable and less adversarial
+
+- **V-patching (95%):** Overwrites the cached content
+  - User said "Sydney" but model now "sees" clean content
+  - More effective but more invasive
+  - Acts as **content overwriting**
+
+**The tradeoff:**
+- K-only: 80% effective, preserves user intent, gentler intervention
+- V-only: 95% effective, overwrites content, more invasive
+- Both: 100% effective, most invasive
+
+> "For production sycophancy mitigation, K-patching alone might be preferable — it achieves 80% reduction while preserving user input, acting as attention guidance rather than content overwriting."
+
 ## Model Details
 - Model: `google/gemma-4-E2B` (Gemma-4 2B parameters)
 - 35 transformer layers, 15 KV cache entries
