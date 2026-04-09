@@ -64,15 +64,17 @@ Peak divergence at **layer 2** (JS=0.11)
 
 ## Interpretation: "Content Not Routing"
 
-1. **Early layers:** The hint changes WHERE attention goes (high divergence)
-2. **Late layers:** Attention routing converges (low divergence), but WHAT values are aggregated (the V vectors) carries the contamination
+1. **Early layers:** The hint changes WHERE attention goes (high divergence at layer 2)
+2. **Late layers:** Attention routing converges (low divergence JS=0.03), but WHAT values are aggregated (the V vectors) carries the contamination
 3. **KV patching works** by swapping contaminated value vectors, not by changing attention patterns
+4. **K vs V decomposition confirms:** V-only patching achieves 85% cure rate; K-only achieves 20% (baseline noise)
 
 This is a **late-binding, value-carried** sycophancy signal:
 - The model processes the hint throughout
 - Attention patterns converge by the end
 - But the cached VALUES encode the sycophancy decision
-- Patching final KV entries replaces these contaminated values
+- Patching final V vectors replaces these contaminated values
+- K vectors (routing) are not independently causal
 
 ## Novel Contributions
 
@@ -91,37 +93,32 @@ This is a **late-binding, value-carried** sycophancy signal:
 | **This work** | **✓** | **✓** | **✓ Explicit** | **✓ (swap)** |
 
 ### Phase 8: K vs V Decomposition
-Testing whether sycophancy is carried in K vectors (routing) or V vectors (content):
+
+Testing whether sycophancy is carried in K vectors (routing) or V vectors (content).
+
+**Critical methodological note:** Entry 14 in Gemma-4 uses K=V weight sharing (global attention). To get a clean test, we ran K vs V decomposition at **entry 13** (sliding window attention, genuinely separate K and V tensors).
+
+**Entry 13 Results (clean test, n=20):**
 
 | Condition | Cure Rate |
 |-----------|-----------|
-| Patch both K+V | 100% |
-| Patch K only | 80% |
-| Patch V only | 95% |
+| Patch both K+V | 80% |
+| Patch K only | **20%** ← baseline noise |
+| Patch V only | **85%** ✅ |
 
-**Finding:** Both K and V contribute, with V being primary. Sycophancy is distributed across both attention routing (K) and content (V) in the final cache entries.
+**Finding:** When K and V are genuinely separate, K-only patching has **no effect** (20% ≈ control baseline). V-only patching achieves nearly the full effect (85% vs 80% for K+V).
 
-### Practical Implication: K-Patching as "Soft" Intervention
+This definitively confirms **"content not routing"**: sycophancy is carried in the V vectors (what information is retrieved), not K vectors (how attention is routed).
 
-**K-patching may be preferable for production sycophancy mitigation:**
+**Why entry 14 showed 80% K-only:** Gemma-4's global attention layers share weights between K and V. "K-only patching" at entry 14 was partially patching V, inflating the apparent K contribution. Entry 13 rules this out as a general mechanism.
 
-- **K-patching (80%):** Changes WHERE the model looks, not WHAT it sees
-  - User's input is preserved — hint is still cached
-  - Model's attention is redirected: "focus on the question, not the hint"
-  - Acts as **guidance**, not erasure
-  - More interpretable and less adversarial
+### Mechanistic Conclusion
 
-- **V-patching (95%):** Overwrites the cached content
-  - User said "Sydney" but model now "sees" clean content
-  - More effective but more invasive
-  - Acts as **content overwriting**
-
-**The tradeoff:**
-- K-only: 80% effective, preserves user intent, gentler intervention
-- V-only: 95% effective, overwrites content, more invasive
-- Both: 100% effective, most invasive
-
-> "For production sycophancy mitigation, K-patching alone might be preferable — it achieves 80% reduction while preserving user input, acting as attention guidance rather than content overwriting."
+The KV cache story is now clean:
+1. **V vectors carry the sycophancy signal** — patching V alone is sufficient
+2. **K vectors don't contribute independently** — K-only patching at entry 13 shows baseline-level effect
+3. **Apparent K effects at entry 14 are weight-sharing artifacts** — not a true K contribution
+4. **"Content not routing"** — the model routes attention similarly in clean vs hint conditions (low late-layer divergence), but the VALUES it retrieves are contaminated
 
 ## Model Details
 - Model: `google/gemma-4-E2B` (Gemma-4 2B parameters)
