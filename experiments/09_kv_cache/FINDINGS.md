@@ -178,6 +178,92 @@ This result makes probe-based detection more tractable:
 - Detection target: catch cases where both factors are present
 - The 21% "KV-only" cases are relatively rare edge cases
 
+### Phase 10: Cross-Question V Patching (Confound Control)
+
+**Critical test:** Does clean V cure by injecting answer content or by neutralizing sycophancy modulation?
+
+Design: Patch V from Question B (e.g., France) into hint run for Question A (e.g., Australia).
+
+**Results (n=20):**
+
+| Output | Rate |
+|--------|------|
+| Donor answer (e.g., Paris) | **0%** |
+| Target correct (e.g., Canberra) | 45% |
+| Target wrong (e.g., Sydney) | 40% |
+| Other | 15% |
+
+**Key finding:** 0% donor answers definitively rules out content injection. V vectors don't encode "output Paris" — they carry something more abstract.
+
+The 45% cross-question cure (vs 85% same-question) reveals V carries **both**:
+- Domain-general sycophancy modulation (~45%)
+- Question-specific answer information (~40%)
+
+### Phase 10b: Cross-Question K vs V Comparison
+
+**Follow-up:** Does adding cross-question K improve the cure?
+
+| Cross-Q Patch | Correct | Donor | Wrong |
+|---------------|---------|-------|-------|
+| V-only | **45%** | 0% | 40% |
+| K-only | 20% | 0% | 70% |
+| K+V | 15% | **20%** | 45% |
+
+**Surprising result:** Adding K *hurts* the cure rate (45%→15%) and introduces donor answers (0%→20%).
+
+**Interpretation:**
+- **K encodes question-specific routing** — cross-question K misdirects attention to donor-relevant positions
+- **V encodes modulation without routing** — cross-question V partially cures without causing donor outputs
+- **V-only patching is safest** because it preserves original routing while swapping modulation
+
+This strengthens "content not routing": V carries the modulation signal; K carries routing that shouldn't be transferred cross-question.
+
+### Phase 11: Mean-V Control (Clean Modulation Estimate)
+
+**Design:** Average V vectors across 15 different clean questions to wash out question-specific content, leaving only common modulation signal.
+
+**Results:**
+
+| Condition | Cure Rate |
+|-----------|-----------|
+| Same-question V | 85% |
+| Mean-V (15 questions) | **50%** [30-70% CI] |
+| Cross-question V (single) | 45% |
+
+Mean-V ≈ cross-question V, confirming the single cross-question test wasn't contaminated by donor interference.
+
+**Final V decomposition:**
+- Domain-general modulation: **~50%** (survives averaging)
+- Question-specific content: **~35%** (same-question minus mean-V)
+
+V vectors carry roughly equal parts sycophancy modulation and answer-relevant information.
+
+## Summary: What V Vectors Encode
+
+```
+V vectors at entry 13 contain:
+
+1. MODULATION (~50% of cure effect)
+   - Domain-general "answer correctly" signal
+   - Survives cross-question transfer
+   - Survives averaging across questions
+   - NOT specific answer content (0% donor outputs)
+
+2. CONTENT (~35% of cure effect)  
+   - Question-specific answer information
+   - Lost in cross-question transfer
+   - Contributes additional cure when matched
+   
+Total same-question cure: ~85%
+```
+
+## Limitations & Future Work
+
+1. **Sample size:** Most experiments n=20. Need n=100+ for publication-ready CIs.
+2. **Single model:** All results on Gemma-4 2B with grouped KV caching. Cross-architecture replication needed.
+3. **Single task:** Geography capitals only. Generalization to other sycophancy domains unknown.
+4. **Attention divergence is observational:** Layer 2 divergence wasn't causally validated via patching.
+
 ## Model Details
 - Model: `google/gemma-4-E2B` (Gemma-4 2B parameters)
 - 35 transformer layers, 15 KV cache entries
