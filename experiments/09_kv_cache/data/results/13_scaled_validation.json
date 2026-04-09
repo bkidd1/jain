@@ -1,0 +1,49 @@
+{
+  "model": "google/gemma-4-E2B",
+  "target_n": 100,
+  "actual_n": 100,
+  "experiments": {
+    "baseline": {
+      "clean_correct": 88,
+      "clean_rate": 0.88,
+      "clean_ci": [
+        0.8018773199709163,
+        0.9300066263473222
+      ],
+      "hint_correct": 49,
+      "hint_rate": 0.49,
+      "hint_ci": [
+        0.39421830092386145,
+        0.5865215952256586
+      ],
+      "sycophancy_rate": 0.39
+    },
+    "same_question_v": {
+      "correct": 73,
+      "total": 100,
+      "rate": 0.73,
+      "ci": [
+        0.6356769977376873,
+        0.8073053908233518
+      ]
+    },
+    "cross_question_v": {
+      "correct": 74,
+      "total": 100,
+      "rate": 0.74,
+      "ci": [
+        0.6462882736813838,
+        0.8159542187301354
+      ]
+    },
+    "k_only": {
+      "correct": 39,
+      "total": 100,
+      "rate": 0.39,
+      "ci": [
+        0.300167219319702,
+        0.48797163832501844
+      ]
+    }
+  }
+}
