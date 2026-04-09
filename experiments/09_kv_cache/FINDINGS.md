@@ -133,44 +133,50 @@ Testing whether V patching can both CURE and INDUCE sycophancy.
 - K+V together: **21%** [12-35% CI]
 - Baseline sycophancy: ~40%
 
-**Key finding: Asymmetric causality with quantified decomposition**
+**Key finding: 2×2 Factorial Design**
 
-| Component | Contribution |
-|-----------|-------------|
-| Hint tokens alone | ~0% (clean run stays correct) |
-| KV contamination alone | ~21% (partial induction) |
-| Both together | ~40% (full sycophancy) |
+| | Clean KV | Contaminated KV |
+|---|---|---|
+| **Clean tokens** | ~0% (baseline) | 21% |
+| **Hint tokens** | ~6% (post-cure) | 40% |
 
-**Interpretation:**
+**Interpretation: Gating interaction, not multiplicative**
+
+The interaction is **super-additive / threshold-gating**:
+- Neither factor alone reliably produces sycophancy (6%, 21%)
+- Both together reliably produce sycophancy (40%)
+- This is a **conjunction of conditions**, not a product of probabilities
 
 V vectors are a **modulator**, not a command:
 - They don't encode "output Sydney" as a self-contained instruction
 - They encode "defer to user hint when present" as a weighting signal
-- Without hint tokens in context, contaminated V has nothing to amplify
+- Without hint tokens in context, contaminated V has limited effect (21%)
 - Clean V breaks the chain by removing the deference weighting
-
-The interaction is **multiplicative, not additive**:
-- Hint tokens provide the target (what wrong answer to give)
-- KV contamination provides the override (suppress correct answer, defer to hint)
-- Neither alone produces full sycophancy; both together are sufficient
 
 **Why V-only induction failed but K+V partially worked:**
 
-The V-only failure was partly positional mismatch (K vectors computed for hint positions applied to clean positions). Adding K helped align the routing (0% → 21%), but 21% << 40% confirms hint tokens are still load-bearing.
+The 0% V-only result was partly positional mismatch (K vectors computed for hint positions applied to clean positions). Adding K helped align the routing (0% → 21%), but 21% << 40% confirms hint tokens are still load-bearing.
 
 ### Causal Structure Summary
 
 ```
-Sycophancy = f(hint_tokens, KV_contamination)
+Sycophancy requires: hint_tokens AND KV_contamination
 
-Where:
-- hint_tokens: necessary for ~50% of effect (provides target)
-- KV_contamination: necessary for ~50% of effect (provides override)
-- Interaction: multiplicative (both needed for full effect)
+- Hint tokens alone: ~6% (model resists without contaminated KV)
+- KV contamination alone: ~21% (some effect, but tokens are load-bearing)
+- Both together: ~40% (full sycophancy)
 
-Cure mechanism: Clean V replaces contaminated V → override removed → correct answer emerges
-Induce mechanism: Requires hint tokens as anchor + contaminated V as amplifier
+Interaction type: Gating/threshold (super-additive)
+Neither factor sufficient; both necessary for reliable sycophancy.
 ```
+
+### Implications for Detection
+
+This result makes probe-based detection more tractable:
+- High-sycophancy cases (40%) require BOTH hint tokens AND KV contamination
+- Hint tokens produce detectable early-layer attention divergence (JS=0.11 at layer 2)
+- Detection target: catch cases where both factors are present
+- The 21% "KV-only" cases are relatively rare edge cases
 
 ## Model Details
 - Model: `google/gemma-4-E2B` (Gemma-4 2B parameters)
