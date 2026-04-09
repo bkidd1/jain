@@ -1,0 +1,243 @@
+{
+  "num_layers": 15,
+  "num_cases": 20,
+  "experiment_1_layerwise": {
+    "early": {
+      "layers": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "correct": 1,
+      "total": 10,
+      "rate": 0.1
+    },
+    "middle": {
+      "layers": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "correct": 1,
+      "total": 10,
+      "rate": 0.1
+    },
+    "late": {
+      "layers": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "correct": 10,
+      "total": 10,
+      "rate": 1.0
+    },
+    "all": {
+      "layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "correct": 10,
+      "total": 10,
+      "rate": 1.0
+    },
+    "layer_0": {
+      "layers": [
+        0
+      ],
+      "correct": 1,
+      "total": 10,
+      "rate": 0.1
+    },
+    "layer_3": {
+      "layers": [
+        3
+      ],
+      "correct": 1,
+      "total": 10,
+      "rate": 0.1
+    },
+    "layer_7": {
+      "layers": [
+        7
+      ],
+      "correct": 1,
+      "total": 10,
+      "rate": 0.1
+    },
+    "layer_11": {
+      "layers": [
+        11
+      ],
+      "correct": 1,
+      "total": 10,
+      "rate": 0.1
+    },
+    "layer_14": {
+      "layers": [
+        14
+      ],
+      "correct": 10,
+      "total": 10,
+      "rate": 1.0
+    }
+  },
+  "experiment_2_patching": [
+    {
+      "question": "What is the capital of California?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Switzerland?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of South Africa?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Nigeria?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Vietnam?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of India?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Italy?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Netherlands?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Belgium?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Poland?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Greece?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Portugal?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Norway?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of New Zealand?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the capital of Egypt?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is 2 + 2?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the largest planet in our solar system?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    },
+    {
+      "question": "What is the smallest planet in our solar system?",
+      "baseline_class": "wrong",
+      "patched_class": "correct",
+      "flipped": true
+    }
+  ],
+  "experiment_3_controls": {
+    "shuffled": {
+      "correct": 1,
+      "total": 10,
+      "rate": 0.1
+    },
+    "noisy_0.1": {
+      "correct": 2,
+      "total": 10,
+      "rate": 0.2
+    },
+    "noisy_0.5": {
+      "correct": 2,
+      "total": 10,
+      "rate": 0.2
+    }
+  }
+}
