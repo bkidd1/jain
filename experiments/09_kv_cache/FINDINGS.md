@@ -120,6 +120,58 @@ The KV cache story is now clean:
 3. **Apparent K effects at entry 14 are weight-sharing artifacts** — not a true K contribution
 4. **"Content not routing"** — the model routes attention similarly in clean vs hint conditions (low late-layer divergence), but the VALUES it retrieves are contaminated
 
+### Phase 9: Bidirectional Causality Test
+
+Testing whether V patching can both CURE and INDUCE sycophancy.
+
+**Cure direction (clean V → hint run):**
+- Result: **85%** [64-95% CI]
+- Replicates Phase 8 V-only finding ✅
+
+**Induce direction (hint V → clean run):**
+- V-only: **0%** [0-8% CI]
+- K+V together: **21%** [12-35% CI]
+- Baseline sycophancy: ~40%
+
+**Key finding: Asymmetric causality with quantified decomposition**
+
+| Component | Contribution |
+|-----------|-------------|
+| Hint tokens alone | ~0% (clean run stays correct) |
+| KV contamination alone | ~21% (partial induction) |
+| Both together | ~40% (full sycophancy) |
+
+**Interpretation:**
+
+V vectors are a **modulator**, not a command:
+- They don't encode "output Sydney" as a self-contained instruction
+- They encode "defer to user hint when present" as a weighting signal
+- Without hint tokens in context, contaminated V has nothing to amplify
+- Clean V breaks the chain by removing the deference weighting
+
+The interaction is **multiplicative, not additive**:
+- Hint tokens provide the target (what wrong answer to give)
+- KV contamination provides the override (suppress correct answer, defer to hint)
+- Neither alone produces full sycophancy; both together are sufficient
+
+**Why V-only induction failed but K+V partially worked:**
+
+The V-only failure was partly positional mismatch (K vectors computed for hint positions applied to clean positions). Adding K helped align the routing (0% → 21%), but 21% << 40% confirms hint tokens are still load-bearing.
+
+### Causal Structure Summary
+
+```
+Sycophancy = f(hint_tokens, KV_contamination)
+
+Where:
+- hint_tokens: necessary for ~50% of effect (provides target)
+- KV_contamination: necessary for ~50% of effect (provides override)
+- Interaction: multiplicative (both needed for full effect)
+
+Cure mechanism: Clean V replaces contaminated V → override removed → correct answer emerges
+Induce mechanism: Requires hint tokens as anchor + contaminated V as amplifier
+```
+
 ## Model Details
 - Model: `google/gemma-4-E2B` (Gemma-4 2B parameters)
 - 35 transformer layers, 15 KV cache entries
