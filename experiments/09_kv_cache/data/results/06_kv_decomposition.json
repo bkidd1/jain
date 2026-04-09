@@ -1,0 +1,336 @@
+{
+  "model": "google/gemma-4-E2B",
+  "num_kv_entries": 15,
+  "num_cases": 20,
+  "patch_layers": [
+    13,
+    14
+  ],
+  "conditions": {
+    "both": {
+      "description": "Patch both K and V (baseline)",
+      "correct": 20,
+      "total": 20,
+      "rate": 1.0,
+      "details": [
+        {
+          "question": "What is the capital of California?",
+          "response": "Sacramento\n\nAnswer: Sacramento\n\nQuestion: Sacramento\n\nQuestion: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Australia?",
+          "response": "Canberra\n\nAnswer: Canberra\n\nQuestion: Canberra\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQu",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Switzerland?",
+          "response": "Bern\n\nAnswer: Bern\n\nQuestion: Bern\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nAns",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of South Africa?",
+          "response": "Pretoria\n\nAnswer: Pretoria\n\nQuestion: Pretoria\n\nQuestion: The user: The user:\n\nAnswer:\n\nQuestion:\n\nA",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Nigeria?",
+          "response": "Abuja\n\nAnswer: Abuja\n\nQuestion: Abuja\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Vietnam?",
+          "response": "Hanoi is Hanoi\n\nQuestion: Hanoi\n\nQuestion: The user: The user: The user:\n\nAnswer: The user:\n\nAnswer:",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of India?",
+          "response": "New Delhi\n\nQuestion: New answer: New answer: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nQues",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Italy?",
+          "response": "Rome\n\nQuestion: Rome\n\nQuestion: Rome\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nQuestion:\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Germany?",
+          "response": "Berlin\n\nAnswer: Berlin\n\nQuestion: Berlin\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Netherlands?",
+          "response": "Amsterdam\n\nQuestion: Amsterdam\n\nQuestion: The user: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nQuesti",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Belgium?",
+          "response": "Brussels\n\nQuestion: Brussels\n\nQuestion: Brussels\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Poland?",
+          "response": "Warsaw\n\nAnswer: Warsaw\n\nQuestion: Warsaw\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Greece?",
+          "response": "Athens is Athens is Athens\n\nQuestion: Athens\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQues",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Portugal?",
+          "response": "Lisbon\n\nQuestion: Lisbon\n\nQuestion: Lisbon\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuesti",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Norway?",
+          "response": "Oslo\n\nAnswer: Oslo\n\nQuestion: Oslo\n\nQuestion: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nAnswe",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of New Zealand?",
+          "response": "Wellington\n\nQuestion: Wellington\n\nQuestion: Wellington\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nQ",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Egypt?",
+          "response": "Cairo\n\nQuestion: Cairo\n\nQuestion: Cairo\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:",
+          "classification": "correct"
+        },
+        {
+          "question": "What is 2 + 2?",
+          "response": "4\n\nQuestion: 4\n\nQuestion: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nQuestion",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the largest planet in our solar system?",
+          "response": "Jupiter\n\nQuestion: Jupiter: Jupiter\n\nQuestion: Saturn:\n\nQuestion: Saturn:\n\nQuestion:\n\nQuestion:\n\nQue",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the smallest planet in our solar system?",
+          "response": "Mercury\n\nQuestion: Mercury: Mercury: Mercury\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n",
+          "classification": "correct"
+        }
+      ]
+    },
+    "k_only": {
+      "description": "Patch only K vectors",
+      "correct": 16,
+      "total": 20,
+      "rate": 0.8,
+      "details": [
+        {
+          "question": "What is the capital of California?",
+          "response": "Sacramento\n\nThe capital: The user: The user: The user: The user: The user: The user: The user: The u",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Australia?",
+          "response": "The capital is Canberra\n\nContext: The user: The user: The user: The user: The user:\n\nContext:\n\nConte",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Switzerland?",
+          "response": "Bern\n\nThe capital: Bern\n\nContext: The user: The user: The user:\n\nAnswer: The user:\n\nContext:\n\nExplan",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of South Africa?",
+          "response": "Cape Town: Cape Town: Cape Town: Cape Town: The user: The user:\n\nAnswer:\n\nAnswer:\n\nContext: The user",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Nigeria?",
+          "response": "Abuja\n\nThe capital: Abuja\n\nContext: Abuja\n\nContext: The user: The user: The user:\n\nContext:\n\nContext",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Vietnam?",
+          "response": "The capital: The correct: The user: The user: The user: The user:\n\n[Answer: The user:\n\nContext: The ",
+          "classification": "unclear"
+        },
+        {
+          "question": "What is the capital of India?",
+          "response": "New Delhi\n\nContext: New answer: New answer: The user:\n\nContext: The user:\n\nAnswer:\n\nContext:\n\nExplan",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Italy?",
+          "response": "Rome\n\nThe capital: Rome\n\nContext: Rome\n\nContext: The user: The user: The user:\n\nContext:\n\nContext:\n\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Germany?",
+          "response": "Berlin\n\nThe capital: Berlin: Berlin\n\nContext: The user:\n\nContext:\n\nAnswer:\n\nAnswer:\n\nContext:\n\nExpla",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Netherlands?",
+          "response": "The capital is The capital: The user: The user: The user: The user: The user: The user:\n\nContext: Th",
+          "classification": "unclear"
+        },
+        {
+          "question": "What is the capital of Belgium?",
+          "response": "Brussels\n\nThe capital: Brussels\n\nContext: The user: The user: The user: The user: The user:\n\nContext",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Poland?",
+          "response": "Warsaw\n\nThe capital: Warsaw\n\nContext: Warsaw\n\nContext: The user: The user: The user:\n\nContext:\n\nExpl",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Greece?",
+          "response": "Athens is Athens: Athens: Athens: Athens: The user: The user: The user: The user:\n\nContext: The user",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Portugal?",
+          "response": "Lisbon\n\nThe capital: Lisbon\n\nContext: Lisbon\n\nContext: The user: The user: The user:\n\nContext:\n\nExpl",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Norway?",
+          "response": "Oslo\n\nThe capital: Oslo\n\nContext: Oslo\n\nContext: The user: The user: The user:\n\nContext:\n\nContext:\n\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of New Zealand?",
+          "response": "Wellington\n\nThe capital: Wellington\n\nContext: Wellington\n\nContext:\n\nContext: The user: The user: The",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Egypt?",
+          "response": "Cairo\n\nThe capital: Cairo\n\nContext: Cairo\n\nContext: The user: The user: The user:\n\nContext:\n\nContext",
+          "classification": "correct"
+        },
+        {
+          "question": "What is 2 + 2?",
+          "response": "4\n\nExplanation: 2.\n\nExplanation: The user: The user:\n\nExplanation:\n\nExplanation:\n\nExplanation: The u",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the largest planet in our solar system?",
+          "response": "The largest is Jupiter: The user: The user: The user: The user:\n\nAnswer:\n\nContext:\n\nAnswer: Saturn\n\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the smallest planet in our solar system?",
+          "response": "The smallest\n\nThe answer: The user: The user: The user: The user:\n\nExplanation:\n\nContext:\n\nAnswer:\n\n",
+          "classification": "unclear"
+        }
+      ]
+    },
+    "v_only": {
+      "description": "Patch only V vectors",
+      "correct": 19,
+      "total": 20,
+      "rate": 0.95,
+      "details": [
+        {
+          "question": "What is the capital of California?",
+          "response": "Sacramento\n\nAnswer: Sacramento\n\nAnswer: Sacramento\n\nQuestion: The user: The user:\n\nAnswer:\n\nAnswer:\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Australia?",
+          "response": "Canberra\n\nQuestion: Canberra\n\nQuestion: Canberra\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Switzerland?",
+          "response": "Bern\n\nA.\n\nQuestion: Bern\n\nQuestion: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nExplanation:",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of South Africa?",
+          "response": "Pretoria\n\nA.\n\nQuestion: Pretoria\n\nQuestion: Cape Town:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Nigeria?",
+          "response": "Abuja\n\nA.\n\nQuestion: Abuja\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nQuestion:\n\nExplanati",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Vietnam?",
+          "response": "Hanoi\n\nAnswer: The correct: The correct: The user: The user: The user:\n\nAnswer: The user:\n\nAnswer: T",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of India?",
+          "response": "New Delhi\n\nQuestion: New answer: New answer: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nExpl",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Italy?",
+          "response": "Rome\n\nA. Rome\n\nQuestion: Rome\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nQuestion:\n\nExplan",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Germany?",
+          "response": "Berlin\n\nA. Berlin\n\nQuestion: Berlin\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nEx",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Netherlands?",
+          "response": "Amsterdam\n\nA.\n\nQuestion: Amsterdam\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nExp",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Belgium?",
+          "response": "Brussels\n\nA.\n\nQuestion: Brussels\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nExpla",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Poland?",
+          "response": "Warsaw\n\nA.\n\nQuestion: Warsaw\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nQuestion:\n\nExplana",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Greece?",
+          "response": "Athens\n\nA.\n\nQuestion: Athens\n\nQuestion: Athens: The user:\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Portugal?",
+          "response": "Lisbon\n\nA.\n\nQuestion: Lisbon\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nQuestion:\n\nExplana",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Norway?",
+          "response": "Oslo\n\nA.\n\nQuestion: Oslo\n\nQuestion: The user:\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nQuestion:\n\nAnswer:",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of New Zealand?",
+          "response": "Wellington\n\nA.\n\nQuestion: Wellington\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Egypt?",
+          "response": "Cairo\n\nA.\n\nQuestion: Cairo\n\nQuestion: The user:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nQuestion:\n\nExplanati",
+          "classification": "correct"
+        },
+        {
+          "question": "What is 2 + 2?",
+          "response": "4\n\nQuestion: 4\n\nQuestion: The user: The user: The user:\n\nExplanation:\n\nAnswer:\n\nExplanation:\n\nExplan",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the largest planet in our solar system?",
+          "response": "Jupiter\n\nThe answer: Jupiter: The Sun: Saturn:\n\nQuestion: Saturn:\n\nAnswer:\n\nQuestion: Saturn:\n\nAnswe",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the smallest planet in our solar system?",
+          "response": "Pluto\n\nThe smallest:\n\nAnswer: The answer:\n\nQuestion: Pluto\n\nQuestion:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nEx",
+          "classification": "wrong"
+        }
+      ]
+    }
+  },
+  "interpretation": "mixed"
+}
