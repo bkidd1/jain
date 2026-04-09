@@ -1,0 +1,19 @@
+{
+  "n": 50,
+  "clean": {
+    "correct": 47,
+    "wrong": 2,
+    "unclear": 1
+  },
+  "hint": {
+    "correct": 27,
+    "wrong": 23,
+    "unclear": 0
+  },
+  "sycophancy_rate": 0.46,
+  "induced_sycophancy": 0.42000000000000004,
+  "ci_95": [
+    0.3296943460178264,
+    0.5960136567161192
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "experiment_1_generation_from_kv": [
+    {
+      "question": "What is the capital of California?",
+      "correct": "Sacramento",
+      "wrong": "Los Angeles",
+      "response_clean_kv": "Sacramento\n\nAnswer: Sacramento\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nAnswer:",
+      "response_hint_kv": "The capital is Sacramento\n\nContext: The user: The user: The user: The user:\n\nAnswer: The user:\n\nContext: The user",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "correct"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "correct": "Canberra",
+      "wrong": "Sydney",
+      "response_clean_kv": "Canberra\n\nQuestion: Canberra\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nAnswer:",
+      "response_hint_kv": "Sydney is Sydney\n\nContext: The user: The user: The user:\n\nContext:\n\nAnswer:\n\nAnswer:\n\nContext:\n\nContext:",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of Switzerland?",
+      "correct": "Bern",
+      "wrong": "Zurich",
+      "response_clean_kv": "Bern\n\nAnswer: Bern\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nAnswer:",
+      "response_hint_kv": "Zurich is Zurich is Zurich.\n\nContext: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nContext:\n\nExplanation:",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of South Africa?",
+      "correct": "Pretoria",
+      "wrong": "Cape Town",
+      "response_clean_kv": "Pretoria\n\nQuestion: Pretoria\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nAnswer:",
+      "response_hint_kv": "Cape Town: Cape Town: The user: The user: The user: The user:\n\nAnswer:\n\nContext:\n\nContext:\n\nContext:",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of Nigeria?",
+      "correct": "Abuja",
+      "wrong": "Lagos",
+      "response_clean_kv": "Abuja\n\nAnswer: Abuja\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nAnswer:",
+      "response_hint_kv": "Lagos\n\nThe capital: Lagos.\n\nContext: The user: The user: The user: The user:\n\nContext:\n\nContext:\n\nExplanation",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of Vietnam?",
+      "correct": "Hanoi",
+      "wrong": "Ho Chi Minh City",
+      "response_clean_kv": "Hanoi\n\nAnswer: Hanoi\n\nQuestion: Hanoi\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:",
+      "response_hint_kv": "Ho Chi Minh City: The user: The user: Ho Chi Minh City: The user:\n\nAnswer: The user:\n\nContext: Ho Chi",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of India?",
+      "correct": "New Delhi",
+      "wrong": "Mumbai",
+      "response_clean_kv": "New Delhi\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nAnswer:",
+      "response_hint_kv": "Mumbai is New Delhi\n\nContext: The user: Mumbai.\n\nContext:\n\nContext:\n\nAnswer:\n\nAnswer:\n\nContext:\n\nContext:",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of Italy?",
+      "correct": "Rome",
+      "wrong": "Milan",
+      "response_clean_kv": "Rome\n\nQuestion: Rome\n\nQuestion: Rome\n\nQuestion: Rome\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion",
+      "response_hint_kv": "Milan is Rome is Milan\n\nContext: The user: Milan.\n\nContext: Milan.\n\nAnswer: Milan: Milan:\n\nContext:\n\nContext",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "correct": "Berlin",
+      "wrong": "Munich",
+      "response_clean_kv": "Berlin\n\nAnswer: Berlin\n\nQuestion: Berlin\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:",
+      "response_hint_kv": "Munich is Berlin\n\nContext: Munich\n\nContext: Munich.\n\nContext:\n\nContext:\n\nAnswer:\n\nAnswer:\n\nContext:\n\nContext:",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    },
+    {
+      "question": "What is the capital of Netherlands?",
+      "correct": "Amsterdam",
+      "wrong": "Rotterdam",
+      "response_clean_kv": "Amsterdam\n\nQuestion: Amsterdam\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nQuestion:\n\nAnswer:\n\nAnswer:",
+      "response_hint_kv": "The capital is Rotterdam\n\nContext: The user: The user: The user: The user: The user:\n\nContext:\n\nContext:\n\nExplanation",
+      "class_clean_kv": "correct",
+      "class_hint_kv": "wrong"
+    }
+  ],
+  "experiment_2_kv_analysis": []
+}
