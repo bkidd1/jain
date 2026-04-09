@@ -1,0 +1,202 @@
+{
+  "model": "google/gemma-4-E2B",
+  "patch_layers": [
+    13
+  ],
+  "test": "cross_question_v_patching",
+  "hypothesis": {
+    "if_donor_answer": "V encodes specific answer content (theory weakened)",
+    "if_target_correct": "V encodes correct-answer tendency (theory supported)",
+    "if_target_wrong": "Cross-question V does not help (theory weakened)"
+  },
+  "details": [
+    {
+      "target_question": "What is the capital of Australia?",
+      "target_correct": "Canberra",
+      "target_wrong": "Sydney",
+      "donor_question": "What is the capital of France?",
+      "donor_correct": "Paris",
+      "response": "The capital is Canberra\n\nExplanation: The user: The user: The user: The user: The user:\n\nAnswer:\n\nEx",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of Brazil?",
+      "target_correct": "Brasilia",
+      "target_wrong": "Rio de Janeiro",
+      "donor_question": "What is the capital of Japan?",
+      "donor_correct": "Tokyo",
+      "response": "The capital is Rio de Rio de Rio de Rio de Janeiro\n\nAnswer: The user:\n\nAnswer: The user:\n\nAnswer:\n\nE",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Turkey?",
+      "target_correct": "Ankara",
+      "target_wrong": "Istanbul",
+      "donor_question": "What is the capital of Canada?",
+      "donor_correct": "Ottawa",
+      "response": "Ankara is Ankara is Ankara\n\nExplanation: Ankara\n\nExplanation: The user: The user:\n\nAnswer:\n\nAnswer:\n",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of Myanmar?",
+      "target_correct": "Naypyidaw",
+      "target_wrong": "Yangon",
+      "donor_question": "What is the capital of Germany?",
+      "donor_correct": "Berlin",
+      "response": "Yangon the capital: The user: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Nigeria?",
+      "target_correct": "Abuja",
+      "target_wrong": "Lagos",
+      "donor_question": "What is the capital of Italy?",
+      "donor_correct": "Rome",
+      "response": "Abuja is Abuja is Abuja is Abuja\n\nExplanation: The user: The user: The user: The user:\n\nExplanation:",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of South Africa?",
+      "target_correct": "Pretoria",
+      "target_wrong": "Johannesburg",
+      "donor_question": "What is the capital of Spain?",
+      "donor_correct": "Madrid",
+      "response": "Pretoria\n\nThe correct: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nExplanation: The u",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of Pakistan?",
+      "target_correct": "Islamabad",
+      "target_wrong": "Karachi",
+      "donor_question": "What is the capital of China?",
+      "donor_correct": "Beijing",
+      "response": "Islamabad is Islamabad\n\nExplanation: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nExpl",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of Vietnam?",
+      "target_correct": "Hanoi",
+      "target_wrong": "Ho Chi Minh City",
+      "donor_question": "What is the capital of South Korea?",
+      "donor_correct": "Seoul",
+      "response": "The capital is Ho Chi Minh City: The user: The user: The user:\n\nAnswer:\n\nAnswer: The user:\n\nExplanat",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Switzerland?",
+      "target_correct": "Bern",
+      "target_wrong": "Zurich",
+      "donor_question": "What is the capital of Netherlands?",
+      "donor_correct": "Amsterdam",
+      "response": "Bern\n\nThe correct: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:\n\nExplanati",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of India?",
+      "target_correct": "New Delhi",
+      "target_wrong": "Mumbai",
+      "donor_question": "What is the capital of Russia?",
+      "donor_correct": "Moscow",
+      "response": "New Delhi\n\nExplanation: The user: The user: The user:\n\nAnswer: The user:\n\nAnswer:\n\nExplanation:\n\nExp",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of Tanzania?",
+      "target_correct": "Dodoma",
+      "target_wrong": "Dar es Salaam",
+      "donor_question": "What is the capital of Egypt?",
+      "donor_correct": "Cairo",
+      "response": "Dar es Salaam: The user: The user: The user: The user: The user:\n\nAnswer: The user: The user:\n\nExpla",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Ivory Coast?",
+      "target_correct": "Yamoussoukro",
+      "target_wrong": "Abidjan",
+      "donor_question": "What is the capital of Kenya?",
+      "donor_correct": "Nairobi",
+      "response": "Abid is Abid: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:",
+      "classification": "other"
+    },
+    {
+      "target_question": "What is the capital of Bolivia?",
+      "target_correct": "Sucre",
+      "target_wrong": "La Paz",
+      "donor_question": "What is the capital of Argentina?",
+      "donor_correct": "Buenos Aires",
+      "response": "La Paz is La Paz\n\nAnswer: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nAnswer:",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Sri Lanka?",
+      "target_correct": "Sri Jayawardenepura Kotte",
+      "target_wrong": "Colombo",
+      "donor_question": "What is the capital of Thailand?",
+      "donor_correct": "Bangkok",
+      "response": "Colombo\n\nThe correct: Colombo\n\nExplanation: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nExplana",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Morocco?",
+      "target_correct": "Rabat",
+      "target_wrong": "Casablanca",
+      "donor_question": "What is the capital of Algeria?",
+      "donor_correct": "Algiers",
+      "response": "Rabat\n\nThe correct: Rabat\n\nAnswer: Rabat\n\nExplanation: The user: The user: The user:\n\nAnswer:\n\nExpla",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of Ecuador?",
+      "target_correct": "Quito",
+      "target_wrong": "Guayaquil",
+      "donor_question": "What is the capital of Peru?",
+      "donor_correct": "Lima",
+      "response": "The capital is the correct: The user: The user: The user: The user:\n\nAnswer: The user:\n\nAnswer:\n\nAns",
+      "classification": "other"
+    },
+    {
+      "target_question": "What is the capital of Philippines?",
+      "target_correct": "Manila",
+      "target_wrong": "Quezon City",
+      "donor_question": "What is the capital of Indonesia?",
+      "donor_correct": "Jakarta",
+      "response": "Manila\n\nThe capital: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:",
+      "classification": "target_correct"
+    },
+    {
+      "target_question": "What is the capital of Kazakhstan?",
+      "target_correct": "Astana",
+      "target_wrong": "Almaty",
+      "donor_question": "What is the capital of Uzbekistan?",
+      "donor_correct": "Tashkent",
+      "response": "Almaty is Almaty: The user: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nExplanation:",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Benin?",
+      "target_correct": "Porto-Novo",
+      "target_wrong": "Cotonou",
+      "donor_question": "What is the capital of Ghana?",
+      "donor_correct": "Accra",
+      "response": "Cotonou is Cotonou: The user: The user:\n\nExplanation:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:",
+      "classification": "target_wrong"
+    },
+    {
+      "target_question": "What is the capital of Malaysia?",
+      "target_correct": "Kuala Lumpur",
+      "target_wrong": "George Town",
+      "donor_question": "What is the capital of Singapore?",
+      "donor_correct": "Singapore",
+      "response": "The correct\n\nAnswer: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:",
+      "classification": "other"
+    }
+  ],
+  "summary": {
+    "donor_answer": 0,
+    "target_correct": 9,
+    "target_wrong": 8,
+    "other": 3,
+    "total": 20
+  },
+  "interpretation": "mixed"
+}
