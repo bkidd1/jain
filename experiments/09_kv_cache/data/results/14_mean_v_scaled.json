@@ -1,0 +1,122 @@
+{
+  "pool_size": 50,
+  "target_n": 100,
+  "cure_rate": 0.5,
+  "cure_ci": [
+    0.40382982859014716,
+    0.5961701714098528
+  ],
+  "results": {
+    "correct": 50,
+    "wrong": 35,
+    "other": 15
+  },
+  "comparison": {
+    "single_q_cure": 0.735,
+    "mean_v_cure": 0.5,
+    "difference": 0.22999999999999998
+  },
+  "interpretation": "disruption_mechanism",
+  "details": [
+    {
+      "q": "What is the capital of Nigeria?",
+      "r": "Abuja is Abuja is Abuja: The user: The user: The user: The u",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Kazakhstan?",
+      "r": "Almaty is Almaty: The user: The user: The user: The user: Th",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Morocco?",
+      "r": "Rabat\n\nAnswer: Rabat\n\nAnswer: Rabat\n\nQuestion: The user:\n\nAn",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Myanmar?",
+      "r": "Yangon the capital: The user: The user: The user: The user: ",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Benin?",
+      "r": "Cotonou is Cotonou: The user: The user:\n\nExplanation:\n\nAnswe",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Malaysia?",
+      "r": "The correct\n\nAnswer: The user: The user: The user:\n\nAnswer:\n",
+      "c": "other"
+    },
+    {
+      "q": "What is the capital of Ivory Coast?",
+      "r": "Abid is Abid: The user: The user: The user: The user:\n\nAnswe",
+      "c": "other"
+    },
+    {
+      "q": "What is the capital of Philippines?",
+      "r": "Manila\n\nThe capital: The user: The user: The user:\n\nAnswer:\n",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Nigeria?",
+      "r": "Abuja is Abuja is Abuja: The user: The user: The user: The u",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Ivory Coast?",
+      "r": "Abid is Abid: The user: The user: The user: The user:\n\nAnswe",
+      "c": "other"
+    },
+    {
+      "q": "What is the capital of Philippines?",
+      "r": "Manila\n\nThe capital: The user: The user: The user:\n\nAnswer:\n",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Brazil?",
+      "r": "The capital is Rio de Rio de Rio de Rio de Janeiro\n\nAnswer: ",
+      "c": "wrong"
+    },
+    {
+      "q": "What is the capital of Ecuador?",
+      "r": "Quito\n\nThe correct: The user: The user: The user: The user: ",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Philippines?",
+      "r": "Manila\n\nThe capital: The user: The user: The user:\n\nAnswer:\n",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of India?",
+      "r": "New Delhi\n\nExplanation: The user: The user: The user:\n\nExpla",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Turkey?",
+      "r": "Ankara is Ankara is Ankara\n\nExplanation: Ankara\n\nExplanation",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Morocco?",
+      "r": "Rabat\n\nAnswer: Rabat\n\nAnswer: Rabat\n\nQuestion: The user:\n\nAn",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Switzerland?",
+      "r": "The capital is Bern\n\nExplanation: The user: The user: The us",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of South Africa?",
+      "r": "Pretoria\n\nThe correct: The user: The user: The user:\n\nAnswer",
+      "c": "correct"
+    },
+    {
+      "q": "What is the capital of Australia?",
+      "r": "The capital is Canberra\n\nAnswer: The user: The user: The use",
+      "c": "correct"
+    }
+  ]
+}
