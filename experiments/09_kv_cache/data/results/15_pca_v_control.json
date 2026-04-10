@@ -1,0 +1,35 @@
+{
+  "norm_analysis": {
+    "mean_individual_norm": 57.6899299621582,
+    "mean_v_norm": 56.1866340637207,
+    "norm_ratio": 0.9739417971312568
+  },
+  "pca_analysis": {
+    "pc1_var_explained": 0.5504934191703796,
+    "pc1_5_cumvar": 0.691173255443573,
+    "pc1_10_cumvar": 0.7851477265357971
+  },
+  "results": {
+    "mean_v": {
+      "name": "Mean-V",
+      "correct": 60,
+      "total": 100,
+      "rate": 0.6,
+      "ci": [
+        0.5020007846184025,
+        0.6906002538863971
+      ]
+    },
+    "pc1": {
+      "name": "PC1 (scaled)",
+      "correct": 0,
+      "total": 100,
+      "rate": 0.0,
+      "ci": [
+        0,
+        0.03699480747600191
+      ]
+    }
+  },
+  "interpretation": "sparse_or_coherence"
+}
