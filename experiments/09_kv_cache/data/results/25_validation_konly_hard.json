@@ -1,7 +1,7 @@
 {
   "experiment": "D_konly_hard",
   "n_per_condition": 100,
-  "timestamp": "2026-04-11T15:26:21.899180",
+  "timestamp": "2026-04-11T15:53:53.892798",
   "model": "google/gemma-4-E2B",
   "patch_layer": 13,
   "results": {

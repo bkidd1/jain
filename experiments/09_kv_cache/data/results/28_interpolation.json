@@ -1,0 +1,113 @@
+{
+  "experiment": "interpolation",
+  "n_per_point": 50,
+  "timestamp": "2026-04-11T16:06:37.349214",
+  "model": "google/gemma-4-E2B",
+  "patch_layer": 13,
+  "interpolation_points": [
+    0.0,
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    0.9,
+    1.0
+  ],
+  "results": {
+    "alpha_0.00": {
+      "alpha": 0.0,
+      "entity_pct": 100,
+      "date_pct": 0,
+      "correct": 30,
+      "wrong": 19,
+      "other": 1,
+      "n": 50,
+      "cure_rate": 0.6,
+      "ci_low": 0.4618118910275937,
+      "ci_high": 0.7239181021375425
+    },
+    "alpha_0.10": {
+      "alpha": 0.1,
+      "entity_pct": 90,
+      "date_pct": 10,
+      "correct": 30,
+      "wrong": 18,
+      "other": 2,
+      "n": 50,
+      "cure_rate": 0.6,
+      "ci_low": 0.4618118910275937,
+      "ci_high": 0.7239181021375425
+    },
+    "alpha_0.25": {
+      "alpha": 0.25,
+      "entity_pct": 75,
+      "date_pct": 25,
+      "correct": 31,
+      "wrong": 19,
+      "other": 0,
+      "n": 50,
+      "cure_rate": 0.62,
+      "ci_low": 0.4815019502239357,
+      "ci_high": 0.7413740415742278
+    },
+    "alpha_0.50": {
+      "alpha": 0.5,
+      "entity_pct": 50,
+      "date_pct": 50,
+      "correct": 31,
+      "wrong": 18,
+      "other": 1,
+      "n": 50,
+      "cure_rate": 0.62,
+      "ci_low": 0.4815019502239357,
+      "ci_high": 0.7413740415742278
+    },
+    "alpha_0.75": {
+      "alpha": 0.75,
+      "entity_pct": 25,
+      "date_pct": 75,
+      "correct": 31,
+      "wrong": 18,
+      "other": 1,
+      "n": 50,
+      "cure_rate": 0.62,
+      "ci_low": 0.4815019502239357,
+      "ci_high": 0.7413740415742278
+    },
+    "alpha_0.90": {
+      "alpha": 0.9,
+      "entity_pct": 9,
+      "date_pct": 90,
+      "correct": 31,
+      "wrong": 17,
+      "other": 2,
+      "n": 50,
+      "cure_rate": 0.62,
+      "ci_low": 0.4815019502239357,
+      "ci_high": 0.7413740415742278
+    },
+    "alpha_1.00": {
+      "alpha": 1.0,
+      "entity_pct": 0,
+      "date_pct": 100,
+      "correct": 30,
+      "wrong": 18,
+      "other": 2,
+      "n": 50,
+      "cure_rate": 0.6,
+      "ci_low": 0.4618118910275937,
+      "ci_high": 0.7239181021375425
+    }
+  },
+  "cure_rates": [
+    0.6,
+    0.6,
+    0.62,
+    0.62,
+    0.62,
+    0.62,
+    0.6
+  ],
+  "is_monotonic": false,
+  "spread_pp": 0.0
+}
