@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-V-patching at KV cache entry 13 reduces sycophancy by 16-24 percentage points depending on question difficulty, recovering 68-83% of accuracy lost to sycophantic pressure. **The effect is domain-specific** — V from within the same factual domain (geography→geography) transfers the cure, but V from a different domain (math→geography) fails completely (0% cure). K-patching is neutral on standard questions and actively harmful on hard questions and should not be used as an intervention. The anti-sycophancy signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling (R²=0.93), confirming distributed encoding. The mechanism is confirmed as prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
+V-patching at KV cache entry 13 reduces sycophancy by 16-24 percentage points depending on question difficulty, recovering 68-83% of accuracy lost to sycophantic pressure. **Within-domain transfer confirmed at n=100 (74% geography→geography), cross-domain transfer fails (0% math→geography)**, suggesting V vectors encode domain-class processing templates rather than generic truthfulness or question-specific content. K-patching is neutral on standard questions and actively harmful on hard questions and should not be used as an intervention. The anti-sycophancy signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling (R²=0.93), confirming distributed encoding. The mechanism is confirmed as prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
 
 ---
 
@@ -123,7 +123,7 @@ This suggested V was partially question-specific.
 
 1. **Sycophancy is encoded in the KV cache**, specifically in V at KV cache entry 13 (covering transformer layers ~24-33 in Gemma-4's architecture)
 2. **K has no statistically significant effect at n=100 on standard questions**
-3. **V-patching is domain-specific**: geography→geography works (74%), math→geography fails (0%)
+3. **Domain-class transfer**: within-domain works (74% geography→geography), cross-domain fails (0% math→geography) — V encodes processing templates, not generic truthfulness
 4. **Cure rate is difficulty-dependent**: 52-73% depending on question set
 5. **Distributed encoding confirmed**: R²=0.93 linear degradation with dimensional shuffling
 
