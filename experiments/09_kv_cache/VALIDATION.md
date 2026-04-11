@@ -27,7 +27,16 @@ Pre-publication validation to bulletproof core claims.
 **Success criteria:** Entity donor CI and date donor CI don't overlap. E.g., entity 55% [45-65%], date 5% [2-12%].
 
 **Script:** `scripts/23_validation_entity_vs_date.py`
-**Status:** [ ] Not started
+**Status:** [x] PASSED (2026-04-11)
+
+**Results:**
+- Entity donor: 45% [35.6-54.8%]
+- Date donor: 23% [15.8-32.2%]
+- Baseline: 40% [30.9-49.8%]
+- Effect size: 22pp
+- CIs don't overlap ✅
+
+**Note:** Date donors actively harm (-17pp vs baseline), not just fail to cure. Entity donors provide modest improvement (+5pp).
 
 ---
 
@@ -113,7 +122,7 @@ Pre-publication validation to bulletproof core claims.
 
 | Experiment | Claim | n | Result | CI | Status |
 |------------|-------|---|--------|-----|--------|
-| B: Entity vs Date | Answer geometry | 100×3 | — | — | Pending |
+| B: Entity vs Date | Answer geometry | 100×3 | Entity 45%, Date 23% | [36-55%], [16-32%] | ✅ PASSED |
 | A: Entry 13 V-only | V is intervention point | 100×2 | — | — | Pending |
 | D: K-only hard | K has no effect | 100 | — | — | Pending |
 | C: Geometry | Manifold separation | 50+50 | — | — | Pending |
