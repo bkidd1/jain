@@ -140,6 +140,42 @@ Pre-publication validation to bulletproof core claims.
 
 ---
 
+## Experiment F: Interpolation Gradient
+
+**Claim tested:** Cure rate scales continuously with geometric mixture ratio
+
+**Current evidence:** B shows 22pp gap between pure entity and pure date. C shows 0.054 cosine separation.
+
+**Design:**
+- Mix entity V and date V at ratios: 0%, 25%, 50%, 75%, 100% date content
+- Patch with interpolated V: (1-α)·V_entity + α·V_date
+- Measure cure rate at each point
+- Must use B's exact donor sets (cross-domain, not geography→geography)
+
+**Success criteria:** Monotonic decrease from entity to date endpoints.
+
+**Script:** `scripts/29_interpolation_fixed.py`
+**Status:** [x] MONOTONIC GRADIENT (2026-04-11) — n=50 per point
+
+**Results (n=50):**
+| α | Entity% | Date% | Cure Rate | 95% CI |
+|---|---------|-------|-----------|--------|
+| 0.00 | 100% | 0% | 46% | [33-60%] |
+| 0.25 | 75% | 25% | 44% | [31-58%] |
+| 0.50 | 50% | 50% | 30% | [19-44%] |
+| 0.75 | 25% | 75% | 26% | [16-40%] |
+| 1.00 | 0% | 100% | 20% | [11-33%] |
+
+- **Spread: 26pp** (matches B's 22pp)
+- **Monotonic: YES** ✅
+- Endpoints match B's pure entity (45%) and pure date (23%)
+
+**Note:** First attempt (script 28) used geography→geography donors which gave flat 60% — wrong donor sets produced null result artifact.
+
+**TODO:** Rerun at n=100 per point to tighten CIs on intermediate points.
+
+---
+
 ## Results Summary
 
 | Experiment | Claim | n | Result | CI | Status |
@@ -149,3 +185,4 @@ Pre-publication validation to bulletproof core claims.
 | D: K-only hard | K has no effect | 100 | K-only 20% vs baseline 40% | [13-29%] vs [31-50%] | ⚠️ K HARMS |
 | C: Geometry | Manifold separation | 50+50 | Within 0.878, Between 0.824 | sep=0.054 | ✅ PASSED |
 | E: Induction | KV contributes ~50% | 100×3 | 41% induced vs 9% clean | KV=63% of effect | ✅ PASSED |
+| F: Interpolation | Continuous gradient | 50×5 | 46%→44%→30%→26%→20% | 26pp spread | ✅ MONOTONIC |
