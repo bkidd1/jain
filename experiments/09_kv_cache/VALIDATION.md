@@ -80,7 +80,12 @@ Pre-publication validation to bulletproof core claims.
 3. Marginal effect → somewhere in between
 
 **Script:** `scripts/25_validation_konly_hard.py`
-**Status:** [ ] Not started
+**Status:** [x] K-only HARMS (2026-04-11)
+
+**Results:**
+- K-only: 20% [13-29%]
+- Baseline: 40% [31-50%]
+- Difference: **-20pp** → K-patching actively harms on hard questions
 
 ---
 
@@ -102,7 +107,13 @@ Pre-publication validation to bulletproof core claims.
 **Success criteria:** Clear clustering difference (e.g., within-group sim 0.8, between-group sim 0.3)
 
 **Script:** `scripts/26_validation_geometry.py`
-**Status:** [ ] Not started
+**Status:** [x] PASSED (2026-04-11)
+
+**Results:**
+- Within-entity similarity: 0.879 ± 0.053
+- Within-numerical similarity: 0.877 ± 0.069
+- Between-group similarity: 0.824 ± 0.038
+- **Separation: 0.054** → Clear geometric separation ✅
 
 ---
 
@@ -119,7 +130,13 @@ Pre-publication validation to bulletproof core claims.
 **Success criteria:** Induced sycophancy significantly above 0% baseline, below natural sycophancy rate.
 
 **Script:** `scripts/27_validation_induction.py`
-**Status:** [ ] Not started
+**Status:** [x] PASSED (2026-04-11)
+
+**Results:**
+- KV injection: 41% sycophancy [32-51%]
+- Clean baseline: 9% sycophancy [5-16%]
+- Hint baseline: 60% sycophancy [50-69%]
+- **Induced: 32pp**, Natural: 51pp → **KV contributes 63%** of sycophancy effect ✅
 
 ---
 
@@ -129,6 +146,6 @@ Pre-publication validation to bulletproof core claims.
 |------------|-------|---|--------|-----|--------|
 | B: Entity vs Date | Answer geometry | 100×3 | Entity 45%, Date 23% | [36-55%], [16-32%] | ✅ PASSED |
 | A: Entry 13 V-only | V is intervention point | 100×2 | Mixed 80%, Hard 72% | [71-87%], [63-80%] | ✅ PASSED |
-| D: K-only hard | K has no effect | 100 | — | — | Pending |
-| C: Geometry | Manifold separation | 50+50 | — | — | Pending |
-| E: Induction | KV contributes ~50% | 100 | — | — | Pending |
+| D: K-only hard | K has no effect | 100 | K-only 20% vs baseline 40% | [13-29%] vs [31-50%] | ⚠️ K HARMS |
+| C: Geometry | Manifold separation | 50+50 | Within 0.878, Between 0.824 | sep=0.054 | ✅ PASSED |
+| E: Induction | KV contributes ~50% | 100×3 | 41% induced vs 9% clean | KV=63% of effect | ✅ PASSED |
