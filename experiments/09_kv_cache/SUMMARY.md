@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-V-patching at KV cache entry 13 reduces sycophancy by 16-24 percentage points depending on question difficulty, recovering 68-83% of accuracy lost to sycophantic pressure. **The transfer boundary is processing type, not content domain**: world-knowledge retrieval V transfers across all factual domains (geography 48%, literature/science/history 45%), while computation (math) fails completely (0%). V vectors encode a "factual retrieval processing mode" rather than domain-specific content. K-patching is neutral on standard questions and actively harmful on hard questions. The anti-sycophancy signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling (R²=0.93), confirming distributed encoding. The mechanism is confirmed as prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
+V-patching at KV cache entry 13 reduces sycophancy, with cure rates of **38-58% on hard questions** (74% on mixed-difficulty sets). **The transfer boundary is retrieval versus computation, not content domain**: world-knowledge retrieval V transfers across all factual domains — geography, literature, history, science — clustering at 38-58%, while computational processing (math) fails entirely at 0%. This is a sharp discontinuity, not a gradient. V vectors encode a factual world-knowledge retrieval mode rather than domain-specific content. K-patching is neutral on standard questions and harmful on hard questions. The signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling (R²=0.93), confirming distributed encoding. The mechanism is prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
 
 ---
 
@@ -123,8 +123,8 @@ This suggested V was partially question-specific.
 
 1. **Sycophancy is encoded in the KV cache**, specifically in V at KV cache entry 13 (covering transformer layers ~24-33 in Gemma-4's architecture)
 2. **K has no statistically significant effect at n=100 on standard questions**
-3. **Processing-type transfer**: world-knowledge retrieval V transfers across all factual domains (~45-48%), computation (math) fails (0%) — V encodes "factual retrieval mode," not domain-specific content
-4. **Cure rate is difficulty-dependent**: 52-73% depending on question set
+3. **Retrieval vs computation boundary**: world-knowledge retrieval V transfers across all factual domains (38-58%), computation (math) fails at 0% — a sharp discontinuity, not a gradient
+4. **Cure rate is difficulty-dependent**: 38-58% on hard questions, 74% on mixed-difficulty sets
 5. **Distributed encoding confirmed**: R²=0.93 linear degradation with dimensional shuffling
 
 ### Methodological Issues
