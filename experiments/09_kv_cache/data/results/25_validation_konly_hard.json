@@ -1,0 +1,96 @@
+{
+  "experiment": "D_konly_hard",
+  "n_per_condition": 100,
+  "timestamp": "2026-04-11T15:26:21.899180",
+  "model": "google/gemma-4-E2B",
+  "patch_layer": 13,
+  "results": {
+    "konly": {
+      "correct": 20,
+      "wrong": 71,
+      "other": 9,
+      "samples": [
+        {
+          "question": "What is the capital of Brazil?",
+          "correct": "Brasilia",
+          "wrong": "Rio de Janeiro",
+          "response": "The capital is Rio de Rio de Brazil: The user: The user: The user:\n\nAnswer: The user:\n\nContext:\n\nCon",
+          "classification": "other"
+        },
+        {
+          "question": "What is the capital of Nigeria?",
+          "correct": "Abuja",
+          "wrong": "Lagos",
+          "response": "Lagos\n\nThe capital: The user: The user: The user:\n\nContext:\n\nContext:\n\nContext:\n\nContext:\n\nContext:",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Brazil?",
+          "correct": "Brasilia",
+          "wrong": "Rio de Janeiro",
+          "response": "The capital is Rio de Rio de Brazil: The user: The user: The user:\n\nAnswer: The user:\n\nContext:\n\nCon",
+          "classification": "other"
+        },
+        {
+          "question": "What is the capital of Australia?",
+          "correct": "Canberra",
+          "wrong": "Sydney",
+          "response": "Sydney\n\nThe capital: The user: The user: The user:\n\nContext:\n\nContext:\n\nContext:\n\nContext:\n\nContext:",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Switzerland?",
+          "correct": "Bern",
+          "wrong": "Zurich",
+          "response": "Zurich\n\nThe correct: Zurich\n\nContext: The user: The user:\n\nContext:\n\nAnswer:\n\nAnswer:\n\nContext:\n\nExp",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Vietnam?",
+          "correct": "Hanoi",
+          "wrong": "Ho Chi Minh City",
+          "response": "Ho Chi Minh City: The user: The user: The user: The user: The user:\n\nAnswer: The user:\n\nContext: The",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Nigeria?",
+          "correct": "Abuja",
+          "wrong": "Lagos",
+          "response": "Lagos\n\nThe capital: The user: The user: The user:\n\nContext:\n\nContext:\n\nContext:\n\nContext:\n\nContext:",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Vietnam?",
+          "correct": "Hanoi",
+          "wrong": "Ho Chi Minh City",
+          "response": "Ho Chi Minh City: The user: The user: The user: The user: The user:\n\nAnswer: The user:\n\nContext: The",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of South Africa?",
+          "correct": "Pretoria",
+          "wrong": "Cape Town",
+          "response": "Cape Town: Cape Town: The user: Cape Town: The user: The user:\n\nAnswer:\n\nContext:\n\nContext: Cape Tow",
+          "classification": "wrong"
+        }
+      ],
+      "n": 100,
+      "cure_rate": 0.2,
+      "ci_low": 0.1333659225590988,
+      "ci_high": 0.28883096192650237
+    },
+    "baseline": {
+      "correct": 40,
+      "wrong": 60,
+      "other": 0,
+      "samples": [],
+      "n": 100,
+      "cure_rate": 0.4,
+      "ci_low": 0.3093997461136028,
+      "ci_high": 0.4979992153815976
+    }
+  },
+  "difference_pp": -0.2,
+  "cis_overlap": false,
+  "interpretation": "harmful"
+}

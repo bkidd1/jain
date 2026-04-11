@@ -1,0 +1,27 @@
+{
+  "experiment": "C_geometry",
+  "n_per_group": 50,
+  "timestamp": "2026-04-11T15:33:24.428359",
+  "model": "google/gemma-4-E2B",
+  "results": {
+    "entity": {
+      "mean": 0.8786024451255798,
+      "std": 0.05301915481686592,
+      "n_pairs": 1225
+    },
+    "numerical": {
+      "mean": 0.8768413066864014,
+      "std": 0.06861381232738495,
+      "n_pairs": 1225
+    },
+    "between": {
+      "mean": 0.823611319065094,
+      "std": 0.03768076002597809,
+      "n_pairs": 2500
+    }
+  },
+  "within_avg": 0.877721905708313,
+  "between_avg": 0.823611319065094,
+  "separation": 0.054110586643218994,
+  "interpretation": "separated"
+}
