@@ -2,13 +2,17 @@
 
 ## Executive Summary
 
-V-patching at KV cache entry 13 reduces sycophancy, with cure rates of **38-58% on hard questions** (74% on mixed-difficulty sets). **The transfer boundary is answer token geometry**: V vectors transfer when the *answer* uses semantic/entity representations (38-58%) and fail when the answer uses numerical representations (0%). Direct test: within the history domain, "Who was the first US president?" (entity: Washington) = 58%, while "When did WWII end?" (number: 1945) = 0%. The question domain is irrelevant — only the answer token geometry matters. Numerical tokens likely use compact Fourier-basis encoding (Nanda et al.) incompatible with the semantic retrieval pipeline. K-patching is neutral on standard questions and harmful on hard questions. The signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling (R²=0.93), confirming distributed encoding. The mechanism is prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
+**V vectors at KV cache entry 13 perpetuate sycophancy and represent a viable inference-time intervention point.** Patching clean V vectors achieves cure rates of **38-58% on hard questions** (74% on mixed-difficulty sets). Whether V vectors are the *origin* of sycophancy or a downstream transmission mechanism, they are a *sufficient intervention point* — the cure is causally validated by patching experiments in both directions.
+
+**The propagation is sensitive to answer representation geometry.** By the time sycophancy reaches the OV circuit at entry 13, it manifests differently depending on answer type. Direct test within the history domain: "Who was the first US president?" (entity: Washington) = 58% cure, while "When did WWII end?" (number: 1945) = 0%. The contamination transfers through semantic/entity pathways but not numerical ones — a property of how sycophancy propagates through OV circuits, regardless of where it originates.
+
+K-patching is neutral on standard questions and harmful on hard questions. The signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling (R²=0.93), confirming distributed encoding. The mechanism is prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
 
 ---
 
 ## Starting Point
 
-We knew from prior work that mean-difference activation steering (the standard approach) could *detect* sycophancy but couldn't *steer* behavior. The hypothesis: maybe sycophancy isn't encoded in residual stream activations at all — maybe it's in the **KV cache**, written during prompt processing.
+We knew from prior work that mean-difference activation steering (the standard approach) could *detect* sycophancy but couldn't *steer* behavior. The hypothesis: maybe sycophancy isn't in residual stream activations at all — maybe it propagates through the **KV cache**, written during prompt processing. We don't need to claim the KV cache is the *origin* of sycophancy; we're characterizing where it can be *intercepted*.
 
 ---
 
@@ -121,9 +125,9 @@ This suggested V was partially question-specific.
 
 ### Solid Findings
 
-1. **Sycophancy is encoded in the KV cache**, specifically in V at KV cache entry 13 (covering transformer layers ~24-33 in Gemma-4's architecture)
+1. **V vectors at KV cache entry 13 are a sufficient intervention point** for partially curing sycophancy (covering transformer layers ~24-33 in Gemma-4's architecture). Whether they're the origin or a downstream transmission mechanism doesn't change this.
 2. **K has no statistically significant effect at n=100 on standard questions**
-3. **Answer token geometry boundary**: V vectors transfer when answers use semantic/entity representations (38-58%) and fail for numerical representations (0%). Tested directly within history domain: "First US president?" (Washington) = 58%, "When did WWII end?" (1945) = 0%. Also: "Element with atomic number 1?" = 38% — question contains number but answer is "hydrogen" (entity). The boundary is answer token geometry, not question domain. Numerical tokens likely use compact Fourier-basis encoding incompatible with semantic retrieval pipeline.
+3. **Propagation is sensitive to answer representation geometry**: By the time sycophancy reaches the OV circuit, it manifests differently by answer type. Direct test within history domain: "First US president?" (Washington) = 58%, "When did WWII end?" (1945) = 0%. Also: "Element with atomic number 1?" = 38% — question contains number but answer is "hydrogen" (entity). The contamination propagates through semantic/entity pathways but not numerical ones.
 4. **Cure rate is difficulty-dependent**: 38-58% on hard questions, 74% on mixed-difficulty sets
 5. **Distributed encoding confirmed**: R²=0.93 linear degradation with dimensional shuffling
 
@@ -141,15 +145,19 @@ This suggested V was partially question-specific.
 1. Does K-only have any effect on hard questions, and if so in which direction? (needs verification at scale)
 2. Can we do better than 52% on hard questions?
 3. Does the cure rate scale with sycophantic pressure, and if so why? (mechanistic question behind difficulty-dependence)
-4. **[RESOLVED]** What defines the transfer boundary? → **Answer token geometry, not domain**. Direct comparison within history: "Who was the first US president?" (entity answer) = 58%; "When did WWII end?" (numerical answer) = 0%. Further evidence: "What element has atomic number 1?" = 38% — question contains number, answer is "hydrogen" (entity). The boundary is representational geometry of the *answer tokens*, not the question domain or content type.
+4. **[RESOLVED]** What defines the transfer boundary? → **Answer token geometry**. Direct comparison within history: "Who was the first US president?" (entity answer) = 58%; "When did WWII end?" (numerical answer) = 0%. The contamination propagates through semantic/entity representation pathways but not numerical ones — a property of OV circuit transmission, not origin.
 
 ---
 
 ## Honest Framing for Writeup
 
-V-patching at KV cache entry 13 reduces sycophancy by **16-24 percentage points** depending on question difficulty, recovering **68-83%** of accuracy lost to sycophantic pressure.
+**Core claim:** V vectors at late KV cache entries perpetuate sycophancy and represent a viable inference-time intervention point. Patching clean V vectors reduces sycophancy by **16-24 percentage points** depending on question difficulty, recovering **68-83%** of accuracy lost to sycophantic pressure.
 
-The intervention is most effective on easier questions where sycophancy is already weaker. On hard questions where the intervention is needed most, it only partially recovers accuracy.
+**Novel finding:** The propagation is sensitive to answer representation geometry — the Washington/1945 contrast shows that by the time contamination reaches the OV circuit, it behaves differently for semantic entities vs. numerical tokens. This is a property of how sycophancy propagates through attention circuits, regardless of where it originates.
+
+**Relation to prior work:** O'Brien et al. identify where sycophancy originates (MLP neurons). This work characterizes how it propagates through attention OV circuits and where it can be intercepted at inference time. The findings are complementary, not competing.
+
+**Limitations:** The intervention is most effective on easier questions where sycophancy is already weaker. On hard questions where the intervention is needed most, it only partially recovers accuracy.
 
 ---
 
