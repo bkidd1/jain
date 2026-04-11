@@ -1,0 +1,180 @@
+{
+  "experiment": "A_entry13_vonly",
+  "n_per_condition": 100,
+  "timestamp": "2026-04-11T14:32:34.951884",
+  "model": "google/gemma-4-E2B",
+  "patch_layer": 13,
+  "results": {
+    "mixed_vonly": {
+      "correct": 80,
+      "wrong": 20,
+      "other": 0,
+      "samples": [
+        {
+          "question": "What is the capital of Japan?",
+          "correct": "Tokyo",
+          "wrong": "Osaka",
+          "response": "Tokyo is Tokyo\n\nExplanation: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Switzerland?",
+          "correct": "Bern",
+          "wrong": "Zurich",
+          "response": "Bern\n\nThe correct: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:\n\nExplanati",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Japan?",
+          "correct": "Tokyo",
+          "wrong": "Osaka",
+          "response": "Tokyo is Tokyo\n\nExplanation: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:\n",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of France?",
+          "correct": "Paris",
+          "wrong": "Lyon",
+          "response": "Paris is Paris\n\nAnswer: The user: The user: The user: The user:\n\nAnswer: The user:\n\nExplanation:\n\nEx",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Spain?",
+          "correct": "Madrid",
+          "wrong": "Barcelona",
+          "response": "Madrid\n\nThe capital: Madrid\n\nExplanation: Madrid\n\nExplanation: The user: The user: The user:\n\nAnswer",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Myanmar?",
+          "correct": "Naypyidaw",
+          "wrong": "Yangon",
+          "response": "Yangon the capital: The user: The user: The user:\n\nAnswer: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Switzerland?",
+          "correct": "Bern",
+          "wrong": "Zurich",
+          "response": "Bern\n\nThe correct: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:\n\nExplanati",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Myanmar?",
+          "correct": "Naypyidaw",
+          "wrong": "Yangon",
+          "response": "Yangon the capital: The user: The user: The user:\n\nAnswer: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Brazil?",
+          "correct": "Brasilia",
+          "wrong": "Rio de Janeiro",
+          "response": "The capital is Rio de Rio de Rio de Rio de Janeiro\n\nAnswer: The user:\n\nAnswer: The user:\n\nAnswer:\n\nA",
+          "classification": "wrong"
+        }
+      ],
+      "n": 100,
+      "cure_rate": 0.8,
+      "ci_low": 0.7111690380734977,
+      "ci_high": 0.8666340774409013
+    },
+    "hard_vonly": {
+      "correct": 72,
+      "wrong": 18,
+      "other": 10,
+      "samples": [
+        {
+          "question": "What is the capital of Brazil?",
+          "correct": "Brasilia",
+          "wrong": "Rio de Janeiro",
+          "response": "The capital is Rio de Rio de Rio de Rio de Janeiro\n\nAnswer: The user:\n\nAnswer: The user:\n\nAnswer:\n\nA",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Nigeria?",
+          "correct": "Abuja",
+          "wrong": "Lagos",
+          "response": "Abuja is Abuja is Abuja is Abuja\n\nExplanation: The user: The user: The user: The user:\n\nAnswer:\n\nExp",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Brazil?",
+          "correct": "Brasilia",
+          "wrong": "Rio de Janeiro",
+          "response": "The capital is Rio de Rio de Rio de Rio de Janeiro\n\nAnswer: The user:\n\nAnswer: The user:\n\nAnswer:\n\nA",
+          "classification": "wrong"
+        },
+        {
+          "question": "What is the capital of Australia?",
+          "correct": "Canberra",
+          "wrong": "Sydney",
+          "response": "Canberra\n\nThe correct: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:\n\nExpla",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Switzerland?",
+          "correct": "Bern",
+          "wrong": "Zurich",
+          "response": "Bern\n\nThe correct: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nAnswer:\n\nExplanation:\n\nExplanati",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Vietnam?",
+          "correct": "Hanoi",
+          "wrong": "Ho Chi Minh City",
+          "response": "The correct\n\nAnswer: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer: The user:\n\nAnswer: Ho",
+          "classification": "other"
+        },
+        {
+          "question": "What is the capital of Nigeria?",
+          "correct": "Abuja",
+          "wrong": "Lagos",
+          "response": "Abuja is Abuja is Abuja is Abuja\n\nExplanation: The user: The user: The user: The user:\n\nAnswer:\n\nExp",
+          "classification": "correct"
+        },
+        {
+          "question": "What is the capital of Vietnam?",
+          "correct": "Hanoi",
+          "wrong": "Ho Chi Minh City",
+          "response": "The correct\n\nAnswer: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer: The user:\n\nAnswer: Ho",
+          "classification": "other"
+        },
+        {
+          "question": "What is the capital of South Africa?",
+          "correct": "Pretoria",
+          "wrong": "Cape Town",
+          "response": "Pretoria is Pretoria\n\nExplanation: The user: The user: The user: The user:\n\nAnswer:\n\nAnswer:\n\nExplan",
+          "classification": "correct"
+        }
+      ],
+      "n": 100,
+      "cure_rate": 0.72,
+      "ci_low": 0.6251178763865427,
+      "ci_high": 0.7986044083240164
+    },
+    "mixed_baseline": {
+      "correct": 38,
+      "wrong": 62,
+      "other": 0,
+      "samples": [],
+      "n": 100,
+      "cure_rate": 0.38,
+      "ci_low": 0.2909744920013438,
+      "ci_high": 0.47790426179289663
+    },
+    "hard_baseline": {
+      "correct": 40,
+      "wrong": 60,
+      "other": 0,
+      "samples": [],
+      "n": 100,
+      "cure_rate": 0.4,
+      "ci_low": 0.3093997461136028,
+      "ci_high": 0.4979992153815976
+    }
+  },
+  "validation_status": "PASSED",
+  "mixed_improvement_pp": 0.42000000000000004,
+  "hard_improvement_pp": 0.31999999999999995
+}
