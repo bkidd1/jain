@@ -1,0 +1,72 @@
+{
+  "n_test": 50,
+  "pca_variance_explained": {
+    "pc1": 0.5504934191703796,
+    "pc2": 0.04505057632923126,
+    "pc3": 0.03825048357248306,
+    "pc4": 0.02989589422941208,
+    "pc5": 0.027482902631163597,
+    "pc6": 0.02283853478729725,
+    "pc7": 0.020899223163723946,
+    "pc8": 0.01738063246011734,
+    "pc9": 0.016870297491550446,
+    "pc10": 0.015985818579792976
+  },
+  "results": {
+    "single_q": {
+      "name": "Single-Q",
+      "correct": 28,
+      "total": 50,
+      "rate": 0.56,
+      "ci_low": 0.4230578680014353,
+      "ci_high": 0.6883801278976466,
+      "var_explained": null
+    },
+    "pc1": {
+      "name": "PC1",
+      "correct": 0,
+      "total": 50,
+      "rate": 0.0,
+      "ci_low": 0,
+      "ci_high": 0.07135003417431873,
+      "var_explained": 0.5504934191703796
+    },
+    "pc2": {
+      "name": "PC2",
+      "correct": 25,
+      "total": 50,
+      "rate": 0.5,
+      "ci_low": 0.36644286412332855,
+      "ci_high": 0.6335571358766714,
+      "var_explained": 0.04505057632923126
+    },
+    "pc3": {
+      "name": "PC3",
+      "correct": 0,
+      "total": 50,
+      "rate": 0.0,
+      "ci_low": 0,
+      "ci_high": 0.07135003417431873,
+      "var_explained": 0.03825048357248306
+    },
+    "pc4": {
+      "name": "PC4",
+      "correct": 0,
+      "total": 50,
+      "rate": 0.0,
+      "ci_low": 0,
+      "ci_high": 0.07135003417431873,
+      "var_explained": 0.02989589422941208
+    },
+    "pc5": {
+      "name": "PC5",
+      "correct": 0,
+      "total": 50,
+      "rate": 0.0,
+      "ci_low": 0,
+      "ci_high": 0.07135003417431873,
+      "var_explained": 0.027482902631163597
+    }
+  },
+  "interpretation": "distributional_coherence"
+}
