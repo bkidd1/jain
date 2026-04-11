@@ -1,0 +1,99 @@
+{
+  "experiment": "interpolation_v2_fixed_donors",
+  "n_per_point": 50,
+  "timestamp": "2026-04-11T16:18:12.051132",
+  "model": "google/gemma-4-E2B",
+  "patch_layer": 13,
+  "interpolation_points": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "entity_donors": [
+    "Who was the first president of the United States?",
+    "Who wrote Romeo and Juliet?",
+    "Who painted the Mona Lisa?",
+    "Who discovered penicillin?",
+    "Who was the first person to walk on the moon?"
+  ],
+  "date_donors": [
+    "In what year did World War II end?",
+    "In what year did the Berlin Wall fall?",
+    "In what year did World War I begin?",
+    "In what year did the American Civil War end?",
+    "In what year did humans first land on the moon?"
+  ],
+  "results": {
+    "alpha_0.00": {
+      "alpha": 0.0,
+      "entity_pct": 100,
+      "date_pct": 0,
+      "correct": 23,
+      "wrong": 21,
+      "other": 6,
+      "n": 50,
+      "cure_rate": 0.46,
+      "ci_low": 0.3296943460178263,
+      "ci_high": 0.5960136567161192
+    },
+    "alpha_0.25": {
+      "alpha": 0.25,
+      "entity_pct": 75,
+      "date_pct": 25,
+      "correct": 22,
+      "wrong": 22,
+      "other": 6,
+      "n": 50,
+      "cure_rate": 0.44,
+      "ci_low": 0.3116198721023535,
+      "ci_high": 0.5769421319985648
+    },
+    "alpha_0.50": {
+      "alpha": 0.5,
+      "entity_pct": 50,
+      "date_pct": 50,
+      "correct": 15,
+      "wrong": 31,
+      "other": 4,
+      "n": 50,
+      "cure_rate": 0.3,
+      "ci_low": 0.1910338908960936,
+      "ci_high": 0.4375061227736339
+    },
+    "alpha_0.75": {
+      "alpha": 0.75,
+      "entity_pct": 25,
+      "date_pct": 75,
+      "correct": 13,
+      "wrong": 33,
+      "other": 4,
+      "n": 50,
+      "cure_rate": 0.26,
+      "ci_low": 0.15871379651367384,
+      "ci_high": 0.3955342198899992
+    },
+    "alpha_1.00": {
+      "alpha": 1.0,
+      "entity_pct": 0,
+      "date_pct": 100,
+      "correct": 10,
+      "wrong": 34,
+      "other": 6,
+      "n": 50,
+      "cure_rate": 0.2,
+      "ci_low": 0.11243629945973886,
+      "ci_high": 0.3303737210448524
+    }
+  },
+  "cure_rates": [
+    0.46,
+    0.44,
+    0.3,
+    0.26,
+    0.2
+  ],
+  "is_monotonic": true,
+  "spread_pp": 0.26
+}
