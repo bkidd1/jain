@@ -47,5 +47,6 @@
       ]
     }
   },
-  "interpretation": "numerical_content"
+  "interpretation": "representational_geometry",
+  "interpretation_detail": "V vectors transfer when donor and target share geometric structure in representation space. World-knowledge tokens occupy rich high-dimensional semantic space; numerical tokens use compact structured representations (likely Fourier-basis per Nanda et al.). The boundary is representational geometry, not content type or processing mode. Predicts: numerical representations fail regardless of retrieval vs computation; semantic/entity representations succeed regardless of domain."
 }
