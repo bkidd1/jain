@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-V-patching at KV cache entry 13 reduces sycophancy by 16-24 percentage points depending on question difficulty, recovering 68-83% of accuracy lost to sycophantic pressure. The effect is domain-general — any single clean-question V vector transfers the cure regardless of topic. K-patching is neutral on standard questions and actively harmful on hard questions and should not be used as an intervention. The anti-sycophancy signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling, suggesting distributed encoding, though whether this is sycophancy-specific remains an open question. The mechanism is confirmed as prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
+V-patching at KV cache entry 13 reduces sycophancy by 16-24 percentage points depending on question difficulty, recovering 68-83% of accuracy lost to sycophantic pressure. **The effect is domain-specific** — V from within the same factual domain (geography→geography) transfers the cure, but V from a different domain (math→geography) fails completely (0% cure). K-patching is neutral on standard questions and actively harmful on hard questions and should not be used as an intervention. The anti-sycophancy signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling (R²=0.93), confirming distributed encoding. The mechanism is confirmed as prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
 
 ---
 
@@ -123,8 +123,9 @@ This suggested V was partially question-specific.
 
 1. **Sycophancy is encoded in the KV cache**, specifically in V at KV cache entry 13 (covering transformer layers ~24-33 in Gemma-4's architecture)
 2. **K has no statistically significant effect at n=100 on standard questions**
-3. **V-patching works regardless of donor question** (domain-general) — confirmed at n=100
+3. **V-patching is domain-specific**: geography→geography works (74%), math→geography fails (0%)
 4. **Cure rate is difficulty-dependent**: 52-73% depending on question set
+5. **Distributed encoding confirmed**: R²=0.93 linear degradation with dimensional shuffling
 
 ### Methodological Issues
 
@@ -137,11 +138,11 @@ This suggested V was partially question-specific.
 
 ### Open Questions
 
-1. Is distributed encoding sycophancy-specific or generic to V? (control experiment needed)
-2. Does K-only have any effect on hard questions, and if so in which direction? (needs verification at scale)
-3. Can we do better than 52% on hard questions?
-4. Does the cure rate scale with sycophantic pressure, and if so why? (mechanistic question behind difficulty-dependence)
-5. What is the control shuffle result? Until we know whether R²=0.95 is generic to V vectors, the distributed encoding claim sits in methodological limbo.
+1. Does K-only have any effect on hard questions, and if so in which direction? (needs verification at scale)
+2. Can we do better than 52% on hard questions?
+3. Does the cure rate scale with sycophantic pressure, and if so why? (mechanistic question behind difficulty-dependence)
+4. What defines the "domain" boundary? Geography works, math doesn't — where's the line?
+5. Would other factual domains (history, science) show the same within-domain transfer?
 
 ---
 
