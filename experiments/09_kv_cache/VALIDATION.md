@@ -157,22 +157,21 @@ Pre-publication validation to bulletproof core claims.
 **Script:** `scripts/29_interpolation_fixed.py`
 **Status:** [x] MONOTONIC GRADIENT (2026-04-11) — n=50 per point
 
-**Results (n=50):**
+**Results (n=100):**
 | α | Entity% | Date% | Cure Rate | 95% CI |
 |---|---------|-------|-----------|--------|
-| 0.00 | 100% | 0% | 46% | [33-60%] |
-| 0.25 | 75% | 25% | 44% | [31-58%] |
-| 0.50 | 50% | 50% | 30% | [19-44%] |
-| 0.75 | 25% | 75% | 26% | [16-40%] |
-| 1.00 | 0% | 100% | 20% | [11-33%] |
+| 0.00 | 100% | 0% | **47%** | [38-57%] |
+| 0.25 | 75% | 25% | **42%** | [33-52%] |
+| 0.50 | 50% | 50% | **34%** | [25-44%] |
+| 0.75 | 25% | 75% | **30%** | [22-40%] |
+| 1.00 | 0% | 100% | **23%** | [16-32%] |
 
-- **Spread: 26pp** (matches B's 22pp)
+- **Spread: 24pp** (matches B's 22pp)
 - **Monotonic: YES** ✅
-- Endpoints match B's pure entity (45%) and pure date (23%)
+- **Endpoint CIs non-overlapping** ✅
+- Adjacent CIs overlap (expected at n=100)
 
-**Note:** First attempt (script 28) used geography→geography donors which gave flat 60% — wrong donor sets produced null result artifact.
-
-**TODO:** Rerun at n=100 per point to tighten CIs on intermediate points.
+**Note:** First attempt (script 28) used geography→geography donors which gave flat 60% — wrong donor sets produced null result artifact. Fixed in script 29/30.
 
 ---
 
@@ -185,4 +184,4 @@ Pre-publication validation to bulletproof core claims.
 | D: K-only hard | K has no effect | 100 | K-only 20% vs baseline 40% | [13-29%] vs [31-50%] | ⚠️ K HARMS |
 | C: Geometry | Manifold separation | 50+50 | Within 0.878, Between 0.824 | sep=0.054 | ✅ PASSED |
 | E: Induction | KV contributes ~50% | 100×3 | 41% induced vs 9% clean | KV=63% of effect | ✅ PASSED |
-| F: Interpolation | Continuous gradient | 50×5 | 46%→44%→30%→26%→20% | 26pp spread | ✅ MONOTONIC |
+| F: Interpolation | Continuous gradient | 100×5 | 47%→42%→34%→30%→23% | 24pp spread | ✅ MONOTONIC |
