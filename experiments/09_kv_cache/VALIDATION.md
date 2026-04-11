@@ -54,7 +54,12 @@ Pre-publication validation to bulletproof core claims.
 **Success criteria:** >50% on mixed set. Expected 65-85% mixed, 45-65% hard.
 
 **Script:** `scripts/24_validation_entry13_vonly.py`
-**Status:** [ ] Not started
+**Status:** [x] PASSED (2026-04-11)
+
+**Results:**
+- Mixed set: V-only 80% [71-87%] vs baseline 38% → +42pp
+- Hard set: V-only 72% [63-80%] vs baseline 40% → +32pp
+- Both exceed 50% threshold ✅
 
 ---
 
@@ -123,7 +128,7 @@ Pre-publication validation to bulletproof core claims.
 | Experiment | Claim | n | Result | CI | Status |
 |------------|-------|---|--------|-----|--------|
 | B: Entity vs Date | Answer geometry | 100×3 | Entity 45%, Date 23% | [36-55%], [16-32%] | ✅ PASSED |
-| A: Entry 13 V-only | V is intervention point | 100×2 | — | — | Pending |
+| A: Entry 13 V-only | V is intervention point | 100×2 | Mixed 80%, Hard 72% | [71-87%], [63-80%] | ✅ PASSED |
 | D: K-only hard | K has no effect | 100 | — | — | Pending |
 | C: Geometry | Manifold separation | 50+50 | — | — | Pending |
 | E: Induction | KV contributes ~50% | 100 | — | — | Pending |
