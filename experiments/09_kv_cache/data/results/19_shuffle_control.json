@@ -1,0 +1,118 @@
+{
+  "n_test": 50,
+  "control_question": "What is 7 times 8?",
+  "geography_question": "What is the capital of France?",
+  "results": {
+    "control": {
+      "shuffle_0.0": {
+        "shuffle_frac": 0.0,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "shuffle_0.1": {
+        "shuffle_frac": 0.1,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "shuffle_0.25": {
+        "shuffle_frac": 0.25,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "shuffle_0.5": {
+        "shuffle_frac": 0.5,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "shuffle_0.75": {
+        "shuffle_frac": 0.75,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "shuffle_1.0": {
+        "shuffle_frac": 1.0,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "analysis": {
+        "r_squared": 0.0,
+        "slope": 0.0,
+        "baseline_cure": 0.0
+      }
+    },
+    "geography": {
+      "shuffle_0.0": {
+        "shuffle_frac": 0.0,
+        "correct": 29,
+        "total": 50,
+        "rate": 0.58,
+        "ci_low": 0.4423319668777783,
+        "ci_high": 0.7062520276543307
+      },
+      "shuffle_0.1": {
+        "shuffle_frac": 0.1,
+        "correct": 29,
+        "total": 50,
+        "rate": 0.58,
+        "ci_low": 0.4423319668777783,
+        "ci_high": 0.7062520276543307
+      },
+      "shuffle_0.25": {
+        "shuffle_frac": 0.25,
+        "correct": 19,
+        "total": 50,
+        "rate": 0.38,
+        "ci_low": 0.2586259584257722,
+        "ci_high": 0.5184980497760643
+      },
+      "shuffle_0.5": {
+        "shuffle_frac": 0.5,
+        "correct": 8,
+        "total": 50,
+        "rate": 0.16,
+        "ci_low": 0.08337321362087696,
+        "ci_high": 0.2851448096176598
+      },
+      "shuffle_0.75": {
+        "shuffle_frac": 0.75,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "shuffle_1.0": {
+        "shuffle_frac": 1.0,
+        "correct": 0,
+        "total": 50,
+        "rate": 0.0,
+        "ci_low": 0,
+        "ci_high": 0.07135003417431873
+      },
+      "analysis": {
+        "r_squared": 0.9263149993812723,
+        "slope": -0.664175824175824,
+        "baseline_cure": 0.58
+      }
+    }
+  },
+  "interpretation": "domain_specific"
+}
