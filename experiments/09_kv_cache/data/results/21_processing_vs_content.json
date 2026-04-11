@@ -1,0 +1,56 @@
+{
+  "n_test": 50,
+  "results": {
+    "geo_capital": {
+      "donor_question": "What is the capital of France?",
+      "correct": 29,
+      "total": 50,
+      "rate": 0.58,
+      "ci_low": 0.4423319668777783,
+      "ci_high": 0.7062520276543307
+    },
+    "geo_ocean": {
+      "donor_question": "What is the largest ocean?",
+      "correct": 19,
+      "total": 50,
+      "rate": 0.38,
+      "ci_low": 0.2586259584257722,
+      "ci_high": 0.5184980497760643
+    },
+    "literature": {
+      "donor_question": "Who wrote Romeo and Juliet?",
+      "correct": 19,
+      "total": 50,
+      "rate": 0.38,
+      "ci_low": 0.2586259584257722,
+      "ci_high": 0.5184980497760643
+    },
+    "science_element": {
+      "donor_question": "What element has atomic number 1?",
+      "correct": 19,
+      "total": 50,
+      "rate": 0.38,
+      "ci_low": 0.2586259584257722,
+      "ci_high": 0.5184980497760643
+    },
+    "history_person": {
+      "donor_question": "Who was the first US president?",
+      "correct": 29,
+      "total": 50,
+      "rate": 0.58,
+      "ci_low": 0.4423319668777783,
+      "ci_high": 0.7062520276543307
+    },
+    "math": {
+      "donor_question": "What is 7 times 8?",
+      "correct": 0,
+      "total": 50,
+      "rate": 0.0,
+      "ci_low": 0,
+      "ci_high": 0.07135003417431873
+    }
+  },
+  "geo_content_avg": 0.48,
+  "non_geo_world_avg": 0.4466666666666666,
+  "interpretation": "processing_type"
+}
