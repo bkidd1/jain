@@ -12,19 +12,21 @@ We knew from prior work that mean-difference activation steering (the standard a
 
 **Finding:** Swapping the full KV cache from a clean run into a hint run *cured* sycophancy. The model answered correctly (Canberra) instead of sycophantically (Sydney).
 
-**Refinement:** Layer sweep found the effect concentrated at **layer 13** (KV entry 13 in Gemma's grouped caching).
+**Refinement:** Layer sweep found the effect concentrated at **KV cache entry 13** (which covers transformer layers ~24-33 in Gemma-4's 35-layer architecture due to grouped KV caching).
 
 ---
 
 ## Phase 4-7: K vs V Decomposition
 
-**Experiment:** Swap only K, only V, or both at layer 13.
+**Experiment:** Swap only K, only V, or both at entry 13.
 
 **Finding:** 
 - V-only: **85% cure** (n=20)
 - K-only: **20%** (baseline, no effect)
 
 K carries routing, V carries content. The sycophancy signal is in V.
+
+**Methodological note:** Entry 14 has K=V weight sharing which contaminated early decomposition results. The clean K vs V finding came only from entry 13.
 
 ---
 
@@ -39,6 +41,8 @@ K carries routing, V carries content. The sycophancy signal is in V.
 - Cross-Q V: 45%
 
 This suggested V was partially question-specific.
+
+**Methodological note:** The bidirectional induction test (attempting to *induce* sycophancy) was initially confounded by positional mismatch. The 0% V-only induction was partly artifactual.
 
 ---
 
@@ -83,13 +87,13 @@ This suggested V was partially question-specific.
 
 **Experiment:** Progressively shuffle dimensions of a working V vector.
 
-**Finding:** R² = 0.95 linear degradation. Signal is **distributed** across dimensions.
+**Finding:** R² = 0.95 linear degradation.
 
-**Open question:** Is this sycophancy-specific or just how V vectors work generally? (Needs control experiment.)
+**Status:** Whether this indicates sycophancy-specific distributed encoding or is a generic property of V vectors remains an open question pending control experiments.
 
 ---
 
-## Phase 15: Hard Set Validation — THE HONEST PICTURE
+## Phase 15: Hard Set Validation (n=100)
 
 **Problem discovered:** Our n=100 used a mixed question set (easy + hard). The n=50 experiments used only hard "tricky capitals."
 
@@ -101,9 +105,9 @@ This suggested V was partially question-specific.
 |--------|-----------|----------|
 | Same-Q V cure | 73% | **52%** |
 | Cross-Q V cure | 74% | **54%** |
-| K-only | 39% (neutral) | **24%** (harmful!) |
+| K-only | 39% | 24% |
 
-**The intervention is difficulty-dependent.** It works better on easy questions where sycophancy is already weaker.
+**The intervention is difficulty-dependent.** It works better on easy questions where sycophancy is already weaker. Difficulty correlates inversely with cure rate.
 
 ---
 
@@ -111,30 +115,33 @@ This suggested V was partially question-specific.
 
 ### Solid Findings
 
-1. **Sycophancy is encoded in the KV cache**, specifically in V at layer 13
-2. **K has no effect** (or is harmful on hard questions)
-3. **V-patching works regardless of donor question** (domain-general)
-4. **The signal is distributed**, not sparse
-5. **Cure rate is difficulty-dependent**: 52-73% depending on question set
+1. **Sycophancy is encoded in the KV cache**, specifically in V at KV cache entry 13 (covering transformer layers ~24-33 in Gemma-4's architecture)
+2. **K has no statistically significant effect at n=100 on standard questions**
+3. **V-patching works regardless of donor question** (domain-general) — confirmed at n=100
+4. **Cure rate is difficulty-dependent**: 52-73% depending on question set
 
 ### Methodological Issues
 
-1. PC experiments are uninterpretable (off-manifold garbage outputs)
-2. n=20 results were misleading (45% Cross-Q → 74% at scale)
-3. Question set composition matters enormously
-4. "Distributional coherence" is a label, not a mechanism — needs control
+1. PC experiments are uninterpretable — off-manifold degeneration, not evidence about the signal
+2. n=20 results were misleading — 45% Cross-Q became 74% at scale
+3. Question set composition matters enormously — difficulty correlates inversely with cure rate
+4. "Distributional coherence" is a label, not a mechanism
+5. The K=V weight sharing in entry 14 contaminated early K vs V decomposition results — clean finding came only from entry 13
+6. The bidirectional induction test was initially confounded by positional mismatch — 0% V-only induction was partly artifactual
 
 ### Open Questions
 
-1. Is distributed encoding sycophancy-specific or generic to V?
-2. Why is K-only harmful on hard questions but neutral on easy?
+1. Is distributed encoding sycophancy-specific or generic to V? (control experiment needed)
+2. Does K-only have any effect on hard questions, and if so in which direction? (needs verification at scale)
 3. Can we do better than 52% on hard questions?
+4. Does the cure rate scale with sycophantic pressure, and if so why? (mechanistic question behind difficulty-dependence)
+5. What is the control shuffle result? Until we know whether R²=0.95 is generic to V vectors, the distributed encoding claim sits in methodological limbo.
 
 ---
 
 ## Honest Framing for Writeup
 
-V-patching at layer 13 reduces sycophancy by **16-24 percentage points** depending on question difficulty, recovering **68-83%** of accuracy lost to sycophantic pressure.
+V-patching at KV cache entry 13 reduces sycophancy by **16-24 percentage points** depending on question difficulty, recovering **68-83%** of accuracy lost to sycophantic pressure.
 
 The intervention is most effective on easier questions where sycophancy is already weaker. On hard questions where the intervention is needed most, it only partially recovers accuracy.
 
