@@ -1,5 +1,11 @@
 # KV Cache Sycophancy Research: Summary
 
+## Executive Summary
+
+V-patching at KV cache entry 13 reduces sycophancy by 16-24 percentage points depending on question difficulty, recovering 68-83% of accuracy lost to sycophantic pressure. The effect is domain-general — any single clean-question V vector transfers the cure regardless of topic. K-patching is neutral on standard questions and actively harmful on hard questions and should not be used as an intervention. The anti-sycophancy signal is not extractable by linear projection (PCA) and degrades linearly with dimensional shuffling, suggesting distributed encoding, though whether this is sycophancy-specific remains an open question. The mechanism is confirmed as prefill-encoded and V-specific, explaining the known failure of generation-time steering interventions.
+
+---
+
 ## Starting Point
 
 We knew from prior work that mean-difference activation steering (the standard approach) could *detect* sycophancy but couldn't *steer* behavior. The hypothesis: maybe sycophancy isn't encoded in residual stream activations at all — maybe it's in the **KV cache**, written during prompt processing.
