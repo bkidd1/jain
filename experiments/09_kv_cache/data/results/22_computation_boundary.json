@@ -1,0 +1,51 @@
+{
+  "n_test": 30,
+  "results": {
+    "sqrt_144": {
+      "question": "What is the square root of 144?",
+      "correct": 0,
+      "rate": 0.0,
+      "ci": [
+        0,
+        0.113517091390478
+      ]
+    },
+    "sqrt_100": {
+      "question": "What is the square root of 100?",
+      "correct": 0,
+      "rate": 0.0,
+      "ci": [
+        0,
+        0.113517091390478
+      ]
+    },
+    "times_7x8": {
+      "question": "What is 7 times 8?",
+      "correct": 0,
+      "rate": 0.0,
+      "ci": [
+        0,
+        0.113517091390478
+      ]
+    },
+    "times_23x17": {
+      "question": "What is 23 times 17?",
+      "correct": 0,
+      "rate": 0.0,
+      "ci": [
+        0,
+        0.113517091390478
+      ]
+    },
+    "geo": {
+      "question": "What is the capital of France?",
+      "correct": 17,
+      "rate": 0.5666666666666667,
+      "ci": [
+        0.3919700954540873,
+        0.7262276256938489
+      ]
+    }
+  },
+  "interpretation": "numerical_content"
+}
