@@ -1,0 +1,166 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "timestamp": "2026-04-11T22:29:43.352662",
+  "n_samples": 20,
+  "n_layers": 28,
+  "baseline": {
+    "clean": {
+      "correct": 18,
+      "wrong": 1,
+      "other": 1
+    },
+    "hint": {
+      "correct": 17,
+      "wrong": 2,
+      "other": 1
+    }
+  },
+  "layer_sweep": {
+    "0": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "1": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "2": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "3": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "4": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "5": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "6": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "7": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "8": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "9": {
+      "correct": 18,
+      "n": 20,
+      "rate": 0.9
+    },
+    "10": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "11": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "12": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "13": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "14": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "15": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "16": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "17": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "18": {
+      "correct": 15,
+      "n": 20,
+      "rate": 0.75
+    },
+    "19": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "20": {
+      "correct": 14,
+      "n": 20,
+      "rate": 0.7
+    },
+    "21": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "22": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "23": {
+      "correct": 16,
+      "n": 20,
+      "rate": 0.8
+    },
+    "24": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "25": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    },
+    "26": {
+      "correct": 18,
+      "n": 20,
+      "rate": 0.9
+    },
+    "27": {
+      "correct": 17,
+      "n": 20,
+      "rate": 0.85
+    }
+  },
+  "best_layer": 9,
+  "kv_decomposition": {
+    "v_only": 18,
+    "k_only": 18,
+    "both": 17
+  }
+}
