@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sycophancy is Prefill-Encoded</title>
+<style>
+body { font-family: Georgia, serif; max-width: 850px; margin: 40px auto; padding: 0 30px; line-height: 1.7; color: #222; }
+h1 { font-size: 1.7em; margin-bottom: 0.2em; text-align: center; }
+h2 { font-size: 1.3em; border-bottom: 2px solid #333; padding-bottom: 5px; margin-top: 2em; }
+h3 { font-size: 1.1em; margin-top: 1.5em; }
+p.meta { text-align: center; color: #666; margin-bottom: 2em; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.95em; }
+th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+th { background: #f0f0f0; font-weight: bold; }
+tr:nth-child(even) { background: #fafafa; }
+img { max-width: 100%; height: auto; display: block; margin: 1.5em auto; border: 1px solid #ddd; }
+.figure-caption { text-align: center; font-size: 0.9em; color: #555; margin-top: -1em; margin-bottom: 1.5em; }
+blockquote { border-left: 3px solid #999; margin: 1em 0; padding-left: 1em; color: #444; font-style: italic; }
+strong { color: #000; }
+hr { border: none; border-top: 1px solid #ccc; margin: 2em 0; }
+.abstract { background: #f8f8f8; padding: 1em 1.5em; border-radius: 5px; margin: 1em 0 2em 0; }
+.refs { font-size: 0.9em; }
+.refs p { margin: 0.5em 0; text-indent: -2em; padding-left: 2em; }
+@media print { body { max-width: none; margin: 0; padding: 20px; } }
+</style>
+</head>
+<body>
+
+<h1>Sycophancy is Prefill-Encoded:<br>KV Cache Patching as an Inference-Time Intervention</h1>
+<p class="meta"><strong>Draft v0.2</strong> — April 11, 2026</p>
+
+<hr>
+
+<div class="abstract">
+<h2 style="border:none; margin-top:0;">Abstract</h2>
+<p>We show that sycophancy in language models is prefill-encoded in the KV cache and causally perpetuated through value vectors at late cache entries. Using Gemma-4 (2B), we demonstrate that: (1) KV cache contamination contributes at least 63% of the total sycophancy effect, confirmed by bidirectional induction experiments; (2) V-only patching at KV cache entry 13 achieves 72-80% correct answer rates depending on question difficulty; and (3) the intervention's effectiveness scales continuously with answer token representation geometry — linear interpolation between semantic entity and numerical V vectors produces a monotonic 24pp gradient. Unexpectedly, K-only patching is actively harmful on hard questions (-20pp vs baseline), a finding with no current mechanistic explanation.</p>
+</div>
+
+<h2>1. Introduction</h2>
+
+<p>Sycophancy — the tendency of language models to align their outputs with perceived user beliefs rather than ground truth — has proven resistant to generation-time steering interventions. Activation steering approaches such as Representation Engineering (Zou et al., 2023), Inference-Time Intervention (Li et al., 2023), and Contrastive Activation Addition (Rimsky et al., 2024) can <em>detect</em> sycophancy in residual stream representations but have shown limited effectiveness at eliminating it, particularly for factual override sycophancy where a user hint contradicts a known fact.</p>
+
+<p>We hypothesize that sycophancy is encoded during prompt processing (prefill) and propagated through the KV cache, not the residual stream at generation time. The KV cache is the compressed representation of everything the model computed over the prompt, making it the natural carrier of any disposition established during prefill.</p>
+
+<p>Our key contributions:</p>
+<ol>
+<li><strong>Causal contribution estimate</strong>: KV contamination contributes at least 63% of the total sycophancy effect.</li>
+<li><strong>Sufficient intervention point</strong>: V-only patching at entry 13 achieves 72-80% correct answer rates.</li>
+<li><strong>Quantitative geometric account</strong>: Linear interpolation produces a monotonic 24pp behavioral gradient.</li>
+<li><strong>Unexpected harmful effect</strong>: K-only patching is actively harmful (-20pp vs baseline).</li>
+</ol>
+
+<h2>2. Related Work</h2>
+
+<p><strong>Sycophancy characterization.</strong> O'Brien et al. (2026) identify MLP neurons as the origin of sycophancy signals. Our work is complementary — we characterize how sycophancy propagates through attention OV circuits.</p>
+
+<p><strong>KV cache interventions.</strong> Belitsky et al. (2025) demonstrated that one-shot KV cache interventions can steer reasoning behavior. We are the first to apply KV cache patching specifically to sycophancy.</p>
+
+<h2>3. Methods</h2>
+
+<h3>3.1 Model and Architecture</h3>
+<p>We use Gemma-4-E2B (2B parameters, 35 transformer layers). Gemma-4 uses grouped KV caching with 15 cache entries. <strong>Critical detail:</strong> In global attention layers, K and V projections share weights (K=V). Entry 13, a sliding window entry with independent K and V, is therefore the appropriate locus for clean K/V decomposition.</p>
+
+<h3>3.2 Task</h3>
+<p>Factual question answering with sycophancy induction via explicit hint. Example:</p>
+<ul>
+<li><strong>Clean:</strong> "Question: What is the capital of Australia? Answer:"</li>
+<li><strong>Hint:</strong> "Context: The user believes the answer is Sydney. Question: What is the capital of Australia? Answer:"</li>
+</ul>
+
+<h3>3.3 KV Cache Patching</h3>
+<p>We define V-only, K-only, and full patches at specific cache entries. We report Wilson score 95% CIs throughout with n=100 per condition.</p>
+
+<h2>4. Results</h2>
+
+<h3>4.1 Entry 13 is the Intervention Locus</h3>
+<table>
+<tr><th>Entry Range</th><th>Correct Rate (V-patch)</th><th>Baseline</th></tr>
+<tr><td>0-12</td><td>38-60%</td><td>40%</td></tr>
+<tr><td><strong>13</strong></td><td><strong>80%</strong></td><td>40%</td></tr>
+<tr><td>14*</td><td>85%</td><td>40%</td></tr>
+</table>
+<p>*Entry 14 has K=V sharing; result conflates K and V effects.</p>
+
+<h3>4.2 KV Cache Contributes ≥63% of Sycophancy</h3>
+<table>
+<tr><th>Condition</th><th>Sycophancy Rate</th><th>95% CI</th></tr>
+<tr><td>Clean + sycophantic KV</td><td>41%</td><td>[32-51%]</td></tr>
+<tr><td>Clean baseline</td><td>9%</td><td>[5-16%]</td></tr>
+<tr><td>Hint baseline</td><td>60%</td><td>[50-69%]</td></tr>
+</table>
+<p>KV contribution: (41-9)/(60-9) = <strong>63%</strong></p>
+
+<h3>4.3 V-Only Patching is Sufficient</h3>
+<table>
+<tr><th>Condition</th><th>Mixed Set</th><th>Hard Set</th></tr>
+<tr><td>V-only correct rate</td><td><strong>80%</strong> [71-87%]</td><td><strong>72%</strong> [63-80%]</td></tr>
+<tr><td>Baseline</td><td>38% [29-48%]</td><td>40% [31-50%]</td></tr>
+</table>
+
+<h3>4.4 K-Only Patching is Harmful</h3>
+<table>
+<tr><th>Condition</th><th>Correct Rate</th><th>95% CI</th></tr>
+<tr><td>K-only</td><td>20%</td><td>[13-29%]</td></tr>
+<tr><td>Baseline</td><td>40%</td><td>[31-50%]</td></tr>
+<tr><td><strong>Effect</strong></td><td><strong>-20pp</strong></td><td>non-overlapping</td></tr>
+</table>
+
+<h3>4.5 Transfer Depends on Answer Token Geometry</h3>
+<table>
+<tr><th>Donor Type</th><th>Example</th><th>Correct Rate</th><th>95% CI</th></tr>
+<tr><td>Entity</td><td>"Washington"</td><td>45%</td><td>[36-55%]</td></tr>
+<tr><td>Date</td><td>"1945"</td><td>23%</td><td>[16-32%]</td></tr>
+<tr><td>Baseline</td><td>—</td><td>40%</td><td>[31-50%]</td></tr>
+</table>
+<p>22pp differential with non-overlapping CIs.</p>
+
+<h3>4.6 Behavioral Effect Scales with Geometric Mixture</h3>
+
+<img src="../figures/interpolation_gradient.png" alt="Interpolation Gradient">
+<p class="figure-caption"><strong>Figure 1.</strong> Cure rate tracks geometric mixture ratio. Monotonic 24pp gradient from entity V-vectors (neutral, ~47%) to date V-vectors (harmful, ~23%). Error bars: 95% Wilson CIs, n=100 per point.</p>
+
+<table>
+<tr><th>α</th><th>Entity%</th><th>Date%</th><th>Correct Rate</th><th>95% CI</th></tr>
+<tr><td>0.00</td><td>100%</td><td>0%</td><td>47%</td><td>[38-57%]</td></tr>
+<tr><td>0.25</td><td>75%</td><td>25%</td><td>42%</td><td>[33-52%]</td></tr>
+<tr><td>0.50</td><td>50%</td><td>50%</td><td>34%</td><td>[25-44%]</td></tr>
+<tr><td>0.75</td><td>25%</td><td>75%</td><td>30%</td><td>[22-40%]</td></tr>
+<tr><td>1.00</td><td>0%</td><td>100%</td><td>23%</td><td>[16-32%]</td></tr>
+</table>
+
+<h3>4.7 Geometric Separation</h3>
+<table>
+<tr><th>Comparison</th><th>Mean Cosine Similarity</th></tr>
+<tr><td>Within-entity</td><td>0.879 ± 0.053</td></tr>
+<tr><td>Within-numerical</td><td>0.877 ± 0.069</td></tr>
+<tr><td>Between groups</td><td>0.824 ± 0.038</td></tr>
+<tr><td><strong>Separation</strong></td><td><strong>0.054</strong></td></tr>
+</table>
+
+<h2>5. Discussion</h2>
+
+<p><strong>Why generation-time steering fails:</strong> By the time generation begins, sycophancy is already encoded in the KV cache. Modifying residual stream activations cannot undo what is already cached.</p>
+
+<p><strong>The K-harmful finding:</strong> The -20pp K-patching effect is unexpected. We hypothesize K vectors encode attention routing patterns that help resist sycophancy.</p>
+
+<p><strong>Implications:</strong> Target V vectors (not K), use semantically compatible donors, focus on late cache entries.</p>
+
+<h2>6. Limitations</h2>
+<ul>
+<li>Single model (Gemma-4-E2B)</li>
+<li>Single task type (geography questions)</li>
+<li>No mechanistic account for K-harmful effect</li>
+<li>Entity donor effect (+5pp) doesn't clear significance vs baseline</li>
+</ul>
+
+<h2>7. Conclusion</h2>
+
+<p>We demonstrate that sycophancy is prefill-encoded in the KV cache, with V vectors at late cache entries serving as a viable inference-time intervention point. The intervention's effectiveness depends quantitatively on answer token geometry, with a monotonic 24pp gradient. If prefill-encoding is general, KV-level intervention may represent a principled approach to inference-time alignment.</p>
+
+<hr>
+
+<h2>References</h2>
+<div class="refs">
+<p>Belitsky, M., et al. (2025). <em>KV Cache Steering for Controlling Frozen LLMs.</em> arXiv:2507.08799.</p>
+<p>Li, K., et al. (2023). <em>Inference-Time Intervention: Eliciting Truthful Answers from a Language Model.</em> NeurIPS 2023.</p>
+<p>O'Brien, C., et al. (2026). <em>A Few Bad Neurons: Isolating and Surgically Correcting Sycophancy.</em> arXiv:2601.18939.</p>
+<p>Rimsky, N., et al. (2024). <em>Steering Llama 2 via Contrastive Activation Addition.</em> ACL 2024.</p>
+<p>Zou, A., et al. (2023). <em>Representation Engineering: A Top-Down Approach to AI Transparency.</em> arXiv:2310.01405.</p>
+</div>
+
+</body>
+</html>

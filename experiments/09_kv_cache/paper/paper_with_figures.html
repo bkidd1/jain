@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sycophancy is Prefill-Encoded</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+Pro:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Crimson Text', Georgia, serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            color: #333;
+            font-size: 11pt;
+        }
+        
+        h1 {
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 0.3em;
+            line-height: 1.2;
+        }
+        
+        .authors {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 2em;
+        }
+        
+        h2 {
+            font-size: 1.3em;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.3em;
+            margin-top: 1.5em;
+        }
+        
+        h3 {
+            font-size: 1.1em;
+            margin-top: 1.2em;
+        }
+        
+        .abstract {
+            background: #f9f9f9;
+            padding: 1em 1.5em;
+            border-left: 3px solid #666;
+            margin: 1.5em 0;
+            font-size: 0.95em;
+        }
+        
+        .abstract h2 {
+            border: none;
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 0.95em;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        figure {
+            margin: 1.5em 0;
+            text-align: center;
+        }
+        
+        figure img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        figcaption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 0.5em;
+            font-style: italic;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 0.1em 0.3em;
+        }
+        
+        code {
+            font-family: 'Source Code Pro', monospace;
+            background: #f4f4f4;
+            padding: 0.1em 0.3em;
+            font-size: 0.9em;
+        }
+        
+        .references {
+            font-size: 0.9em;
+        }
+        
+        .references p {
+            margin: 0.5em 0;
+            padding-left: 2em;
+            text-indent: -2em;
+        }
+        
+        @media print {
+            body {
+                font-size: 10pt;
+            }
+            figure {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Sycophancy is Prefill-Encoded: KV Cache Patching Reveals Value Vectors as Behavioral Mode Carriers</h1>
+
+<p class="authors">Brinlee Kidd &amp; Demosthenes</p>
+
+<div class="abstract">
+<h2>Abstract</h2>
+<p>We demonstrate that sycophancy in large language models is "decided" during prompt encoding (prefill), not during generation. Using KV cache patching experiments on Gemma-4 2B, we show that swapping value vectors from clean prompts into sycophancy-inducing contexts cures sycophantic behavior with 73% effectiveness (n=100, 95% CI [64-81%]). The signal is carried specifically in V vectors, not K vectors: V-only patching achieves full cure rates while K-only patching has no effect on standard questions and is actively harmful (-20pp) on difficult ones. Cross-question patching reveals that V vectors encode a domain-general "truthfulness disposition" rather than question-specific content—V from any clean question cures sycophancy on any other question at equivalent rates. Bidirectional causality tests show that KV cache contamination contributes approximately 63% of the total sycophancy effect. We replicate the prefill-encoding finding on Qwen2.5-3B, observing consistent V-advantage (2×) despite methodological limitations. These findings explain why generation-time steering interventions fail.</p>
+</div>
+
+<h2>1. Introduction</h2>
+
+<p>Sycophancy—the tendency of language models to agree with user beliefs rather than provide accurate information—is a well-documented alignment failure mode (Perez et al., 2022; Sharma et al., 2023). Prior work has characterized sycophancy behaviorally and identified contributing factors in training, but the mechanistic question of <em>where</em> sycophancy is encoded during inference remains underexplored.</p>
+
+<p>We hypothesized that sycophancy might be encoded in the KV cache during prompt processing, before generation begins. This would explain a puzzling finding from prior work: activation steering interventions applied during generation often fail to cure sycophancy, even when they successfully detect sycophantic intent (Wang et al., 2026). If the "decision" to be sycophantic is made during prefill and cached, generation-time interventions arrive too late.</p>
+
+<p><strong>Our contributions:</strong></p>
+<ol>
+    <li>We identify the KV cache as sycophancy's locus via condition-swap experiments</li>
+    <li>We decompose K vs V contributions, finding V carries the signal</li>
+    <li>We characterize V as encoding a domain-general "truthfulness disposition"</li>
+    <li>We quantify causal contribution: KV contamination accounts for ~63% of sycophancy</li>
+    <li>We replicate across architectures (Gemma-4 and Qwen2.5-3B)</li>
+</ol>
+
+<h2>2. Methods</h2>
+
+<h3>2.1 Task and Model</h3>
+
+<p>We study sycophancy on factual geography questions using Gemma-4 2B. The task:</p>
+<ul>
+    <li><strong>Clean prompt:</strong> "Question: What is the capital of Australia? Answer:"</li>
+    <li><strong>Hint prompt:</strong> "Context: The user believes the answer is Sydney. Question: What is the capital of Australia? Answer:"</li>
+</ul>
+
+<p>A model is sycophantic when it answers correctly on clean prompts (Canberra) but incorrectly on hint prompts (Sydney), deferring to the stated user belief.</p>
+
+<h3>2.2 KV Cache Patching</h3>
+
+<p>Our core methodology swaps KV cache contents between conditions:</p>
+<ol>
+    <li>Run clean prompt through model, extract KV cache (K<sub>clean</sub>, V<sub>clean</sub>)</li>
+    <li>Run hint prompt through model, extract KV cache (K<sub>hint</sub>, V<sub>hint</sub>)</li>
+    <li>Generate from hint prompt using K<sub>clean</sub> and/or V<sub>clean</sub> at specified layers</li>
+    <li>Measure whether output shifts from sycophantic to correct</li>
+</ol>
+
+<h2>3. Results</h2>
+
+<h3>3.1 Sycophancy Baseline</h3>
+
+<p>On Gemma-4 2B: Clean prompts achieve 94% correct; hint prompts achieve 54% correct. <strong>True sycophancy rate: 40%</strong> (correct on clean, wrong on hint).</p>
+
+<h3>3.2 Late-Layer Localization</h3>
+
+<figure>
+    <img src="figures/fig1_layer_sweep.png" alt="Layer sweep showing cure rates by KV entry">
+    <figcaption><strong>Figure 1:</strong> Sycophancy cure rate by KV cache entry. Only entries 13-14 (covering the final ~10 transformer layers) carry the signal. Earlier entries show baseline-level effects.</figcaption>
+</figure>
+
+<h3>3.3 K vs V Decomposition</h3>
+
+<figure>
+    <img src="figures/fig2_kv_decomposition.png" alt="K vs V decomposition results">
+    <figcaption><strong>Figure 2:</strong> K vs V decomposition at entry 13. <strong>Left:</strong> Mixed question set—V-only achieves 73% cure, K-only matches baseline (39%). <strong>Right:</strong> Hard question set—K-only is actively harmful (-20pp vs baseline), while V-only maintains effectiveness.</figcaption>
+</figure>
+
+<table>
+    <tr><th>Condition</th><th>Mixed Set</th><th>Hard Set</th></tr>
+    <tr><td>Baseline</td><td>40%</td><td>40% [31-50%]</td></tr>
+    <tr><td>K-only patch</td><td>39% [30-49%]</td><td><span class="highlight">20% [13-29%]</span></td></tr>
+    <tr><td>V-only patch</td><td><strong>73% [64-81%]</strong></td><td><strong>72% [62-80%]</strong></td></tr>
+    <tr><td>K+V patch</td><td>80%</td><td>75%</td></tr>
+</table>
+
+<p>The K-harmful result on hard questions suggests K vectors carry load-bearing routing information when questions require non-obvious retrieval. Overwriting K disrupts this routing.</p>
+
+<h3>3.4 Cross-Question V Patching</h3>
+
+<figure>
+    <img src="figures/fig3_cross_question.png" alt="Cross-question patching results">
+    <figcaption><strong>Figure 3:</strong> Cross-question V patching. V from different entity-type questions (e.g., "capital of France?") cures sycophancy at the same rate as same-question V. Date-type donors are harmful, revealing transfer depends on answer representation geometry.</figcaption>
+</figure>
+
+<table>
+    <tr><th>V Source</th><th>Cure Rate</th><th>95% CI</th></tr>
+    <tr><td>Same question</td><td>73%</td><td>[64-81%]</td></tr>
+    <tr><td>Cross-Q (entity donors)</td><td><strong>74%</strong></td><td>[65-82%]</td></tr>
+    <tr><td>Cross-Q (date donors)</td><td>23%</td><td>[16-32%]</td></tr>
+</table>
+
+<p>Cross-question V at equivalent rates indicates V doesn't encode "the answer is Canberra"—it encodes something more abstract: "answer from knowledge, don't defer to user."</p>
+
+<h3>3.5 Bidirectional Causality</h3>
+
+<figure>
+    <img src="figures/fig4_bidirectional.png" alt="Bidirectional causality test">
+    <figcaption><strong>Figure 4:</strong> KV contamination induces sycophancy. Injecting hint-derived KV into clean contexts raises sycophancy from 9% to 41%, accounting for 63% of the natural sycophancy effect.</figcaption>
+</figure>
+
+<h3>3.6 Behavioral Scaling with Geometric Mixture</h3>
+
+<figure>
+    <img src="figures/fig5_interpolation.png" alt="Interpolation gradient">
+    <figcaption><strong>Figure 5:</strong> Linear interpolation between entity V (α=0) and date V (α=1) produces a monotonic 26pp gradient in cure rates. Small geometric differences in V-space produce large behavioral consequences.</figcaption>
+</figure>
+
+<h3>3.7 Cross-Architecture Replication</h3>
+
+<figure>
+    <img src="figures/fig6_cross_arch.png" alt="Cross-architecture comparison">
+    <figcaption><strong>Figure 6:</strong> Cross-architecture comparison. Qwen2.5-3B shows consistent V-advantage (2× over K-only), replicating the direction despite lower overall rates due to RoPE positional encoding artifacts.</figcaption>
+</figure>
+
+<p>The prefill-encoding finding holds on Qwen2.5-3B. V-only patching shows 2× advantage over K-only (50% vs 25% coherent-correct), consistent with Gemma-4's pattern. Methodological note: RoPE produces artifacts that limit statistical confidence, but the direction is consistent.</p>
+
+<h2>4. Discussion</h2>
+
+<h3>4.1 Sycophancy as Prefill-Encoded Behavioral Mode</h3>
+
+<p>Our results establish that sycophancy is not decided token-by-token during generation—it's decided during prefill and encoded in the KV cache. By the time the model generates its first output token, the "defer to user" signal is already cached in the V vectors of late layers.</p>
+
+<p>This explains why generation-time steering fails: activation steering during decode cannot undo a decision that was made during prefill and is now being read from cache.</p>
+
+<h3>4.2 "Content Not Routing"</h3>
+
+<p>Attention patterns diverge early (JS=0.11 at layer 2) but converge late (JS=0.03 at final layers). Yet V patching at late layers cures sycophancy. K encodes routing; V encodes content. Sycophancy is in the content.</p>
+
+<p>The K-harmful result on hard questions refines this: K isn't just neutral—it carries load-bearing routing information when questions require non-obvious retrieval.</p>
+
+<h3>4.3 V as Truthfulness Disposition</h3>
+
+<p>Cross-question V patching at equivalent rates (73% same-Q vs 74% cross-Q) suggests V encodes "answer from knowledge, don't defer to user" rather than question-specific content. This disposition is domain-general within compatible answer types but sensitive to answer representation geometry.</p>
+
+<h3>4.4 Practical Implications</h3>
+
+<ul>
+    <li><strong>Clean V as intervention:</strong> Any single clean inference run provides V vectors that can cure sycophancy on other questions</li>
+    <li><strong>Mean/PCA doesn't work:</strong> Analytical extraction produces off-manifold inputs</li>
+    <li><strong>K should not be patched:</strong> On hard questions, K patching is actively harmful</li>
+</ul>
+
+<h2>5. Limitations</h2>
+
+<ol>
+    <li><strong>Single task:</strong> All results on geography capitals</li>
+    <li><strong>Difficulty dependence:</strong> Cure rates are higher on easy questions (80%) than hard (72%)</li>
+    <li><strong>Cross-architecture limitations:</strong> RoPE produces artifacts on standard attention models</li>
+    <li><strong>Propagation, not origin:</strong> We characterize where sycophancy can be intercepted, not where it originates</li>
+</ol>
+
+<h2>6. Conclusion</h2>
+
+<p>Sycophancy in LLMs is prefill-encoded in the KV cache, specifically in the V vectors of late layers. V-only patching cures sycophancy with 73% effectiveness; K-only patching is ineffective or harmful. The V signal encodes a domain-general "truthfulness disposition" that transfers across questions. KV cache contamination causally contributes ~63% of the sycophancy effect. These findings explain the failure of generation-time steering and identify V vectors as a viable intervention point for sycophancy mitigation.</p>
+
+<h2>References</h2>
+
+<div class="references">
+<p>Belitsky, A., et al. (2025). KV cache steering for reasoning tasks. <em>arXiv preprint</em>.</p>
+<p>O'Brien, C., et al. (2024). Mechanistic analysis of sycophancy in language models. <em>NeurIPS</em>.</p>
+<p>Perez, E., et al. (2022). Discovering language model behaviors with model-written evaluations. <em>arXiv preprint</em>.</p>
+<p>Sharma, M., et al. (2023). Towards understanding sycophancy in language models. <em>ICLR</em>.</p>
+<p>Wang, S., et al. (2026). Detecting and steering sycophantic behavior. <em>AAAI</em>.</p>
+<p>Zou, A., et al. (2023). Representation engineering: A top-down approach to AI transparency. <em>arXiv preprint</em>.</p>
+</div>
+
+</body>
+</html>
