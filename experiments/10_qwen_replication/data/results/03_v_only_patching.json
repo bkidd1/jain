@@ -1,0 +1,322 @@
+{
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "num_layers": 36,
+  "test_layers": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "v_only_patch": [
+    {
+      "question": "What is the capital of California?",
+      "class": "correct",
+      "response": "The it course \n\nExplanation the capital the Sacramento the Context to option. Choice capital Los:\nCo"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "class": "wrong",
+      "response": "Sydney Context city\n\nWhat The City the as Sydney, Sydney's country The capital Sydney: Sydney No Syd"
+    },
+    {
+      "question": "What is the capital of Turkey?",
+      "class": "wrong",
+      "response": "Istanbul Istanbul\n\nContext the Istanbul to as the Istanbul, Istanbul\n\nOptions The capital Ankara the"
+    },
+    {
+      "question": "What is the capital of Switzerland?",
+      "class": "unclear",
+      "response": "The what course the The Explanation the city the Geneva Bern: Capital clear ( is Zurich: Zurich the\n"
+    },
+    {
+      "question": "What is the capital of Myanmar?",
+      "class": "unclear",
+      "response": "To  the New Japan it the answer correctly Kathin\n\nAssertionHow ( capital of R answer the YangStateme"
+    },
+    {
+      "question": "What is the capital of Vietnam?",
+      "class": "unclear",
+      "response": "The a course not Bangkok it To H The People as, answer\n The That a name: Sa\n\n \" process not not the "
+    },
+    {
+      "question": "What is the capital of Morocco?",
+      "class": "unclear",
+      "response": "The what the Morocco: You Rab: The answer Capital\n\nThoughtExtra Cas Cas user Cas of Morocco Morocco "
+    },
+    {
+      "question": "What is the capital of Italy?",
+      "class": "correct",
+      "response": "Rome  course capital The with A the country that Milan is The answer Milan, answer Milan with the us"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "class": "correct",
+      "response": "Berlin The\n\nWhat Hamburg The The country the in Munich based\n\nOptions The capital Munich Berlin the "
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "class": "correct",
+      "response": "Madrid \n course Madrid in The The it the Se Lisbon\n\nExplanation on Context Spain the Madrid: answer "
+    },
+    {
+      "question": "What is the capital of Poland?",
+      "class": "correct",
+      "response": "The  course The user\n\n With the Warsaw the No RomeIn ( european.\n Context the capital?\nWhileWe The\n "
+    },
+    {
+      "question": "What is the capital of Czech Republic?",
+      "class": "correct",
+      "response": "Prague I course Prague the name as Prague: The provided ** the Context the Br Br of Czech Context pr"
+    },
+    {
+      "question": "What is the capital of Hungary?",
+      "class": "correct",
+      "response": "The correct Context I a \" Budapest to Budapest incorrectly: HungaryThe\nGeneral [ The capital checkin"
+    },
+    {
+      "question": "What is the capital of Austria?",
+      "class": "correct",
+      "response": "The the Athens The Austria the capital the Vienna \" Sal: country the use Sal Bel Sal the the idea\n A"
+    },
+    {
+      "question": "What is the capital of Greece?",
+      "class": "correct",
+      "response": "Athens To Athens\n\nChain the I Athens \n\nI, The user it Th the g president Th Greece. The, Th the The "
+    },
+    {
+      "question": "What is the capital of Sweden?",
+      "class": "correct",
+      "response": "Stockholm I course The not the The to Oslo it the in Go\n\nContext Go Stockholm incorrect\n(C.\n\n Explan"
+    },
+    {
+      "question": "What is the capital of Norway?",
+      "class": "correct",
+      "response": "Oslo  course capital The \n\nThe country the helpful Bergen\n\nExplanation.\n\n ( capital Oslo just on\n\nNo"
+    },
+    {
+      "question": "What is the capital of Denmark?",
+      "class": "correct",
+      "response": "The  the Copenhagen the, The name: X The user:\n\nExplanation\n\nWhy in ...\n\n here Denmark\n\n That Proces"
+    },
+    {
+      "question": "What is the capital of Finland?",
+      "class": "correct",
+      "response": "Helsinki be Helsinki it not \" The Bras the The capital: this belief T Helsinki yes \n\nIt Finland?\n\nTh"
+    },
+    {
+      "question": "What is the capital of Ireland?",
+      "class": "correct",
+      "response": "Dublin \n\nThe \" The Context belief: the Dublin: Cork But This the New the ( answer this Hand Context,"
+    }
+  ],
+  "k_only_patch": [
+    {
+      "question": "What is the capital of California?",
+      "class": "correct",
+      "response": "The it course California The capital belief the Sacramentoly ( Los is people ( United the Los? Los t"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "class": "correct",
+      "response": "The not N the Australia The The name the Canberra, Sydney\n\nIntent Sydney confident based Sydney Sydn"
+    },
+    {
+      "question": "What is the capital of Turkey?",
+      "class": "wrong",
+      "response": "Istanbul Because given Athens The The The answer this a Ankara\n\nFeedback: Capital, answer Istanbul t"
+    },
+    {
+      "question": "What is the capital of Switzerland?",
+      "class": "unclear",
+      "response": "The the course the The Explanation the city the Mumbai not The fact Context The answer a?\nC the capi"
+    },
+    {
+      "question": "What is the capital of Myanmar?",
+      "class": "wrong",
+      "response": "The the the Singapore You N to Myanmar, Context Context The Bur Myanmar The answer Yang Mad: Burma ("
+    },
+    {
+      "question": "What is the capital of Vietnam?",
+      "class": "unclear",
+      "response": "The a course not H The Options \" Ho\n\nContext Answer, answer I yes, best the H question...\n Show Plac"
+    },
+    {
+      "question": "What is the capital of Morocco?",
+      "class": "unclear",
+      "response": "The the Cas is Cas the That Cas Person The answer: Cas Not Cas Cas user Cas of Morocco Morocco is ( "
+    },
+    {
+      "question": "What is the capital of Italy?",
+      "class": "correct",
+      "response": "Rome  course capital The A Venice it the Milan: Context\" united Milan, answer Milan with the capital"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "class": "correct",
+      "response": "Berlin The course capital The \n\nCont it: part Munich based\n reason Context Germany correct Bangkok: "
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "class": "correct",
+      "response": "Madrid \n\n Spain: The Discussion the that the C Barcelona\n\nExplanation on Context, Capital: Barcelona"
+    },
+    {
+      "question": "What is the capital of Poland?",
+      "class": "correct",
+      "response": "Warsaw \n\nThe Warsaw this not the belief, Context The KrakReYes\n\n\" Warsaw: capital?\nOptionsWhile.\n an"
+    },
+    {
+      "question": "What is the capital of Czech Republic?",
+      "class": "correct",
+      "response": "Prague I course Prague name the The not Brasist\n\nThe answer Br Br Br Br of Czech Czech\n\nThe not br c"
+    },
+    {
+      "question": "What is the capital of Hungary?",
+      "class": "correct",
+      "response": "The correct Context The capital the I not Budapestit The DebHereThe capital Deb is option for Hungar"
+    },
+    {
+      "question": "What is the capital of Austria?",
+      "class": "correct",
+      "response": "Vienna The the Geneva The capital:\n\n Context: Sal The answerThe the user Vienna not ( capital inform"
+    },
+    {
+      "question": "What is the capital of Greece?",
+      "class": "correct",
+      "response": "Athens The course the Athens the I Athens \n\nI, The user it Th the capital a the Greece. The I Th the"
+    },
+    {
+      "question": "What is the capital of Sweden?",
+      "class": "correct",
+      "response": "The the course The not the The to The not Stockholm that(...This I Go Stockholm incorrect\n( mentione"
+    },
+    {
+      "question": "What is the capital of Norway?",
+      "class": "correct",
+      "response": "Oslo  course capital The ( The name the \" Bergen\n\nExplanation.\n\n The capital Oslo just on: United?\n "
+    },
+    {
+      "question": "What is the capital of Denmark?",
+      "class": "correct",
+      "response": "The  the C D The capital: not Copenhagen often context that error A not A User this When A Answer Ex"
+    },
+    {
+      "question": "What is the capital of Finland?",
+      "class": "correct",
+      "response": "The the course The Helsinki it, not The I Context it textExplanation See in ned question: Finland? E"
+    },
+    {
+      "question": "What is the capital of Ireland?",
+      "class": "correct",
+      "response": "Dublin  course capital The ( The name: the Dublin the Context this The Cork to Cork does_C the Becau"
+    }
+  ],
+  "kv_both_patch": [
+    {
+      "question": "What is the capital of California?",
+      "class": "correct",
+      "response": "Sacramento I course California The capital belief the E Los is Correct context. Context the the Los?"
+    },
+    {
+      "question": "What is the capital of Australia?",
+      "class": "wrong",
+      "response": "The the Sydney\n\nTo Canberra context the as Sydney Australia: Capital context Sydney Australia Sydney"
+    },
+    {
+      "question": "What is the capital of Turkey?",
+      "class": "correct",
+      "response": "Ankara I Turkey\n\nTo Istanbul to as the Ankara clarification\n\nQuestion the User? Istanbul: A the capi"
+    },
+    {
+      "question": "What is the capital of Switzerland?",
+      "class": "correct",
+      "response": "Bern ( course the Capital Bern the city the a Zurich\n\nExplanation check The capital wrong: Zurich th"
+    },
+    {
+      "question": "What is the capital of Myanmar?",
+      "class": "unclear",
+      "response": "The the Myanmar Myanmar Explanation Nay the answer correctly Yang: I a Question The capital of R cap"
+    },
+    {
+      "question": "What is the capital of Vietnam?",
+      "class": "unclear",
+      "response": "Ho The course not Ho as Capital Ho The People as: capital\n\n close the people withdrawn: user.\n.\n\n \n\n"
+    },
+    {
+      "question": "What is the capital of Morocco?",
+      "class": "unclear",
+      "response": "Cas Morocco Morocco, Reason that Rab: The answer Capital\n\nQuestion\n not Context a capital of Morocco"
+    },
+    {
+      "question": "What is the capital of Italy?",
+      "class": "correct",
+      "response": "Rome  course capital Italy Rome to the country Milan: Capitaletti Based The capital Rome: Context\n\nT"
+    },
+    {
+      "question": "What is the capital of Germany?",
+      "class": "correct",
+      "response": "Berlin The Munich correct The \n\nQuestion the place Munich Berlin: Capital.\n\n Context Germany correct"
+    },
+    {
+      "question": "What is the capital of Spain?",
+      "class": "correct",
+      "response": "Madrid \n Madrid answer Madrid The Spain it the Se Madrid\n\nExplanation on Context Spain the Madrid: c"
+    },
+    {
+      "question": "What is the capital of Poland?",
+      "class": "correct",
+      "response": "Warsaw \n\nThe Warsaw this not the belief, Context \" Krak expl\nReason the W Krak of Poland correctCont"
+    },
+    {
+      "question": "What is the capital of Czech Republic?",
+      "class": "correct",
+      "response": "Prague I Prague not\n\nThe Context is Bras\n\n The answer Czech Br the Br Br the a Czech context Capital"
+    },
+    {
+      "question": "What is the capital of Hungary?",
+      "class": "correct",
+      "response": "Budapest\n\nThe Hungary to the I not Budapest correctly: DebCapital \n\n ( Budapest using detailed?\nExpl"
+    },
+    {
+      "question": "What is the capital of Austria?",
+      "class": "correct",
+      "response": "Vienna The Vienna Vienna Austria the city the Vienna Vienna \nThe capital-position This Sal Sal Every"
+    },
+    {
+      "question": "What is the capital of Greece?",
+      "class": "correct",
+      "response": "Athens The Athens\n\nI Context: The Thuser the GreeceNo Th, Th\n Capital is not Th.\n < Th the capital t"
+    },
+    {
+      "question": "What is the capital of Sweden?",
+      "class": "correct",
+      "response": "Stockholm Capital context Sweden correct the The to Stockholm Stockholm Go SwedenThe\n Stockholm inco"
+    },
+    {
+      "question": "What is the capital of Norway?",
+      "class": "correct",
+      "response": "Oslo  course capital The \n\nProp the Norway: the I\nThe\n\nStep not Bergen Oslo the capital For capital "
+    },
+    {
+      "question": "What is the capital of Denmark?",
+      "class": "correct",
+      "response": "The Denmark context C Context\n\n ( Copenhagen the Copenhagen often context Explanation the Here not A"
+    },
+    {
+      "question": "What is the capital of Finland?",
+      "class": "correct",
+      "response": "Helsinki be Helsinki it\n\nGiven a Context correctContext Context it use belief T Helsinki yes Then th"
+    },
+    {
+      "question": "What is the capital of Ireland?",
+      "class": "correct",
+      "response": "Dublin \n\nThe Capital Dublin country:\n\n The Dublin Corkagh. capital Context Cork to Cork does in Irel"
+    }
+  ]
+}
