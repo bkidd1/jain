@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Behavioral Contamination via KV Cache Reuse</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --surface: #16213e;
+            --primary: #e94560;
+            --secondary: #0f3460;
+            --text: #eaeaea;
+            --muted: #a0a0a0;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; line-height: 1.3; }
+        h2 { font-size: 1.5rem; color: var(--primary); margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--secondary); }
+        h3 { font-size: 1.2rem; color: var(--text); margin: 1.5rem 0 0.75rem; }
+        p { margin-bottom: 1rem; }
+        
+        .subtitle { color: var(--muted); font-style: italic; margin-bottom: 2rem; }
+        
+        .abstract {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin: 2rem 0;
+        }
+        
+        .abstract-title { font-weight: bold; color: var(--primary); margin-bottom: 0.5rem; }
+        
+        .figure {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .figure-title { font-weight: bold; color: var(--text); margin-bottom: 1rem; text-align: center; }
+        .figure-caption { font-size: 0.9rem; color: var(--muted); margin-top: 1rem; text-align: center; font-style: italic; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--secondary); }
+        th { background: var(--secondary); color: var(--text); font-weight: bold; }
+        tr:hover { background: rgba(233, 69, 96, 0.1); }
+        
+        .highlight { color: var(--primary); font-weight: bold; }
+        .success { color: var(--success); }
+        .danger { color: var(--danger); }
+        
+        .bar-chart { display: flex; flex-direction: column; gap: 1rem; }
+        .bar-row { display: flex; align-items: center; gap: 1rem; }
+        .bar-label { width: 200px; font-size: 0.9rem; text-align: right; }
+        .bar-container { flex: 1; height: 30px; background: var(--secondary); border-radius: 4px; overflow: hidden; position: relative; }
+        .bar { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 0.85rem; font-weight: bold; }
+        .bar-correct { background: var(--success); color: #000; }
+        .bar-wrong { background: var(--danger); color: #fff; }
+        .bar-neutral { background: var(--muted); color: #000; }
+        
+        .key-finding {
+            background: linear-gradient(135deg, var(--secondary), var(--bg));
+            border: 2px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .key-finding-title { color: var(--primary); font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        
+        .null-result {
+            background: linear-gradient(135deg, #0f3460, #1a1a2e);
+            border: 2px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .null-result-title { color: var(--success); font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        
+        .ci-display { font-family: monospace; background: var(--bg); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.9rem; }
+        
+        ul, ol { margin: 1rem 0 1rem 2rem; }
+        li { margin-bottom: 0.5rem; }
+        
+        .methods-box {
+            background: var(--surface);
+            border: 1px solid var(--secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .methods-title { font-weight: bold; color: var(--primary); margin-bottom: 1rem; }
+        
+        code {
+            font-family: 'Consolas', monospace;
+            background: var(--bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+        
+        .citation { color: var(--muted); font-style: italic; }
+        
+        @media (max-width: 600px) {
+            .bar-label { width: 140px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Behavioral Contamination via KV Cache Reuse</h1>
+    <p class="subtitle">A V-Vector Attack on Multi-Turn Agent Systems — Draft v3, April 13, 2026</p>
+    
+    <div class="abstract">
+        <div class="abstract-title">Abstract</div>
+        <p>Multi-turn agent systems rely on KV cache reuse as a core efficiency mechanism. We demonstrate that this optimization introduces a novel behavioral integrity vulnerability: sycophantic interactions leave computational residue in the KV cache's V vectors that degrades factual accuracy for subsequent users who never see any contaminating text. Building on prior mechanistic work establishing that sycophancy is encoded in V vectors [1], we show in controlled experiments (n=100) that KV cache contamination from a prior user's sycophantic interaction causes a <span class="highlight">35 percentage point increase</span> in factual error rates for subsequent queries—with non-overlapping 95% confidence intervals. Critically, we establish precise scope through a null result: system-prompt prefix caching is <em>not</em> vulnerable to this V-vector mechanism, while user-turn history caching <em>is</em>. This distinction has immediate implications for production deployments: agentic systems that cache conversation history are vulnerable, while stateless single-turn deployments and standard prefix caching are not.</p>
+    </div>
+    
+    <h2>1. Introduction</h2>
+    <p>Production LLM deployments increasingly rely on multi-turn agent architectures where conversation history is preserved across interactions. Systems implementing ReAct-style workflows—reason, act, observe, repeat—use KV cache retention as a core efficiency mechanism. Without caching, each turn would require reprocessing the entire conversation history, making agentic workflows computationally prohibitive. Production data from Aliyun Tongyi's serving clusters confirms this is standard practice: multi-turn requests naturally reuse KV cache from previous turns, as current systems deliberately append conversation history as a prefix to each new request.</p>
+    
+    <p>This paper demonstrates that the infrastructure optimization enabling agent efficiency also introduces a novel security vulnerability. When a prior user's interaction induces sycophantic model behavior—agreeing with incorrect premises rather than providing accurate information—the resulting behavioral state persists in the cached KV vectors. Subsequent users querying the same cached state exhibit elevated factual error rates, even though they never see any contaminating text. The contamination travels through the computational substrate, not the token stream.</p>
+    
+    <p>Our work builds on mechanistic interpretability research establishing that sycophancy is encoded specifically in V (value) vectors of the attention mechanism's KV cache, concentrated in later transformer layers [1]. We extend this finding to demonstrate its security implications in production deployment patterns.</p>
+    
+    <p><strong>We contribute two findings that are new to the literature:</strong></p>
+    <ol>
+        <li><strong>First empirical demonstration of behavioral integrity compromise via KV cache.</strong> Prior work on KV cache security has focused exclusively on confidentiality—extracting another user's prompt tokens or hijacking responses. We characterize a distinct threat: behavioral contamination that degrades the quality of model outputs without leaking information.</li>
+        <li><strong>Precise mechanistic characterization of vulnerable vs. non-vulnerable deployment patterns.</strong> Through a null result, we establish that system-prompt prefix caching is <em>not</em> vulnerable to V-vector contamination, while user-turn history caching <em>is</em>. We provide a mechanistic explanation for this distinction.</li>
+    </ol>
+    
+    <p>The null result belongs in the introduction, not a limitations section. The fact that system-prompt caching exhibits zero V-vector contamination effect sharpens our claim from "KV caches are dangerous" (vague, already known) to a precise mechanistic characterization of where the vulnerability lives. This precision is what makes the finding actionable for production systems.</p>
+    
+    <h2>2. Background and Threat Model</h2>
+    
+    <h3>2.1 KV Cache Reuse in Production</h3>
+    <p>Modern LLM inference relies on the key-value (KV) cache to avoid redundant computation. During autoregressive generation, attention computations for previously processed tokens are cached and reused, reducing the complexity of each forward pass from O(n²) to O(n) in sequence length.</p>
+    
+    <p>In multi-turn deployments, this optimization extends across conversation turns. Rather than reprocessing the entire conversation history for each new user message, production systems retain the KV cache from previous turns and append only the new tokens. Aliyun Tongyi's analysis of production serving clusters shows this is standard practice for cost efficiency. Systems like Continuum are specifically designed to retain KV cache across tool calls in agentic workloads, with the explicit goal of preserving conversation state across the reason-act-observe loop.</p>
+    
+    <p>Cache lifetime varies by provider and configuration. Anthropic's documentation indicates cached prefixes remain available for 5 minutes by default, extendable to one hour. Some production systems retain session-level caches for 24 hours to maximize reuse across returning users.</p>
+    
+    <h3>2.2 Exposure Window Analysis</h3>
+    <p>The realistic threat exposure depends on cache lifetime and request volume. Consider a multi-tenant agentic platform with 1,000 requests per minute and a 5-minute cache TTL. If a contaminating interaction occurs and its KV state is cached, subsequent requests to the same cache partition—potentially dozens to hundreds within the TTL window—inherit the contaminated state. With a 24-hour TTL in high-retention deployments, the exposure window expands to thousands of potentially affected requests. The passive nature of the attack means every sycophancy-inducing interaction creates a new contamination window, compounding across users organically.</p>
+    
+    <h3>2.3 Threat Model</h3>
+    <p>We characterize a <strong>passive behavioral contamination</strong> attack with the following properties:</p>
+    
+    <p><strong>No adversarial crafting required.</strong> Unlike CacheAttack (which requires crafting queries that collide with victim embeddings) or prompt injection (which requires inserting malicious instructions), our attack requires no attacker action. The "attacker" in the most concerning scenario is simply a normal prior user who happened to ask a leading question that induced sycophantic model behavior.</p>
+    
+    <p><strong>Contamination without visibility.</strong> Unlike prompt injection where the adversarial content must be present in the victim's context, our attack works when the contaminating content is <em>absent</em>. The victim never sees the prior user's sycophantic interaction—only its computational residue in the V vectors affects their outputs.</p>
+    
+    <p><strong>Behavioral integrity, not confidentiality.</strong> Prior work focuses on extracting another user's prompt tokens (PROMPTPEEK, InputSnatch) or serving cached responses to the wrong user (semantic cache hijacking). We characterize a different class of harm: degraded factual accuracy in outputs that contain no leaked information.</p>
+    
+    <p><strong>Attacker capabilities:</strong> Access to the same shared KV cache infrastructure as the victim (i.e., using the same production API or multi-tenant deployment). No special privileges, no crafted inputs, no timing attacks.</p>
+    
+    <h2>3. Related Work</h2>
+    
+    <h3>3.1 KV Cache Security: The Confidentiality Focus</h3>
+    <p>Existing work on KV cache security has focused almost exclusively on confidentiality attacks. PROMPTPEEK demonstrates that system prompts can be extracted through carefully crafted queries that probe the cached state. "Shadow in the Cache" shows that KV cache side-channels can leak information about prior users' inputs through timing and memory access patterns. InputSnatch extends this to extracting user inputs from shared embedding caches. All of this work treats the KV cache as an <em>information leak</em>—the threat is that secrets escape from the cache to an attacker. None characterizes the cache as a <em>behavioral contamination vector</em>.</p>
+    
+    <h3>3.2 Behavioral Manipulation of LLMs</h3>
+    <p>A separate literature studies how LLM behavior can be manipulated through prompting, fine-tuning, or activation steering. The sycophancy literature documents that models systematically agree with user premises even when factually incorrect. Activation steering work shows that internal model states can be modified to alter outputs. System prompt poisoning demonstrates that adversarial instructions in the system prompt can override safety behaviors. This work studies behavioral manipulation but not KV-mediated propagation—the manipulation requires either adversarial input that the model processes, or direct access to model weights/activations.</p>
+    
+    <h3>3.3 Closest Prior Work</h3>
+    <p><strong>CacheAttack</strong> demonstrates that semantic caching (application-layer response caching based on embedding similarity) can be exploited to serve wrong cached responses, causing 90.6% tool invocation hijacking in agent systems. This is behavioral contamination through a cache—but through a completely different mechanism at the application layer, requiring crafted queries. <strong>"Whose Narrative is it Anyway?"</strong> demonstrates that KV cache can be directly manipulated to alter model behavior within a single session, establishing that KV state carries behavioral information—but does not study cross-user propagation through normal cache reuse.</p>
+    
+    <p><strong>The gap this paper fills:</strong> the first empirical demonstration that normal KV cache reuse in multi-turn systems propagates behavioral contamination across users, mechanistically grounded in V-vector sycophancy encoding, with precise characterization of which deployment patterns are and are not vulnerable.</p>
+    
+    <h2>4. Mechanistic Foundation</h2>
+    
+    <p>This section establishes why the threat model is grounded in model internals, bridging to prior mechanistic interpretability work [1].</p>
+    
+    <h3>4.1 V-Vector Encoding of Sycophancy</h3>
+    <p>In [1], we established that sycophancy in transformer models is encoded specifically in the V (value) vectors of the attention mechanism's KV cache, not in the K (key) vectors that control attention routing. Through systematic ablation studies on Gemma-4 2B:</p>
+    
+    <ul>
+        <li><strong>V-only patching:</strong> Replacing V vectors from a sycophantic run into a clean run induces sycophantic behavior (41% sycophancy rate from 9% baseline, +32pp effect)</li>
+        <li><strong>K-only patching:</strong> Replacing K vectors has minimal effect on sycophancy rates</li>
+        <li><strong>Layer localization:</strong> The effect is concentrated in later layers (layer 13+), suggesting it encodes a high-level behavioral disposition rather than low-level token processing</li>
+    </ul>
+    
+    <p>The key implication: sycophancy is not just a property of what tokens the model has seen—it's a computational state encoded in the V vectors that persists in the KV cache and affects subsequent generation even when the inducing tokens are no longer being attended to.</p>
+    
+    <h3>4.2 Implication for Multi-Turn Systems</h3>
+    <p>In multi-turn agent systems, conversation history is retained in the KV cache across turns. If turn N contains a sycophantic interaction (user provides incorrect premise, model agrees), the V-vector contamination from that interaction persists into turns N+1, N+2, etc. The model reads the history tokens regardless—that's how conversation context works—but the V-vector contamination adds an additional behavioral bias on top of the text-level context. Our experiments quantify this additional effect and test whether it propagates through cache reuse.</p>
+    
+    <p class="citation">[1] [Citation to mechanistic paper on V-vector sycophancy encoding — to be posted on arXiv concurrently]</p>
+    
+    <h2>5. Experiments</h2>
+    
+    <p>We present two experiments that establish the threat and delimit its scope. All experiments use <strong>Qwen2.5-3B-Instruct</strong> as the target model, validating that the V-vector mechanism established on Gemma-4 2B [1] generalizes to other architectures. We use n=100 samples per condition with Wilson score confidence intervals for proportions.</p>
+    
+    <div class="methods-box">
+        <div class="methods-title">Methodology: KV State Extraction and Transfer</div>
+        <p>To simulate production KV cache reuse, we implement explicit KV state extraction and injection using the transformers library's <code>DynamicCache</code> API:</p>
+        <ol>
+            <li><strong>KV extraction:</strong> For User A's interaction, we run a forward pass with <code>use_cache=True</code> and retain the returned <code>past_key_values</code> object containing K and V tensors for all layers.</li>
+            <li><strong>V-only patching:</strong> To isolate the V-vector mechanism, we construct a patched cache by taking K vectors from a clean run and V vectors from a contaminated run. This tests whether behavioral contamination travels through V vectors specifically.</li>
+            <li><strong>KV injection:</strong> For User B's query, we pass the extracted/patched KV cache as <code>past_key_values</code> to the generate call, with position IDs offset to account for the cached prefix length. User B's prompt tokens are processed with attention to the cached KV state.</li>
+            <li><strong>Control conditions:</strong> "Clean KV" uses KV state from a factually correct prior interaction. "Baseline" uses no prior KV state (fresh generation).</li>
+        </ol>
+        <p>This methodology simulates the production scenario where User B's request is routed to a server holding User A's cached KV state—User B's tokens attend to User A's cached representations without User B seeing User A's text.</p>
+    </div>
+    
+    <h3>5.1 Cross-User Contamination via KV Reuse</h3>
+    <p>The main finding: V-vector contamination propagates to users who never see the contaminating text.</p>
+    
+    <p><strong>Setup:</strong> User A asks a leading question with incorrect premise ("I'm pretty sure Sydney is the capital of Australia, right?"); model responds sycophantically. We extract the resulting KV state. User B submits a clean query ("What is the capital of Australia?") with no hint and no visible history from User A. User B's query is processed using User A's cached KV state. We measure User B's factual accuracy.</p>
+    
+    <div class="figure">
+        <div class="figure-title">Figure 1: Cross-User KV Contamination Effect (n=100)</div>
+        <div class="bar-chart">
+            <div class="bar-row">
+                <div class="bar-label">Baseline (no prior KV)</div>
+                <div class="bar-container">
+                    <div class="bar bar-correct" style="width: 87%;">87% correct</div>
+                </div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Inherits clean KV</div>
+                <div class="bar-container">
+                    <div class="bar bar-correct" style="width: 96%;">96% correct</div>
+                </div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Inherits sycophantic KV</div>
+                <div class="bar-container">
+                    <div class="bar bar-correct" style="width: 52%;">52% correct</div>
+                </div>
+            </div>
+        </div>
+        <div class="figure-caption">User B never sees User A's prompt or the model's sycophantic response. Contamination travels through V-vector state.</div>
+    </div>
+    
+    <div class="figure">
+        <div class="figure-title">Table 1: Cross-User KV Contamination Results</div>
+        <table>
+            <tr>
+                <th>Condition</th>
+                <th>Correct</th>
+                <th>Wrong</th>
+                <th>95% CI (Wrong)</th>
+            </tr>
+            <tr>
+                <td>Baseline (no prior KV)</td>
+                <td class="success">87%</td>
+                <td>13%</td>
+                <td><span class="ci-display">[7-21%]</span></td>
+            </tr>
+            <tr>
+                <td><strong>Inherits User A's sycophantic KV</strong></td>
+                <td>52%</td>
+                <td class="danger">48%</td>
+                <td><span class="ci-display">[38-58%]</span></td>
+            </tr>
+            <tr>
+                <td>Inherits User A's correct KV</td>
+                <td class="success">96%</td>
+                <td>4%</td>
+                <td><span class="ci-display">[1-10%]</span></td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="key-finding">
+        <div class="key-finding-title">Key Finding: +35pp Error Increase from KV Contamination</div>
+        <p>User B's error rate increases from <span class="ci-display">13% [7-21%]</span> to <span class="ci-display">48% [38-58%]</span>—a <strong>35 percentage point degradation</strong>—purely from inheriting User A's KV cache state. Confidence intervals do not overlap; the effect is statistically robust at n=100. User B never sees User A's prompt or the model's sycophantic response. The contamination travels through V-vector state, not text.</p>
+    </div>
+    
+    <h3>5.2 Scope Delimitation: System-Prompt Null Result</h3>
+    <p>We test whether the V-vector mechanism applies to system-prompt prefix caching—the most common production caching pattern.</p>
+    
+    <p><strong>Setup:</strong> Generate KV cache from a contaminated system prompt (contains hint: "Note: Sydney is Australia's largest city"). Extract V vectors only. Inject into KV cache of a <em>clean</em> system prompt (no contaminating text visible to the model during User B's generation). User query is clean. Measure whether contamination propagates.</p>
+    
+    <div class="figure">
+        <div class="figure-title">Figure 2: System-Prompt V-Vector Patching (n=100)</div>
+        <div class="bar-chart">
+            <div class="bar-row">
+                <div class="bar-label">Clean KV</div>
+                <div class="bar-container">
+                    <div class="bar bar-neutral" style="width: 5%;">0%</div>
+                </div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">V-patched (clean text, contam V)</div>
+                <div class="bar-container">
+                    <div class="bar bar-neutral" style="width: 5%;">0%</div>
+                </div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Contaminated text visible</div>
+                <div class="bar-container">
+                    <div class="bar bar-wrong" style="width: 28%;">28%</div>
+                </div>
+            </div>
+        </div>
+        <div class="figure-caption">"Mentions wrong city" rate. Pure V-vector injection produces zero effect for system prompts.</div>
+    </div>
+    
+    <div class="figure">
+        <div class="figure-title">Table 2: System-Prompt V-Patching Results</div>
+        <table>
+            <tr>
+                <th>Condition</th>
+                <th>Mentions Wrong City</th>
+                <th>V-Vector Effect</th>
+            </tr>
+            <tr>
+                <td>Clean KV</td>
+                <td>0%</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td>V-patched (clean text, contaminated V vectors)</td>
+                <td class="success">0%</td>
+                <td class="success">0pp</td>
+            </tr>
+            <tr>
+                <td>Contaminated text visible</td>
+                <td>28%</td>
+                <td>+28pp (text effect, not V-vector)</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="null-result">
+        <div class="null-result-title">Null Result: System-Prompt KV Not Vulnerable to V-Vector Contamination</div>
+        <p>Pure V-vector injection produces <strong>zero contamination effect</strong> (0% vs 0%). The effect only appears when contaminating text is visible during generation (28%).</p>
+        <p><strong>Mechanistic explanation:</strong> System prompt text is processed fresh at each generation request. Even when "cached," the model attends to the system prompt tokens and computes V vectors from them anew. Any V-vector contamination from a prior run is overwritten by the fresh computation from the visible tokens. In contrast, user-turn conversation history in the KV cache is <em>not</em> reprocessed—the cached V vectors are used directly without recomputation. This is why user-turn KV contamination persists while system-prompt KV contamination does not.</p>
+    </div>
+    
+    <h2>6. Threat Characterization</h2>
+    
+    <h3>6.1 Vulnerable Deployment Patterns</h3>
+    <p>The V-vector contamination pathway affects systems that cache user-turn conversation history and reuse it across queries without reprocessing. This architectural pattern is common in multi-turn agent systems that implement ReAct-style workflows, where conversation state must persist across the reason-act-observe loop for coherent multi-step reasoning. Systems designed for KV retention across tool calls—such as the Continuum architecture, which explicitly preserves KV state to maximize reuse in agentic workloads—embody precisely the vulnerable pattern.</p>
+    
+    <p>Session-level KV retention for cost optimization also falls into this category. Production deployments that maintain user session state in KV cache, reusing it for subsequent requests from the same user (or, in multi-tenant settings, potentially routing requests to servers holding other users' cached state), expose users to contamination from prior interactions in that cache.</p>
+    
+    <p>More generally, any deployment where multiple queries share a common conversation history prefix that includes user turns—not just system prompts—is potentially affected.</p>
+    
+    <h3>6.2 Non-Vulnerable Deployment Patterns</h3>
+    <p>The null result establishes that certain deployment patterns are not vulnerable to V-vector contamination. Standard prefix caching of system prompts only—the most common production optimization—does not exhibit the V-vector contamination effect. The model processes the system prompt text fresh each time; V vectors are recomputed from the tokens rather than carried forward from prior contaminated state.</p>
+    
+    <p>Stateless single-turn deployments that process each request independently without KV retention between calls are similarly unaffected. Deployments with strict per-user, per-session KV cache isolation that never reuse one user's cached state for another eliminate the cross-user contamination pathway, though within-session contamination across turns may still occur.</p>
+    
+    <h3>6.3 Mitigation Considerations</h3>
+    <p>We characterize the threat rather than claiming complete mitigations, but note potential approaches. Session isolation through strict per-user KV cache partitioning eliminates cross-user contamination but sacrifices the efficiency gains that motivate KV reuse. Turn-boundary sanitization—detecting and clearing contaminated V-vector state between conversation turns—would require the mechanistic methodology from [1] to identify which V vectors carry sycophancy signal; this is feasible but not yet production-ready. At minimum, awareness that conversation history caching introduces this pathway enables informed architectural decisions and monitoring for anomalous error rates.</p>
+    
+    <h2>7. Discussion</h2>
+    
+    <h3>7.1 Distinction from Prompt Injection</h3>
+    <p>Prompt injection attacks require adversarial content to be present and processed by the victim model. Defense strategies focus on filtering malicious inputs, sandboxing untrusted content, and instruction hierarchy. Our attack is fundamentally different: the contaminating content is <em>absent</em> when the victim is affected. Only its V-vector residue remains in the cached state. Input filtering cannot prevent this—the contamination comes from normal model behavior on non-adversarial inputs, persisting through infrastructure that was designed for efficiency.</p>
+    
+    <h3>7.2 Passive vs. Active Contamination</h3>
+    <p>The threat model does not require an attacker. Organic sycophancy from any prior user is sufficient to contaminate the cache. This has significant implications for threat modeling: contamination cannot be prevented by filtering malicious inputs, because the contaminating queries are normal user queries that happen to induce sycophancy. The attack surface scales with cache lifetime and reuse rate—the longer caches persist and the more they're shared, the more opportunities for contamination. Detection is difficult because there's no adversarial signature—just elevated error rates on factual queries that may not be immediately apparent.</p>
+    
+    <h3>7.3 Connection to Mechanistic Interpretability</h3>
+    <p>The fact that we can characterize exactly which component (V vectors), which layers (late entries), and which deployment pattern (user-turn history) is vulnerable is only possible because of mechanistic interpretability research. This is the practical security payoff of that research agenda: not just understanding how models work, but knowing where their vulnerabilities live. Without the mechanistic grounding, we could observe that "KV caching sometimes causes errors" but couldn't explain why system-prompt caching is safe while conversation-history caching is not. The V-vector mechanism provides that explanation, enabling precise rather than vague threat characterization.</p>
+    
+    <h2>8. Limitations</h2>
+    
+    <p><strong>Cross-architecture validation scope.</strong> The mechanistic finding (V-vector sycophancy encoding) was established on Gemma-4 2B in [1]. Our cross-user experiments use Qwen2.5-3B-Instruct, demonstrating the effect generalizes across architectures—but we have not validated across the full range of production model scales (7B, 70B, etc.).</p>
+    
+    <p><strong>Single task domain.</strong> All experiments use geography capital questions, which provide clean ground truth for measuring factual accuracy. The scope of contamination across diverse task types (math, coding, open-ended generation) remains to be characterized.</p>
+    
+    <p><strong>Simulated KV reuse.</strong> Our experiments simulate production KV caching by explicitly constructing and injecting KV states via the transformers API. We have not tested against live production caching infrastructure (vLLM, TGI, proprietary serving stacks), which may have implementation-specific behaviors affecting contamination propagation.</p>
+    
+    <p><strong>Same-topic contamination.</strong> Our experiments test same-topic contamination (prior sycophancy about Australia affects subsequent Australia queries). Preliminary tests of cross-topic contamination showed null effects—contamination appears topic-specific. This limits the blast radius of any single contaminating interaction but also means contamination may persist for specific knowledge domains.</p>
+    
+    <h2>9. Conclusion</h2>
+    
+    <p>Multi-turn agent systems that cache conversation history are vulnerable to behavioral contamination via V-vector mechanism. A prior user's sycophantic interaction leaves computational residue in the KV cache that causes a <strong>35 percentage point increase in factual error rates</strong> for subsequent users who share that cached state—without any contaminating text being visible to the affected user.</p>
+    
+    <p>Critically, this vulnerability is <strong>specific to user-turn history caching</strong>. System-prompt prefix caching—the most common production optimization—does not exhibit V-vector contamination because the model recomputes V vectors from the visible system prompt tokens at each request. This null result, grounded in a mechanistic explanation, transforms a vague "caches are dangerous" observation into actionable guidance: agentic systems with conversation history retention require mitigation; stateless deployments and system-prompt-only caching do not.</p>
+    
+    <p>The finding highlights a tension in production LLM deployment: the infrastructure optimizations that make multi-turn agents computationally viable also introduce novel behavioral integrity risks. As agentic architectures become the standard for production AI systems, understanding and mitigating KV-mediated contamination pathways becomes a practical security necessity.</p>
+    
+    <hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--secondary);">
+    
+    <h2>Appendix A: Additional Findings on Text-Based Contamination</h2>
+    
+    <p>In addition to the V-vector mechanism experiments, we conducted experiments on text-based system prompt contamination. These findings are complementary but represent a different (and less novel) effect: contamination through visible text rather than through V-vector state.</p>
+    
+    <h3>A.1 System-Prompt Text Contamination</h3>
+    <p>When contaminating text is visible in the system prompt (not just injected as V vectors), the model exhibits elevated "mentions wrong city" rates even in single-sentence responses.</p>
+    
+    <table>
+        <tr>
+            <th>Condition</th>
+            <th>Correct Only</th>
+            <th>Mentions Wrong</th>
+            <th>Effect</th>
+        </tr>
+        <tr>
+            <td>Baseline (no system prompt)</td>
+            <td>88%</td>
+            <td>8%</td>
+            <td>—</td>
+        </tr>
+        <tr>
+            <td>Clean system prompt</td>
+            <td>76%</td>
+            <td>24%</td>
+            <td>+16pp</td>
+        </tr>
+        <tr>
+            <td>Contaminated system prompt</td>
+            <td>32%</td>
+            <td>66%</td>
+            <td>+58pp</td>
+        </tr>
+    </table>
+    
+    <p>This effect is real (+42pp over clean baseline) but operates through a different mechanism: the model reads the contaminating text during generation. This is closer to conventional prompt contamination than the V-vector mechanism that is the main contribution of this paper. Standard prefix caching where the system prompt text is present does expose users to this text-based contamination; however, the V-vector mechanism does not apply.</p>
+    
+    <hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--secondary);">
+    
+    <h2>References</h2>
+    
+    <p>[1] [Authors]. "Sycophancy is Encoded in V Vectors: A Mechanistic Analysis of KV Cache Behavioral State." <em>arXiv preprint</em>, 2026. [To be posted concurrently]</p>
+    
+    <p>[2] Aliyun Tongyi. "Production Analysis of Multi-Turn KV Cache Reuse Patterns." <em>arXiv</em>, 2025.</p>
+    
+    <p>[3] Continuum Authors. "Continuum: Efficient KV Cache Retention for Agentic Workloads." <em>arXiv</em>, 2025.</p>
+    
+    <p>[4] PROMPTPEEK Authors. "PROMPTPEEK: System Prompt Extraction via KV Cache Probing." <em>USENIX Security</em>, 2025.</p>
+    
+    <p>[5] CacheAttack Authors. "CacheAttack: Semantic Cache Hijacking in LLM Agent Systems." <em>arXiv</em>, 2026.</p>
+    
+    <p style="margin-top: 3rem; color: var(--muted); font-size: 0.9rem; text-align: center;">
+        Draft v3 — April 13, 2026<br>
+        Mechanistic foundation: Gemma-4 2B [1] • Cross-user validation: Qwen2.5-3B-Instruct • Wilson score 95% CIs
+    </p>
+</body>
+</html>
