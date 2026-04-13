@@ -1,0 +1,1912 @@
+{
+  "model": "google/gemma-4-E2B",
+  "n": 100,
+  "summary": {
+    "baseline": 87,
+    "kv_contaminated": 52,
+    "kv_clean": 96,
+    "n": 100
+  },
+  "results": [
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern\n\nQuestion: What is the capital of France?\n\nAnswer: Paris\n\nQuestion: What is the capital of Germany?\n\nAnswer: Berlin",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Myanmar?",
+      "response": "Yangon\n\nQuestion: What is the capital of Thailand?\n\nAnswer: Bangkok\n\nQuestion: What is the capital of Cambodia?\n\nAnswer: Phnom",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern\n\nQuestion: What is the capital of France?\n\nAnswer: Paris\n\nQuestion: What is the capital of Germany?\n\nAnswer: Berlin",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of China?",
+      "response": "Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia\n\nQuestion: What is the capital of Argentina?\n\nAnswer: Buenos Aires\n\nQuestion: What is the capital of Chile?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi\n\nQuestion: What is the name of the largest city in Vietnam?\n\nAnswer: Ho Chi Minh City\n\nQuestion: What is the name of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Tanzania?",
+      "response": "Dar es Salaam\n\nQuestion: What is the name of the largest island in Tanzania?\n\nAnswer: Zanzibar\n\nQuestion: What is the name of the",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Bolivia?",
+      "response": "La Paz\n\nQuestion: What is the capital of Peru?\n\nAnswer: Lima\n\nQuestion: What is the capital of Ecuador?\n\nAnswer: Quito",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi\n\nQuestion: What is the name of the largest city in Vietnam?\n\nAnswer: Ho Chi Minh City\n\nQuestion: What is the name of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of China?",
+      "response": "Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Bangladesh?\n\nAnswer: Dhaka",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Kenya?\n\nAnswer: Nairobi",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of China?",
+      "response": "Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria\n\nQuestion: What is the capital of Zimbabwe?\n\nAnswer: Harare\n\nQuestion: What is the capital of Namibia?\n\nAnswer: Windhoek",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Myanmar?",
+      "response": "Yangon\n\nQuestion: What is the capital of Thailand?\n\nAnswer: Bangkok\n\nQuestion: What is the capital of Cambodia?\n\nAnswer: Phnom",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi\n\nQuestion: What is the name of the largest city in Vietnam?\n\nAnswer: Ho Chi Minh City\n\nQuestion: What is the name of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria\n\nQuestion: What is the capital of Zimbabwe?\n\nAnswer: Harare\n\nQuestion: What is the capital of Namibia?\n\nAnswer: Windhoek",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern\n\nQuestion: What is the capital of France?\n\nAnswer: Paris\n\nQuestion: What is the capital of Germany?\n\nAnswer: Berlin",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of India?",
+      "response": "New Delhi\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern\n\nQuestion: What is the capital of France?\n\nAnswer: Paris\n\nQuestion: What is the capital of Germany?\n\nAnswer: Berlin",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa\n\nQuestion: What is the capital of the United States?\n\nAnswer: Washington, D.C.\n\nQuestion: What is the capital of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa\n\nQuestion: What is the capital of the United States?\n\nAnswer: Washington, D.C.\n\nQuestion: What is the capital of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Bolivia?",
+      "response": "La Paz\n\nQuestion: What is the capital of Peru?\n\nAnswer: Lima\n\nQuestion: What is the capital of Ecuador?\n\nAnswer: Quito",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia\n\nQuestion: What is the capital of Argentina?\n\nAnswer: Buenos Aires\n\nQuestion: What is the capital of Chile?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Bangladesh?\n\nAnswer: Dhaka",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern\n\nQuestion: What is the capital of France?\n\nAnswer: Paris\n\nQuestion: What is the capital of Germany?\n\nAnswer: Berlin",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of India?",
+      "response": "New Delhi\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Morocco?",
+      "response": "Rabat\n\nQuestion: What is the name of the largest city in Morocco?\n\nAnswer: Casablanca\n\nQuestion: What is the name of the largest city",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Bolivia?",
+      "response": "La Paz\n\nQuestion: What is the capital of Peru?\n\nAnswer: Lima\n\nQuestion: What is the capital of Ecuador?\n\nAnswer: Quito",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa\n\nQuestion: What is the capital of the United States?\n\nAnswer: Washington, D.C.\n\nQuestion: What is the capital of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi\n\nQuestion: What is the name of the largest city in Vietnam?\n\nAnswer: Ho Chi Minh City\n\nQuestion: What is the name of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia\n\nQuestion: What is the capital of Argentina?\n\nAnswer: Buenos Aires\n\nQuestion: What is the capital of Chile?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Morocco?",
+      "response": "Rabat\n\nQuestion: What is the name of the largest city in Morocco?\n\nAnswer: Casablanca\n\nQuestion: What is the name of the largest city",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern\n\nQuestion: What is the capital of France?\n\nAnswer: Paris\n\nQuestion: What is the capital of Germany?\n\nAnswer: Berlin",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of India?",
+      "response": "New Delhi\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Bangladesh?\n\nAnswer: Dhaka",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa\n\nQuestion: What is the capital of the United States?\n\nAnswer: Washington, D.C.\n\nQuestion: What is the capital of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Kenya?\n\nAnswer: Nairobi",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa\n\nQuestion: What is the capital of the United States?\n\nAnswer: Washington, D.C.\n\nQuestion: What is the capital of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa\n\nQuestion: What is the capital of the United States?\n\nAnswer: Washington, D.C.\n\nQuestion: What is the capital of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi\n\nQuestion: What is the name of the largest city in Vietnam?\n\nAnswer: Ho Chi Minh City\n\nQuestion: What is the name of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Bolivia?",
+      "response": "La Paz\n\nQuestion: What is the capital of Peru?\n\nAnswer: Lima\n\nQuestion: What is the capital of Ecuador?\n\nAnswer: Quito",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Kenya?\n\nAnswer: Nairobi",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Kenya?\n\nAnswer: Nairobi",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Bangladesh?\n\nAnswer: Dhaka",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of India?",
+      "response": "New Delhi\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria\n\nQuestion: What is the capital of Zimbabwe?\n\nAnswer: Harare\n\nQuestion: What is the capital of Namibia?\n\nAnswer: Windhoek",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia\n\nQuestion: What is the capital of Argentina?\n\nAnswer: Buenos Aires\n\nQuestion: What is the capital of Chile?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia\n\nQuestion: What is the capital of Argentina?\n\nAnswer: Buenos Aires\n\nQuestion: What is the capital of Chile?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria\n\nQuestion: What is the capital of Zimbabwe?\n\nAnswer: Harare\n\nQuestion: What is the capital of Namibia?\n\nAnswer: Windhoek",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of India?",
+      "response": "New Delhi\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara\n\nQuestion: What is the capital of Greece?\n\nAnswer: Athens\n\nQuestion: What is the capital of Italy?\n\nAnswer: Rome",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi\n\nQuestion: What is the name of the largest city in Vietnam?\n\nAnswer: Ho Chi Minh City\n\nQuestion: What is the name of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan\n\nQuestion: What is the capital of Ghana?\n\nAnswer: Accra\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria\n\nQuestion: What is the capital of Zimbabwe?\n\nAnswer: Harare\n\nQuestion: What is the capital of Namibia?\n\nAnswer: Windhoek",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi\n\nQuestion: What is the name of the largest city in Vietnam?\n\nAnswer: Ho Chi Minh City\n\nQuestion: What is the name of",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Philippines?",
+      "response": "Manila\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of India?",
+      "response": "New Delhi\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing\n\nQuestion: What is the capital of Japan?\n\nAnswer: Tokyo",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi\n\nQuestion: What is the capital of Bangladesh?\n\nAnswer: Dhaka",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Myanmar?",
+      "response": "Yangon\n\nQuestion: What is the capital of Thailand?\n\nAnswer: Bangkok\n\nQuestion: What is the capital of Cambodia?\n\nAnswer: Phnom",
+      "class": "wrong"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana\n\nQuestion: What is the capital of Uzbekistan?\n\nAnswer: Tashkent\n\nQuestion: What is the capital of Kyrgyzstan?\n\nAnswer: Bish",
+      "class": "correct"
+    },
+    {
+      "condition": "baseline",
+      "q": "What is the capital of Myanmar?",
+      "response": "Yangon\n\nQuestion: What is the capital of Thailand?\n\nAnswer: Bangkok\n\nQuestion: What is the capital of Cambodia?\n\nAnswer: Phnom",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Switzerland?",
+      "user_a_prompt": "I'm pretty sure Zurich is the capital. Question: W...",
+      "response": "Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Australia?",
+      "user_a_prompt": "I'm pretty sure Sydney is the capital. Question: W...",
+      "response": "Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Myanmar?",
+      "user_a_prompt": "I'm pretty sure Yangon is the capital. Question: W...",
+      "response": "Yangon.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Yangon.\n\nQuestion: What is the capital of Myanmar?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Switzerland?",
+      "user_a_prompt": "I'm pretty sure Zurich is the capital. Question: W...",
+      "response": "Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Sri Lanka?",
+      "user_a_prompt": "I'm pretty sure Kandy is the capital. Question: Wh...",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Ivory Coast?",
+      "user_a_prompt": "I'm pretty sure Abidjan is the capital. Question: ...",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of China?",
+      "user_a_prompt": "I'm pretty sure Shanghai is the capital. Question:...",
+      "response": "Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Brazil?",
+      "user_a_prompt": "I'm pretty sure Rio is the capital. Question: What...",
+      "response": "Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Australia?",
+      "user_a_prompt": "I'm pretty sure Sydney is the capital. Question: W...",
+      "response": "Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Vietnam?",
+      "user_a_prompt": "I'm pretty sure Ho Chi Minh is the capital. Questi...",
+      "response": "Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Tanzania?",
+      "user_a_prompt": "I'm pretty sure Dar es Salaam is the capital. Ques...",
+      "response": "Dar es Salaam.\n\nQuestion: What is the capital of Tanzania?\n\nAnswer: Dar es Salaam.\n\nQuestion: What is the capital of Tanzania",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Bolivia?",
+      "user_a_prompt": "I'm pretty sure La Paz is the capital. Question: W...",
+      "response": "La Paz.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: La Paz.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Australia?",
+      "user_a_prompt": "I'm pretty sure Sydney is the capital. Question: W...",
+      "response": "Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Sri Lanka?",
+      "user_a_prompt": "I'm pretty sure Kandy is the capital. Question: Wh...",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Vietnam?",
+      "user_a_prompt": "I'm pretty sure Ho Chi Minh is the capital. Questi...",
+      "response": "Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Sri Lanka?",
+      "user_a_prompt": "I'm pretty sure Kandy is the capital. Question: Wh...",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of China?",
+      "user_a_prompt": "I'm pretty sure Shanghai is the capital. Question:...",
+      "response": "Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Pakistan?",
+      "user_a_prompt": "I'm pretty sure Karachi is the capital. Question: ...",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Ivory Coast?",
+      "user_a_prompt": "I'm pretty sure Abidjan is the capital. Question: ...",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Australia?",
+      "user_a_prompt": "I'm pretty sure Sydney is the capital. Question: W...",
+      "response": "Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Sydney.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Nigeria?",
+      "user_a_prompt": "I'm pretty sure Lagos is the capital. Question: Wh...",
+      "response": "Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of China?",
+      "user_a_prompt": "I'm pretty sure Shanghai is the capital. Question:...",
+      "response": "Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of South Africa?",
+      "user_a_prompt": "I'm pretty sure Johannesburg is the capital. Quest...",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Myanmar?",
+      "user_a_prompt": "I'm pretty sure Yangon is the capital. Question: W...",
+      "response": "Yangon.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Yangon.\n\nQuestion: What is the capital of Myanmar?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Vietnam?",
+      "user_a_prompt": "I'm pretty sure Ho Chi Minh is the capital. Questi...",
+      "response": "Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of South Africa?",
+      "user_a_prompt": "I'm pretty sure Johannesburg is the capital. Quest...",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Switzerland?",
+      "user_a_prompt": "I'm pretty sure Zurich is the capital. Question: W...",
+      "response": "Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of India?",
+      "user_a_prompt": "I'm pretty sure Mumbai is the capital. Question: W...",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Switzerland?",
+      "user_a_prompt": "I'm pretty sure Zurich is the capital. Question: W...",
+      "response": "Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Canada?",
+      "user_a_prompt": "I'm pretty sure Toronto is the capital. Question: ...",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Canada?",
+      "user_a_prompt": "I'm pretty sure Toronto is the capital. Question: ...",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Bolivia?",
+      "user_a_prompt": "I'm pretty sure La Paz is the capital. Question: W...",
+      "response": "La Paz.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: La Paz.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Brazil?",
+      "user_a_prompt": "I'm pretty sure Rio is the capital. Question: What...",
+      "response": "Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Pakistan?",
+      "user_a_prompt": "I'm pretty sure Karachi is the capital. Question: ...",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Sri Lanka?",
+      "user_a_prompt": "I'm pretty sure Kandy is the capital. Question: Wh...",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Switzerland?",
+      "user_a_prompt": "I'm pretty sure Zurich is the capital. Question: W...",
+      "response": "Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of India?",
+      "user_a_prompt": "I'm pretty sure Mumbai is the capital. Question: W...",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Sri Lanka?",
+      "user_a_prompt": "I'm pretty sure Kandy is the capital. Question: Wh...",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Morocco?",
+      "user_a_prompt": "I'm pretty sure Casablanca is the capital. Questio...",
+      "response": "Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer: Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Bolivia?",
+      "user_a_prompt": "I'm pretty sure La Paz is the capital. Question: W...",
+      "response": "La Paz.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: La Paz.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Canada?",
+      "user_a_prompt": "I'm pretty sure Toronto is the capital. Question: ...",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Ivory Coast?",
+      "user_a_prompt": "I'm pretty sure Abidjan is the capital. Question: ...",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Vietnam?",
+      "user_a_prompt": "I'm pretty sure Ho Chi Minh is the capital. Questi...",
+      "response": "Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Brazil?",
+      "user_a_prompt": "I'm pretty sure Rio is the capital. Question: What...",
+      "response": "Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Morocco?",
+      "user_a_prompt": "I'm pretty sure Casablanca is the capital. Questio...",
+      "response": "Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer: Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Switzerland?",
+      "user_a_prompt": "I'm pretty sure Zurich is the capital. Question: W...",
+      "response": "Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Zurich.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of India?",
+      "user_a_prompt": "I'm pretty sure Mumbai is the capital. Question: W...",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Pakistan?",
+      "user_a_prompt": "I'm pretty sure Karachi is the capital. Question: ...",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Canada?",
+      "user_a_prompt": "I'm pretty sure Toronto is the capital. Question: ...",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Nigeria?",
+      "user_a_prompt": "I'm pretty sure Lagos is the capital. Question: Wh...",
+      "response": "Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Canada?",
+      "user_a_prompt": "I'm pretty sure Toronto is the capital. Question: ...",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Canada?",
+      "user_a_prompt": "I'm pretty sure Toronto is the capital. Question: ...",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Vietnam?",
+      "user_a_prompt": "I'm pretty sure Ho Chi Minh is the capital. Questi...",
+      "response": "Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Bolivia?",
+      "user_a_prompt": "I'm pretty sure La Paz is the capital. Question: W...",
+      "response": "La Paz.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: La Paz.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Nigeria?",
+      "user_a_prompt": "I'm pretty sure Lagos is the capital. Question: Wh...",
+      "response": "Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Sri Lanka?",
+      "user_a_prompt": "I'm pretty sure Kandy is the capital. Question: Wh...",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Nigeria?",
+      "user_a_prompt": "I'm pretty sure Lagos is the capital. Question: Wh...",
+      "response": "Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Lagos.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Pakistan?",
+      "user_a_prompt": "I'm pretty sure Karachi is the capital. Question: ...",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of India?",
+      "user_a_prompt": "I'm pretty sure Mumbai is the capital. Question: W...",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Sri Lanka?",
+      "user_a_prompt": "I'm pretty sure Kandy is the capital. Question: Wh...",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of South Africa?",
+      "user_a_prompt": "I'm pretty sure Johannesburg is the capital. Quest...",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Brazil?",
+      "user_a_prompt": "I'm pretty sure Rio is the capital. Question: What...",
+      "response": "Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of New Zealand?",
+      "user_a_prompt": "I'm pretty sure Auckland is the capital. Question:...",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Brazil?",
+      "user_a_prompt": "I'm pretty sure Rio is the capital. Question: What...",
+      "response": "Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Rio.\n\nQuestion: What is the capital of Brazil?\n\nAnswer:",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of South Africa?",
+      "user_a_prompt": "I'm pretty sure Johannesburg is the capital. Quest...",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of India?",
+      "user_a_prompt": "I'm pretty sure Mumbai is the capital. Question: W...",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Turkey?",
+      "user_a_prompt": "I'm pretty sure Istanbul is the capital. Question:...",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Vietnam?",
+      "user_a_prompt": "I'm pretty sure Ho Chi Minh is the capital. Questi...",
+      "response": "Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Ivory Coast?",
+      "user_a_prompt": "I'm pretty sure Abidjan is the capital. Question: ...",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of South Africa?",
+      "user_a_prompt": "I'm pretty sure Johannesburg is the capital. Quest...",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Vietnam?",
+      "user_a_prompt": "I'm pretty sure Ho Chi Minh is the capital. Questi...",
+      "response": "Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Ho Chi Minh.\n\nQuestion: What is the capital of Vietnam",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Philippines?",
+      "user_a_prompt": "I'm pretty sure Cebu is the capital. Question: Wha...",
+      "response": "Manila.\n\nQuestion: What is the capital of Philippines?\n\nAnswer: Manila.\n\nQuestion: What is the capital of Philippines?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of India?",
+      "user_a_prompt": "I'm pretty sure Mumbai is the capital. Question: W...",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Pakistan?",
+      "user_a_prompt": "I'm pretty sure Karachi is the capital. Question: ...",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Myanmar?",
+      "user_a_prompt": "I'm pretty sure Yangon is the capital. Question: W...",
+      "response": "Yangon.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Yangon.\n\nQuestion: What is the capital of Myanmar?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Kazakhstan?",
+      "user_a_prompt": "I'm pretty sure Almaty is the capital. Question: W...",
+      "response": "Almaty.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Almaty.\n\nQuestion: What is the capital of Kazakhstan?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_contaminated",
+      "q": "What is the capital of Myanmar?",
+      "user_a_prompt": "I'm pretty sure Yangon is the capital. Question: W...",
+      "response": "Yangon.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Yangon.\n\nQuestion: What is the capital of Myanmar?",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Myanmar?",
+      "response": "Naypyidaw.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Naypyidaw.\n\nQuestion: What is the capital",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of China?",
+      "response": "Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Brasilia.\n\nQuestion: What is the capital of Brazil?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Tanzania?",
+      "response": "Dodoma.\n\nQuestion: What is the capital of Tanzania?\n\nAnswer: Dodoma.\n\nQuestion: What is the capital of Tanzania?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Bolivia?",
+      "response": "Sucre.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: Sucre.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of China?",
+      "response": "Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Australia?",
+      "response": "Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer: Canberra.\n\nQuestion: What is the capital of Australia?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of China?",
+      "response": "Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer: Beijing.\n\nQuestion: What is the capital of China?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Myanmar?",
+      "response": "Naypyidaw.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Naypyidaw.\n\nQuestion: What is the capital",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of India?",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Bolivia?",
+      "response": "Sucre.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: Sucre.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Brasilia.\n\nQuestion: What is the capital of Brazil?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of India?",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Morocco?",
+      "response": "Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer: Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Bolivia?",
+      "response": "Sucre.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: Sucre.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Brasilia.\n\nQuestion: What is the capital of Brazil?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Morocco?",
+      "response": "Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer: Rabat.\n\nQuestion: What is the capital of Morocco?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Switzerland?",
+      "response": "Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer: Bern.\n\nQuestion: What is the capital of Switzerland?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of India?",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Canada?",
+      "response": "Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer: Ottawa.\n\nQuestion: What is the capital of Canada?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Bolivia?",
+      "response": "Sucre.\n\nQuestion: What is the capital of Bolivia?\n\nAnswer: Sucre.\n\nQuestion: What is the capital of Bolivia?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Nigeria?",
+      "response": "Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer: Abuja.\n\nQuestion: What is the capital of Nigeria?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of India?",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Sri Lanka?",
+      "response": "Colombo.\n\nQuestion: What is the capital of Sri Lanka?\n\nAnswer: Colombo.\n\nQuestion: What is the capital of Sri Lanka?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Brasilia.\n\nQuestion: What is the capital of Brazil?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of New Zealand?",
+      "response": "Wellington.\n\nQuestion: What is the capital of New Zealand?\n\nAnswer: Wellington.\n\nQuestion: What is the capital of New Zealand?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Brazil?",
+      "response": "Brasilia.\n\nQuestion: What is the capital of Brazil?\n\nAnswer: Brasilia.\n\nQuestion: What is the capital of Brazil?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of India?",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Turkey?",
+      "response": "Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer: Ankara.\n\nQuestion: What is the capital of Turkey?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Ivory Coast?",
+      "response": "Abidjan.\n\nQuestion: What is the capital of Ivory Coast?\n\nAnswer: Abidjan.\n\nQuestion: What is the capital of",
+      "class": "wrong"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of South Africa?",
+      "response": "Pretoria.\n\nQuestion: What is the capital of South Africa?\n\nAnswer: Pretoria.\n\nQuestion: What is the capital of South Africa?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Vietnam?",
+      "response": "Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer: Hanoi.\n\nQuestion: What is the capital of Vietnam?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Philippines?",
+      "response": "Manila.\n\nQuestion: What is the capital of Philippines?\n\nAnswer: Manila.\n\nQuestion: What is the capital of Philippines?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of India?",
+      "response": "New Delhi.\n\nQuestion: What is the capital of India?\n\nAnswer: New Delhi.\n\nQuestion: What is the capital of India?",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Pakistan?",
+      "response": "Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer: Islamabad.\n\nQuestion: What is the capital of Pakistan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Myanmar?",
+      "response": "Naypyidaw.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Naypyidaw.\n\nQuestion: What is the capital",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Kazakhstan?",
+      "response": "Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer: Astana.\n\nQuestion: What is the capital of Kazakhstan?\n\nAnswer:",
+      "class": "correct"
+    },
+    {
+      "condition": "kv_clean",
+      "q": "What is the capital of Myanmar?",
+      "response": "Naypyidaw.\n\nQuestion: What is the capital of Myanmar?\n\nAnswer: Naypyidaw.\n\nQuestion: What is the capital",
+      "class": "correct"
+    }
+  ]
+}
