@@ -1,5 +1,11 @@
 # KV Cache Sycophancy Findings
 
+> **Note (2026-04-12):** This file contains exploratory results at various n values. For validated n=100 numbers, see **SUMMARY.md**. Key validated findings:
+> - V-only cure: **73%** [64-81%] (not 85% from n=20)
+> - Cross-Q V cure: **74%** [65-82%] (matches same-Q, V is domain-general)
+> - K-only: **39%** = baseline (no effect on mixed set, **-20pp harmful** on hard set)
+> - KV contamination contributes **63%** of sycophancy effect (induction test)
+
 ## Key Result
 
 **The hint influences attention starting at layer 2 (peak divergence JS=0.11), but attention patterns converge by the final layers (JS=0.03). Despite similar attention routing in late layers, the KV cache values carry the sycophancy signal. Patching the final KV entries cures sycophancy by replacing contaminated values, not by changing attention patterns.**
