@@ -1,0 +1,48 @@
+{
+  "experiment": "clean_k_control",
+  "model": "google/gemma-4-E2B",
+  "patch_layer": 13,
+  "n_per_condition": 100,
+  "timestamp": "2026-04-28T06:02:09.848441",
+  "results": {
+    "baseline": {
+      "correct": 40,
+      "wrong": 60,
+      "other": 0,
+      "n": 100,
+      "correct_rate": 0.4,
+      "ci": [0.309, 0.498]
+    },
+    "clean_v": {
+      "correct": 72,
+      "wrong": 28,
+      "other": 0,
+      "n": 100,
+      "correct_rate": 0.72,
+      "ci": [0.625, 0.799]
+    },
+    "clean_k": {
+      "correct": 20,
+      "wrong": 71,
+      "other": 9,
+      "n": 100,
+      "correct_rate": 0.2,
+      "ci": [0.133, 0.289]
+    },
+    "clean_kv": {
+      "correct": 40,
+      "wrong": 41,
+      "other": 19,
+      "n": 100,
+      "correct_rate": 0.4,
+      "ci": [0.309, 0.498]
+    }
+  },
+  "interpretation": {
+    "v_k_cis_overlap": false,
+    "clean_v_rate": 0.72,
+    "clean_k_rate": 0.2,
+    "baseline_rate": 0.4,
+    "finding_status": "V_SPECIFIC"
+  }
+}
