@@ -1,0 +1,48 @@
+{
+  "experiment": "random_v_control",
+  "model": "google/gemma-4-E2B",
+  "patch_layer": 13,
+  "n_per_condition": 100,
+  "timestamp": "2026-04-28T02:50:00.351287",
+  "results": {
+    "baseline": {
+      "correct": 40,
+      "wrong": 60,
+      "other": 0,
+      "n": 100,
+      "correct_rate": 0.4,
+      "ci": [0.309, 0.498]
+    },
+    "clean_v": {
+      "correct": 72,
+      "wrong": 18,
+      "other": 10,
+      "n": 100,
+      "correct_rate": 0.72,
+      "ci": [0.625, 0.799]
+    },
+    "random_v": {
+      "correct": 6,
+      "wrong": 23,
+      "other": 71,
+      "n": 100,
+      "correct_rate": 0.06,
+      "ci": [0.028, 0.125]
+    },
+    "zero_v": {
+      "correct": 51,
+      "wrong": 30,
+      "other": 19,
+      "n": 100,
+      "correct_rate": 0.51,
+      "ci": [0.413, 0.606]
+    }
+  },
+  "interpretation": {
+    "cis_overlap": false,
+    "clean_rate": 0.72,
+    "random_rate": 0.06,
+    "baseline_rate": 0.4,
+    "finding_status": "SUPPORTED"
+  }
+}
