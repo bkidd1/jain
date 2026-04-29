@@ -1,0 +1,37 @@
+{
+  "experiment": "qwen_kv_replication_v2",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "patch_layer": 18,
+  "n": 100,
+  "timestamp": "2026-04-29T02:27:17.710722",
+  "results": {
+    "baseline": {
+      "correct": 90,
+      "wrong": 10,
+      "other": 0
+    },
+    "clean_v": {
+      "correct": 90,
+      "wrong": 10,
+      "other": 0
+    },
+    "clean_k": {
+      "correct": 90,
+      "wrong": 10,
+      "other": 0
+    },
+    "clean_kv": {
+      "correct": 90,
+      "wrong": 10,
+      "other": 0
+    }
+  },
+  "summary": {
+    "baseline": 0.9,
+    "clean_v": 0.9,
+    "clean_k": 0.9,
+    "clean_kv": 0.9,
+    "v_delta_pp": 0.0,
+    "k_delta_pp": 0.0
+  }
+}
