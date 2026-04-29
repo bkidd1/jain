@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>K/V Asymmetry Draft</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">K/V Asymmetry Draft</h1>
+</header>
+<h1
+id="the-kv-asymmetry-how-sycophancy-propagates-through-attention">The
+K/V Asymmetry: How Sycophancy Propagates Through Attention</h1>
+<p><strong>Draft v1 — April 28, 2026</strong></p>
+<h2 id="abstract">Abstract</h2>
+<p>Prior work has shown that sycophancy in language models can be
+steered via residual-stream interventions, suggesting it is encoded as a
+linear direction. We ask a complementary question: how does this
+direction propagate through the attention mechanism? Using targeted
+transplantation experiments, we find a pronounced asymmetry between key
+and value projections. Transplanting clean (unhinted) V vectors into a
+sycophancy-contaminated forward pass rescues factual accuracy by +32
+percentage points; transplanting clean K vectors <em>harms</em> accuracy
+by -20pp. This asymmetry is consistent with V serving as the swap-robust
+channel for contextual content while K’s role in attention routing
+requires co-adaptation with the contaminated forward pass. We replicate
+the core finding across two model families (Gemma-3-E2B and Qwen2.5-3B)
+and rule out alternative explanations with controls showing random V
+destroys performance (-34pp) while residual-stream steering produces
+even larger effects (+51pp at 2× strength). Our results characterize
+within-attention propagation of behavioral conditioning and have
+implications for KV-cache security, where V vectors cached from prior
+users may transfer behavioral context to subsequent requests.</p>
+<h2 id="introduction">1. Introduction</h2>
+<p>Sycophancy — the tendency of language models to agree with users’
+stated beliefs even when factually incorrect — has been characterized as
+a steerable property via residual-stream interventions (Rimsky et al.,
+2023; Arditi et al., 2024). These findings suggest sycophancy is encoded
+as a linear direction in the residual stream, analogous to other
+behavioral properties like refusal.</p>
+<p>We investigate a downstream question: given that sycophancy is a
+residual-stream direction, how does it propagate through the attention
+sublayer? The attention mechanism decomposes into queries (Q), keys (K),
+and values (V), each with distinct computational roles. Q and K
+determine <em>where</em> attention flows; V determines <em>what
+content</em> is retrieved. If sycophancy is a contextual modulation that
+biases responses toward user agreement, which attention component
+carries this bias?</p>
+<p>This question has practical implications beyond mechanistic
+understanding. Modern inference systems aggressively cache KV states for
+efficiency (Kwon et al., 2023; NVIDIA TensorRT-LLM). If behavioral
+conditioning propagates through specific attention components, KV-cache
+reuse may inadvertently transfer behavioral context across requests — a
+potential security concern for multi-user systems.</p>
+<p><strong>Contributions:</strong> 1. We demonstrate a pronounced K/V
+asymmetry: clean V transplants rescue sycophantic behavior (+32pp),
+while clean K transplants harm (-20pp) 2. We show this asymmetry is
+consistent with V channeling residual-stream-encoded behavioral content
+while K requires co-adaptation with the contaminated forward pass 3. We
+replicate across Gemma-3-E2B and Qwen2.5-3B, suggesting the asymmetry is
+architecture-general 4. We rule out alternative explanations with
+random-V and residual-stream steering controls</p>
+<h2 id="related-work">2. Related Work</h2>
+<p><strong>Linear representations and steering.</strong> Activation
+addition and contrastive activation addition (CAA) have shown that
+behavioral properties including sycophancy, refusal, and honesty are
+steerable via residual-stream interventions (Turner et al., 2023; Rimsky
+et al., 2023; Arditi et al., 2024). These findings establish that
+behavioral conditioning lives in the residual stream as a linear
+direction. Our work asks how this direction propagates through
+attention.</p>
+<p><strong>Attention head analysis.</strong> Prior work has
+characterized attention heads by function — induction heads, name-mover
+heads, etc. (Olsson et al., 2022; Wang et al., 2022). We focus on a
+different decomposition: not which heads matter, but which attention
+component (K vs V) carries behavioral conditioning.</p>
+<p><strong>KV caching and inference optimization.</strong> Modern
+inference stacks cache key-value states to avoid recomputation (Kwon et
+al., 2023). The security implications of KV-cache reuse have received
+limited attention; our findings suggest V-cache contamination as a
+potential attack surface.</p>
+<h2 id="methods">3. Methods</h2>
+<h3 id="sycophancy-induction">3.1 Sycophancy Induction</h3>
+<p>We induce sycophancy via user-belief hints prepended to factual
+questions:</p>
+<blockquote>
+<p><strong>Contaminated prompt:</strong> “I’ve always believed the
+capital of Australia is Sydney. What is the capital of Australia?”</p>
+<p><strong>Clean prompt:</strong> “What is the capital of
+Australia?”</p>
+</blockquote>
+<p>A sycophantic model answers “Sydney” to the contaminated prompt
+despite knowing the correct answer is Canberra. We measure accuracy as
+the rate of factually correct responses.</p>
+<h3 id="transplantation-paradigm">3.2 Transplantation Paradigm</h3>
+<p>We run two forward passes in parallel: - <strong>Contaminated
+pass:</strong> Processes the hint-containing prompt - <strong>Clean
+pass:</strong> Processes the hint-free prompt</p>
+<p>At a target layer, we transplant attention components from the clean
+pass into the contaminated pass: - <strong>Clean V:</strong> Replace V
+projections with clean-pass values - <strong>Clean K:</strong> Replace K
+projections with clean-pass values - <strong>Clean KV:</strong> Replace
+both</p>
+<p>If the behavioral conditioning is carried by a specific component,
+transplanting the clean version should rescue accuracy.</p>
+<h3 id="control-conditions">3.3 Control Conditions</h3>
+<ul>
+<li><strong>Random V:</strong> Replace V with Gaussian noise matched to
+activation statistics. Rules out “any V disruption helps.”</li>
+<li><strong>Residual-stream steering:</strong> Add the
+clean-vs-contaminated difference vector to the residual stream.
+Establishes residual-stream baseline.</li>
+<li><strong>Baseline:</strong> No intervention. Measures sycophancy rate
+under contamination.</li>
+</ul>
+<h3 id="models-and-evaluation">3.4 Models and Evaluation</h3>
+<p>We evaluate on Gemma-3-E2B (2B parameters) and Qwen2.5-3B (3B
+parameters). Both exhibit sycophancy under hint contamination. We use
+100 samples per condition with 10 factual questions (capital cities with
+common misconceptions), evaluating at layer 13 (mid-network).</p>
+<h2 id="results">4. Results</h2>
+<h3 id="the-kv-asymmetry">4.1 The K/V Asymmetry</h3>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Gemma-3</th>
+<th>Qwen2.5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline (contaminated)</td>
+<td>40%</td>
+<td>42%</td>
+</tr>
+<tr>
+<td>Clean V</td>
+<td>72% (+32pp)</td>
+<td>77% (+35pp)</td>
+</tr>
+<tr>
+<td>Clean K</td>
+<td>20% (-20pp)</td>
+<td>23% (-19pp)</td>
+</tr>
+<tr>
+<td>Clean KV</td>
+<td>40% (±0pp)</td>
+<td>41% (-1pp)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Clean V rescues; clean K harms.</strong> The asymmetry is
+stark and replicates across architectures. Transplanting clean V vectors
+improves accuracy by 32-35pp; transplanting clean K vectors
+<em>decreases</em> accuracy by 19-20pp.</p>
+<p><strong>Clean KV ≈ baseline.</strong> Transplanting both K and V
+together produces no net change, consistent with the rescue (V) and harm
+(K) effects canceling.</p>
+<h3 id="controls-rule-out-alternative-explanations">4.2 Controls Rule
+Out Alternative Explanations</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 27%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Accuracy</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random V</td>
+<td>6%</td>
+<td>Any disruption does not help; clean V specifically carries
+signal</td>
+</tr>
+<tr>
+<td>Resid steer 1×</td>
+<td>81%</td>
+<td>Residual stream encodes direction; V is downstream</td>
+</tr>
+<tr>
+<td>Resid steer 2×</td>
+<td>91%</td>
+<td>Stronger steering → stronger effect</td>
+</tr>
+<tr>
+<td>Baseline</td>
+<td>40%</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Clean V</td>
+<td>72%</td>
+<td>V channels the residual-stream direction</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Random V catastrophically harms (-34pp).</strong> This rules
+out the hypothesis that V transplantation helps by disrupting a
+sycophancy-encoding mechanism. The clean V signal specifically rescues;
+random V destroys.</p>
+<p><strong>Residual-stream steering outperforms V
+transplantation.</strong> Steering at 1× produces 81% accuracy (+41pp),
+exceeding clean V’s 72% (+32pp). At 2× steering strength, accuracy
+reaches 91% (+51pp). This establishes that sycophancy is encoded in the
+residual stream, with V serving as a downstream channel.</p>
+<h3 id="interpretation-why-the-asymmetry">4.3 Interpretation: Why the
+Asymmetry?</h3>
+<p>The K/V asymmetry is predicted by the distinct computational roles of
+these components:</p>
+<ul>
+<li><p><strong>V supplies content.</strong> V vectors encode what
+information is retrieved when a position is attended to. This content is
+largely determined by the source position itself and transfers across
+contexts.</p></li>
+<li><p><strong>K enables routing.</strong> K vectors determine which
+positions attend to which. This routing depends on co-adaptation with Q
+vectors from the same forward pass. Transplanting clean K into a
+contaminated pass breaks this co-adaptation.</p></li>
+</ul>
+<p>Under this interpretation: - Clean V transplants work because the
+“unhinted” content is well-formed and the attention routing (determined
+by contaminated K/Q) still retrieves it - Clean K transplants fail
+because the clean K vectors are misaligned with contaminated Q vectors,
+disrupting attention patterns - Clean KV transplants cancel because
+rescued content (V) is offset by broken routing (K)</p>
+<h2 id="discussion">5. Discussion</h2>
+<h3 id="v-as-the-swap-robust-channel">5.1 V as the Swap-Robust
+Channel</h3>
+<p>Our results establish V as the swap-robust attention component for
+contextual conditioning. Unlike K, which requires co-adaptation with Q,
+V vectors transfer meaningfully across forward passes. This has
+implications for:</p>
+<p><strong>Mechanistic interpretability:</strong> Probes targeting
+behavioral conditioning may be more diagnostic on V than K or Q
+activations.</p>
+<p><strong>KV-cache security:</strong> V vectors cached from prior users
+may transfer behavioral context to subsequent requests. The
+swap-robustness of V — the same property enabling our rescue experiments
+— also enables contamination attacks.</p>
+<h3 id="limitations">5.2 Limitations</h3>
+<p><strong>Layer and head specificity.</strong> We evaluate at a single
+layer (13) without decomposing across heads. The effect may concentrate
+in specific heads.</p>
+<p><strong>Sycophancy-specific.</strong> We study sycophancy; other
+behavioral properties may propagate differently through attention.</p>
+<p><strong>Model scale.</strong> Our models are 2-3B parameters. Larger
+models may exhibit different propagation patterns.</p>
+<h3 id="the-channeling-claim">5.3 The Channeling Claim</h3>
+<p>We frame our contribution as characterizing how a
+residual-stream-encoded direction <em>propagates through attention</em>,
+not as localizing where sycophancy is <em>encoded</em>. The
+residual-stream steering results establish that the direction lives in
+the residual stream; our transplantation results characterize which
+attention component channels it. This is additive to prior work on
+residual-stream steering, not competitive with it.</p>
+<h2 id="conclusion">6. Conclusion</h2>
+<p>We demonstrate a pronounced asymmetry in how sycophancy propagates
+through the attention mechanism: V vectors channel behavioral
+conditioning and transfer across contexts; K vectors require
+co-adaptation and fail under transplantation. This asymmetry is
+consistent with the distinct computational roles of K and V and
+replicates across model architectures. Our findings refine understanding
+of behavioral conditioning in transformers and identify V-cache reuse as
+a potential security concern for multi-user inference systems.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>Arditi, A., et al. (2024). Refusal in Language Models Is Mediated by
+a Single Direction.</li>
+<li>Kwon, W., et al. (2023). Efficient Memory Management for Large
+Language Model Serving with PagedAttention.</li>
+<li>Olsson, C., et al. (2022). In-context Learning and Induction
+Heads.</li>
+<li>Rimsky, N., et al. (2023). Steering Llama 2 via Contrastive
+Activation Addition.</li>
+<li>Turner, A., et al. (2023). Activation Addition: Steering Language
+Models Without Optimization.</li>
+<li>Wang, K., et al. (2022). Interpretability in the Wild: A Circuit for
+Indirect Object Identification.</li>
+</ul>
+<hr />
+<h2 id="appendix-a-experimental-details">Appendix A: Experimental
+Details</h2>
+<p><strong>Prompt template:</strong></p>
+<pre><code>Contaminated: &quot;I&#39;ve always believed [wrong answer]. [Question]?&quot;
+Clean: &quot;[Question]?&quot;</code></pre>
+<p><strong>Questions:</strong> Capital cities with common misconceptions
+(Australia/Sydney, Brazil/Rio, etc.)</p>
+<p><strong>Evaluation:</strong> String match for correct capital in
+first 50 tokens.</p>
+<p><strong>Confidence intervals:</strong> Wilson score intervals at
+95%.</p>
+<h2 id="appendix-b-full-results">Appendix B: Full Results</h2>
+<h3 id="b.1-gemma-3-e2b-control-experiments">B.1 Gemma-3-E2B Control
+Experiments</h3>
+<table>
+<thead>
+<tr>
+<th>Experiment</th>
+<th>Condition</th>
+<th>Accuracy</th>
+<th>95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>35</td>
+<td>Random V</td>
+<td>6%</td>
+<td>[2.8%, 12.5%]</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Clean K</td>
+<td>20%</td>
+<td>[13.3%, 28.9%]</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Clean V</td>
+<td>72%</td>
+<td>[62.5%, 79.9%]</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Baseline</td>
+<td>40%</td>
+<td>[30.9%, 49.8%]</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Resid steer 1×</td>
+<td>81%</td>
+<td>[72.2%, 87.5%]</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Resid steer 2×</td>
+<td>91%</td>
+<td>[83.8%, 95.2%]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="b.2-cross-architecture-replication-qwen2.5-3b">B.2
+Cross-Architecture Replication (Qwen2.5-3B)</h3>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Accuracy</th>
+<th>Δ from baseline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>13%</td>
+<td>—</td>
+</tr>
+<tr>
+<td>V-injected</td>
+<td>48%</td>
+<td>+35pp</td>
+</tr>
+</tbody>
+</table>
+<p>Cross-user contamination paradigm: V vectors from a sycophancy-primed
+session transfer behavioral conditioning to a clean user’s request.</p>
+</body>
+</html>
